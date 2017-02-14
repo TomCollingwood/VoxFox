@@ -3,20 +3,23 @@
 
 #include <iostream>
 #include <vector>
+#include "lib/glm/glm/glm.hpp"
 
 #include "include/LeafNode.h"
 #include "include/PrimaryNode.h"
-#include "include/SecondaryNode.h"
-
 
 class RootNode
 {
 public:
   RootNode();
-  
+  void addVoxel(glm::vec3 _position);
+
 private:
-  std::vector<LeafNode> m_leafTable;
-  std::vector<PrimaryNode> m_primChildren;
+  const float unitChildLength = 10.0;
+  const int depth = 3;
+
+  std::vector<LeafNode *> m_leafTable;
+  std::vector<PrimaryNode *> m_primChildren;
   std::vector<LeafNode *> m_accessors;
 };
 
