@@ -2,7 +2,18 @@
 
 RootNode::RootNode()
 {
+  m_vertexes = new std::vector<float>(0);
+}
 
+int RootNode::getSize()
+{
+  return m_primChildren.size();
+}
+
+void RootNode::printVertexes()
+{
+  for (std::vector<float>::const_iterator i = m_vertexes->begin(); i != m_vertexes->end(); ++i)
+      std::cout << *i << ' ';
 }
 
 void RootNode::addVoxel(glm::vec3 _position)
@@ -23,4 +34,14 @@ void RootNode::addVoxel(glm::vec3 _position)
     m_primChildren.push_back(new PrimaryNode(newOrigin));
     m_primChildren.back()->addVoxel(_position);
   }
+  numberOfVoxels++;
 }
+
+void RootNode::draw()
+{
+  for (auto &prim : m_primChildren) // access by reference to avoid copying
+  {
+    prim->draw(m_vertexes);
+  }
+}
+

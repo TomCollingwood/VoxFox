@@ -27,3 +27,12 @@ void PrimaryNode::addVoxel(glm::vec3 _position)
     m_secChildren.back()->addVoxel(_position);
   }
 }
+
+void PrimaryNode::draw(std::vector<float> * _vertexes)
+{
+  for (auto &sec : m_secChildren) // access by reference to avoid copying
+  {
+    sec->draw(_vertexes);
+  }
+}
+

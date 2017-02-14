@@ -15,6 +15,7 @@ public:
   SecondaryNode();
   SecondaryNode(glm::vec3 _origin);
   void addVoxel(glm::vec3 _position);
+  void draw(std::vector<float> * _vertexes);
   glm::vec3 getOrigin() {return m_origin; }
 private:
   glm::vec3 m_origin;

@@ -26,3 +26,11 @@ void SecondaryNode::addVoxel(glm::vec3 _position)
     m_leafChildren.back()->addVoxel(_position);
   }
 }
+
+void SecondaryNode::draw(std::vector<float> * _vertexes)
+{
+  for (auto &leaf : m_leafChildren) // access by reference to avoid copying
+  {
+    leaf->draw(_vertexes);
+  }
+}

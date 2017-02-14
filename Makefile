@@ -15,7 +15,7 @@ CXX           = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefau
 DEFINES       = -DQT_QML_DEBUG
 CFLAGS        = -pipe -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.9 $(EXPORT_QMAKE_XARCH_CFLAGS) -g -Wall -W -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.9 $(EXPORT_QMAKE_XARCH_CFLAGS) -g -std=gnu++11 -Wall -W -fPIC $(DEFINES)
-INCPATH       = -I. -I../../../Qt2/5.8/clang_64/mkspecs/macx-clang
+INCPATH       = -I. -I../../../NGL/include -I../../../Qt2/5.8/clang_64/mkspecs/macx-clang
 QMAKE         = /Users/Tom/Qt2/5.8/clang_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -209,6 +209,7 @@ DIST          = ../../../Qt2/5.8/clang_64/mkspecs/features/spec_pre.prf \
 		../../../Qt2/5.8/clang_64/mkspecs/features/qt_config.prf \
 		../../../Qt2/5.8/clang_64/mkspecs/macx-clang/qmake.conf \
 		../../../Qt2/5.8/clang_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../Qt2/5.8/clang_64/mkspecs/features/exclusive_builds.prf \
 		../../../Qt2/5.8/clang_64/mkspecs/features/mac/sdk.prf \
 		../../../Qt2/5.8/clang_64/mkspecs/features/toolchain.prf \
@@ -399,6 +400,7 @@ Makefile: VoxFox.pro ../../../Qt2/5.8/clang_64/mkspecs/macx-clang/qmake.conf ../
 		../../../Qt2/5.8/clang_64/mkspecs/features/qt_config.prf \
 		../../../Qt2/5.8/clang_64/mkspecs/macx-clang/qmake.conf \
 		../../../Qt2/5.8/clang_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../Qt2/5.8/clang_64/mkspecs/features/exclusive_builds.prf \
 		../../../Qt2/5.8/clang_64/mkspecs/features/mac/sdk.prf \
 		../../../Qt2/5.8/clang_64/mkspecs/features/toolchain.prf \
@@ -570,6 +572,7 @@ Makefile: VoxFox.pro ../../../Qt2/5.8/clang_64/mkspecs/macx-clang/qmake.conf ../
 ../../../Qt2/5.8/clang_64/mkspecs/features/qt_config.prf:
 ../../../Qt2/5.8/clang_64/mkspecs/macx-clang/qmake.conf:
 ../../../Qt2/5.8/clang_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../Qt2/5.8/clang_64/mkspecs/features/exclusive_builds.prf:
 ../../../Qt2/5.8/clang_64/mkspecs/features/mac/sdk.prf:
 ../../../Qt2/5.8/clang_64/mkspecs/features/toolchain.prf:
@@ -614,6 +617,7 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) $(TARGET) 
+	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 

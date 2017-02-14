@@ -12,7 +12,10 @@ class RootNode
 {
 public:
   RootNode();
+  int getSize();
+  void draw();
   void addVoxel(glm::vec3 _position);
+  void printVertexes();
 
 private:
   const float unitChildLength = 10.0;
@@ -21,6 +24,8 @@ private:
   std::vector<LeafNode *> m_leafTable;
   std::vector<PrimaryNode *> m_primChildren;
   std::vector<LeafNode *> m_accessors;
+  float numberOfVoxels;
+  std::vector<float> * m_vertexes;
 };
 
 #endif // ROOTNODE_H

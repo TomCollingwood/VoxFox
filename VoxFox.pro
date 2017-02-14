@@ -19,3 +19,6 @@ HEADERS += \
     include/PolyToVoxel.h
 
 OTHER_FILES += lib/glm/glm/*
+
+INCLUDEPATH += $$(HOME)/NGL/include
+QT += core opengl gui
