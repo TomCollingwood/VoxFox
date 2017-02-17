@@ -4,6 +4,7 @@
 // 4 * 4 * 4
 #include <iostream>
 #include <vector>
+#include <cstring>
 #include "lib/glm/glm/glm.hpp"
 
 class LeafNode
@@ -16,7 +17,7 @@ public:
   void draw(std::vector<float> * _vertexes);
 private:
   glm::vec3 m_origin;
-  char m_VoxelData[64] = "";
+  char m_VoxelData[64];
   float unitVoxelLength = 0.01953125;
 };
 

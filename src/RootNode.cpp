@@ -15,6 +15,16 @@ int RootNode::getSize()
   return m_primChildren.size();
 }
 
+float RootNode::getFloat(int i)
+{
+  return m_vertexes->at(i);
+}
+
+int RootNode::getVertexSize()
+{
+  return m_vertexes->size();
+}
+
 void RootNode::printVertexes()
 {
   for (std::vector<float>::const_iterator i = m_vertexes->begin(); i != m_vertexes->end(); ++i)
@@ -48,6 +58,8 @@ void RootNode::draw()
   {
     prim->draw(m_vertexes);
   }
+  
+
 }
 
 

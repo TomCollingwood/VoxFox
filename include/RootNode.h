@@ -17,6 +17,8 @@ public:
   void addVoxel(glm::vec3 _position);
   void printVertexes();
   std::vector<float> * getVertexes();
+  float getFloat(int i);
+  int getVertexSize();
 
 private:
   const float unitChildLength = 10.0;

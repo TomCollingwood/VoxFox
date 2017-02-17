@@ -78,12 +78,5 @@ void main() {
     test[2] = int(test[2]);
 
     // Set the output color of our current pixel
-    FragColor = vec4(test/10,1.0);
-
-
-
-    mat3 rotMat = mat3(_MV);
-    vec3 d = vec3(_MV[3]);
-    vec3 retVec = -d * rotMat;
-    if(dot(n,v)<0.3) FragColor=vec4(0,0,0,1);
+    FragColor = vec4(LightIntensity,1.0);
 }

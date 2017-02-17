@@ -2,7 +2,7 @@
 
 LeafNode::LeafNode()
 {
-
+  memset(&m_VoxelData[0], 0, sizeof(m_VoxelData));
 }
 LeafNode::LeafNode(glm::vec3 _origin) : m_origin(_origin) {
 }
@@ -22,10 +22,16 @@ void LeafNode::draw(std::vector<float> * _vertexes)
     {
       if(m_VoxelData[i] & (1<<j))
       {
-       // _vertexes->push_back(1.0f);
-
         _vertexes->push_back( (i/8)*unitVoxelLength +m_origin[0] );
         _vertexes->push_back((i-(floor(i/8)*8))*unitVoxelLength+m_origin[1]);
+        _vertexes->push_back(j*unitVoxelLength+m_origin[2]);
+
+        _vertexes->push_back( (i/8)*unitVoxelLength +m_origin[0] + unitVoxelLength);
+        _vertexes->push_back((i-(floor(i/8)*8))*unitVoxelLength+m_origin[1]);
+        _vertexes->push_back(j*unitVoxelLength+m_origin[2]);
+
+        _vertexes->push_back( (i/8)*unitVoxelLength +m_origin[0] +unitVoxelLength);
+        _vertexes->push_back((i-(floor(i/8)*8))*unitVoxelLength+m_origin[1] +unitVoxelLength);
         _vertexes->push_back(j*unitVoxelLength+m_origin[2]);
       }
     }

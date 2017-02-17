@@ -60,8 +60,10 @@ CONFIG += console
   INCLUDEPATH += /usr/local/Cellar
   INCLUDEPATH += /usr/local/lib
 
+macx{
  LIBS+= -framework OpenGL
   LIBS+= -framework GLUT
+}
 NGLPATH=$$(NGLDIR)
 isEmpty(NGLPATH){ # note brace must be here
 	message("including $HOME/NGL")
