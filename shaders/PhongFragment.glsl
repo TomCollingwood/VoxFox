@@ -42,9 +42,9 @@ struct MaterialInfo {
 // The object has a material
 uniform MaterialInfo Material = MaterialInfo(
             vec3(1, 0, 0),    // Ka
-            vec3(1.0, 1.0, 1.0),    // Kd
-            vec3(1.0, 1.0, 1.0),    // Ks
-            10.0                    // Shininess
+            vec3(1.0, 0.0, 0.0),    // Kd
+            vec3(1.0, 0.0, 0.0),    // Ks
+            3.0                    // Shininess
             );
 
 /************************************************************************************/
@@ -78,5 +78,5 @@ void main() {
     test[2] = int(test[2]);
 
     // Set the output color of our current pixel
-    FragColor = vec4(LightIntensity/2,1.0);
+    FragColor = vec4(LightIntensity,1.0);
 }

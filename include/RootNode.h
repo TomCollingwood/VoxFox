@@ -21,6 +21,7 @@ public:
   float getFloat(int i);
   int getVertexSize();
   void createSphere(glm::vec3 _position, int _radius);
+  void createTorus(glm::vec3 _position, glm::vec2 _t);
   bool full;
 private:
   const float unitChildLength = 10.0;

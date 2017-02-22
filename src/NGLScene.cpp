@@ -39,7 +39,7 @@ void NGLScene::initializeGL()
   // gl commands from the lib, if that is not done program will crash
   ngl::NGLInit::instance();
 
-  glClearColor( 1.0f, 1.0f, 1.0f, 1.0f ); // Grey Background
+  glClearColor( 0.0f, 0.0f, 0.0f, 1.0f ); // Grey Background
   // enable depth testing for drawing
   glEnable( GL_DEPTH_TEST );
 // enable multisampling for smoother drawing
@@ -100,14 +100,16 @@ void NGLScene::initializeGL()
   // load these values to the shader as well
   light.loadToShader( "light" );
 
-  //glEnable(GL_CULL_FACE);
+  glEnable(GL_CULL_FACE);
   float unit = 0.01953125;
   myRoot = new RootNode();
   myRoot->addVoxel(glm::vec3(0,0,0));
   myRoot->addVoxel(glm::vec3(0,0,1));
 //  myRoot->addVoxel(glm::vec3(unit,0,0));
 
-  myRoot->createSphere(glm::vec3(0,0,0),30);
+  //myRoot->createSphere(glm::vec3(0,0,0),50);
+  myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(0.55,0.06));
+  myRoot->createSphere(glm::vec3(0,0,0),20);
 
 
 //  for(int i = 0; i<40 ; ++i)
@@ -118,12 +120,12 @@ void NGLScene::initializeGL()
  //myRoot->createSphere(glm::vec3(-1,-1,0),20);
 
 
-  for(int i = 0; i<10; ++i)
-  {
-    myRoot->addVoxel(glm::vec3(0,0,i*unit));
-    myRoot->addVoxel(glm::vec3(0,i*unit,0));
-    myRoot->addVoxel(glm::vec3(i*unit,0,0));
-  }
+//  for(int i = 0; i<10; ++i)
+//  {
+//    myRoot->addVoxel(glm::vec3(0,0,i*unit));
+//    myRoot->addVoxel(glm::vec3(0,i*unit,0));
+//    myRoot->addVoxel(glm::vec3(i*unit,0,0));
+//  }
 
   ngl::Mat4 MV = m_mouseGlobalTX * m_cam.getViewMatrix();
   myRoot->draw(MV);
@@ -232,7 +234,7 @@ void NGLScene::paintGL()
   // draw
 
   //prim->draw( "teapot" );
-  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
   //myRoot->draw(m_mouseGlobalTX* m_cam.getViewMatrix());
   loadMatricesToShader();
   glDrawArrays(GL_TRIANGLES,0,myRoot->getVertexSize()/3);
