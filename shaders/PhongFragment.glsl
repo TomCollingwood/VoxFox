@@ -78,5 +78,5 @@ void main() {
     test[2] = int(test[2]);
 
     // Set the output color of our current pixel
-    FragColor = vec4(LightIntensity,1.0);
+    FragColor = vec4(LightIntensity/2,1.0);
 }

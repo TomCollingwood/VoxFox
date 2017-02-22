@@ -38,7 +38,8 @@ void NGLScene::initializeGL()
   // we must call that first before any other GL commands to load and link the
   // gl commands from the lib, if that is not done program will crash
   ngl::NGLInit::instance();
-  glClearColor( 0.4f, 0.4f, 0.4f, 1.0f ); // Grey Background
+
+  glClearColor( 1.0f, 1.0f, 1.0f, 1.0f ); // Grey Background
   // enable depth testing for drawing
   glEnable( GL_DEPTH_TEST );
 // enable multisampling for smoother drawing
@@ -99,12 +100,35 @@ void NGLScene::initializeGL()
   // load these values to the shader as well
   light.loadToShader( "light" );
 
-
+  //glEnable(GL_CULL_FACE);
+  float unit = 0.01953125;
   myRoot = new RootNode();
-  myRoot->addVoxel(glm::vec3(1,1,1));
-  myRoot->addVoxel(glm::vec3(1,1.5,1));
-  myRoot->addVoxel(glm::vec3(1,1,1.2));
-  myRoot->draw();
+  myRoot->addVoxel(glm::vec3(0,0,0));
+  myRoot->addVoxel(glm::vec3(0,0,1));
+//  myRoot->addVoxel(glm::vec3(unit,0,0));
+
+  myRoot->createSphere(glm::vec3(0,0,0),30);
+
+
+//  for(int i = 0; i<40 ; ++i)
+//  {
+//  myRoot->createSphere(glm::vec3(((float)i)/5,0,0),5);
+//  }
+ //myRoot->createSphere(glm::vec3(1,-1,0),10);
+ //myRoot->createSphere(glm::vec3(-1,-1,0),20);
+
+
+  for(int i = 0; i<10; ++i)
+  {
+    myRoot->addVoxel(glm::vec3(0,0,i*unit));
+    myRoot->addVoxel(glm::vec3(0,i*unit,0));
+    myRoot->addVoxel(glm::vec3(i*unit,0,0));
+  }
+
+  ngl::Mat4 MV = m_mouseGlobalTX * m_cam.getViewMatrix();
+  myRoot->draw(MV);
+
+
 
   GLuint vao;
   glGenVertexArrays(1, &vao);
@@ -112,24 +136,14 @@ void NGLScene::initializeGL()
 
   GLuint vbo;
   glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-  // int amountVertexData = 6 * 3;
-
-  
-
-  // float vertexes[6*3] = {
-  //   0,0,0, \
-  //   1,1,1, \
-  //   0,1,0, \
-
-  //   2,2,2, \
-  //   3,3,3, \
-  //   2,3,2  \
-  // };
+  GLuint nbo;
+  glGenBuffers(1, &nbo);
 
   int amountVertexData = myRoot->getVertexSize();
+  //printf("MAX SIZET: %d",myRoot->getVertexes()->max_size());
 
+  // CALCULATE NORMALS ---
   float normals[amountVertexData];
   for(int i = 0; i<amountVertexData; i+=9)
   {
@@ -138,7 +152,7 @@ void NGLScene::initializeGL()
     glm::vec3 c = glm::vec3(myRoot->getFloat(i+6),myRoot->getFloat(i+7),myRoot->getFloat(i+8));
     glm::vec3 A = b - a;
     glm::vec3 B = c - a;
-    glm::vec3 N = glm::cross(B,A);
+    glm::vec3 N = glm::cross(A,B);
     N = glm::normalize(N);
     for(int j=0; j<9; j+=3)
     {
@@ -147,26 +161,27 @@ void NGLScene::initializeGL()
       normals[i+j+2]=N[2];
     }
   }
-  glBufferData(GL_ARRAY_BUFFER, amountVertexData * 2 * sizeof(float), 0, GL_STATIC_DRAW);
-  glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), myRoot->getVertexes()->data());
-  glBufferSubData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), amountVertexData * sizeof(float), normals);
 
+  //printf("YOOO%d \n",amountVertexData * sizeof(float));
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), myRoot->getVertexes()->data());
+
+  glBindBuffer(GL_ARRAY_BUFFER, nbo);
+  glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), normals);
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
   GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
   glEnableVertexAttribArray(pos);
   glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,3*sizeof(float),0);
-  // last 0 is offset
-  // penultimate is stride
-  // second is
+  //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
 
+  glBindBuffer(GL_ARRAY_BUFFER, nbo);
   GLint n = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexNormal");
   glEnableVertexAttribArray(n);
-  glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), BUFFER_OFFSET(amountVertexData));
-
-  // need pid
-  // buffer offset
-  // binding
-
-
+  glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
+  //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
 }
 
 
@@ -217,8 +232,10 @@ void NGLScene::paintGL()
   // draw
 
   //prim->draw( "teapot" );
+  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  //myRoot->draw(m_mouseGlobalTX* m_cam.getViewMatrix());
   loadMatricesToShader();
-  glDrawArrays(GL_TRIANGLES,0,6);
+  glDrawArrays(GL_TRIANGLES,0,myRoot->getVertexSize()/3);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

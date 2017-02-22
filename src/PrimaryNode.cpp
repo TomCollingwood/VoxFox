@@ -8,15 +8,28 @@ PrimaryNode::PrimaryNode()
 PrimaryNode::PrimaryNode(glm::vec3 _origin) : m_origin(_origin)
 {}
 
-void PrimaryNode::addVoxel(glm::vec3 _position)
+bool PrimaryNode::isVoxel(glm::vec3 _position)
+{
+  for (auto &sec : m_secChildren) // access by reference to avoid copying
+      {
+        if(_position[0]<sec->getOrigin()[0] || _position[0]>=sec->getOrigin()[0]+unitChildLength) continue;
+        if(_position[1]<sec->getOrigin()[1] || _position[1]>=sec->getOrigin()[1]+unitChildLength) continue;
+        if(_position[2]<sec->getOrigin()[2] || _position[2]>=sec->getOrigin()[2]+unitChildLength) continue;
+        return sec->isVoxel(_position);
+      }
+  return false;
+}
+
+void PrimaryNode::addVoxel(glm::vec3 _position, SecondaryNode * _secAccessor, LeafNode * _leafAccessor)
 {
   bool found = false;
   for (auto &sec : m_secChildren) // access by reference to avoid copying
       {
-        if(_position[0]<sec->getOrigin()[0] || _position[0]>sec->getOrigin()[0]+unitChildLength) continue;
-        if(_position[0]<sec->getOrigin()[1] || _position[1]>sec->getOrigin()[1]+unitChildLength) continue;
-        if(_position[0]<sec->getOrigin()[2] || _position[2]>sec->getOrigin()[2]+unitChildLength) continue;
-        sec->addVoxel(_position);
+        if(_position[0]<sec->getOrigin()[0] || _position[0]>=sec->getOrigin()[0]+unitChildLength) continue;
+        if(_position[1]<sec->getOrigin()[1] || _position[1]>=sec->getOrigin()[1]+unitChildLength) continue;
+        if(_position[2]<sec->getOrigin()[2] || _position[2]>=sec->getOrigin()[2]+unitChildLength) continue;
+        sec->addVoxel(_position,_leafAccessor);
+        _secAccessor=sec;
         found = true;
         break;
       }
@@ -24,15 +37,15 @@ void PrimaryNode::addVoxel(glm::vec3 _position)
   {
     glm::vec3 newOrigin = floor(_position/unitChildLength)*unitChildLength;
     m_secChildren.push_back(new SecondaryNode(newOrigin));
-    m_secChildren.back()->addVoxel(_position);
+    m_secChildren.back()->addVoxel(_position,_leafAccessor);
   }
 }
 
-void PrimaryNode::draw(std::vector<float> * _vertexes)
+void PrimaryNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)
 {
   for (auto &sec : m_secChildren) // access by reference to avoid copying
   {
-    sec->draw(_vertexes);
+    sec->draw(_vertexes, _DOF);
   }
 }
 
