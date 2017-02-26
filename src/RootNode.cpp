@@ -3,11 +3,18 @@
 RootNode::RootNode()
 {
   m_vertexes = new std::vector<float>(0);
+  m_normals = new std::vector<float>(0);
+
 }
 
 std::vector<float> * RootNode::getVertexes()
 {
   return m_vertexes;
+}
+
+std::vector<float> * RootNode::getNormals()
+{
+  return m_normals;
 }
 
 int RootNode::getSize()
@@ -66,248 +73,247 @@ void RootNode::addVoxel(glm::vec3 _position)
   numberOfVoxels++;
 }
 
-void RootNode::draw(ngl::Mat4 MV)
+//                glm::vec3 one = glm::vec3(_x,_y,k*incre+_z);
+//                glm::vec3 two = glm::vec3(_x+_u,_y,(n.x*_x + n.y*_y + n.z*(k*_u+_z) - n.x*(_x+_u) - n.z*_y)/n.y); // last ones you are trying to find
+//                glm::vec3 thr = glm::vec3(_x+_u,_y+_u,(n.x*_x + n.y*_y + n.z*(k*_u+_z) - n.x*(_x+_u) - n.z*(_y+_u))/n.y) ;
+//                glm::vec3 fou = glm::vec3(_x,_y+_u,(n.x*_x + n.y*_y + n.z*(k*_u+_z) - n.x*_x - n.z*(_y+_u))/n.y) ;
+
+void RootNode::calculatePolys(ngl::Mat4 MV)
 {
   m_vertexes->clear();
 
-  glm::vec3 DOF = glm::vec3(-MV.m_02,-MV.m_12,-MV.m_22);
+    glm::vec3 DOF = glm::vec3(-MV.m_02,-MV.m_12,-MV.m_22);
 
-//  DOF[0] = static_cast<float>(MV.m_02); // x
-//  DOF[1] = static_cast<float>(MV.m_12); // y
-//  DOF[2] = static_cast<float>(MV.m_22); // z
+  //  DOF[0] = static_cast<float>(MV.m_02); // x
+  //  DOF[1] = static_cast<float>(MV.m_12); // y
+  //  DOF[2] = static_cast<float>(MV.m_22); // z
 
-  for (auto &prim : m_primChildren) // access by reference to avoid copying
-  {
-    //prim->draw(m_vertexes, DOF);
-    for(auto &sec : prim->m_secChildren)
+    for (auto &prim : m_primChildren) // access by reference to avoid copying
     {
-      for(auto &leaf : sec->m_leafChildren)
+      //prim->draw(m_vertexes, DOF);
+      for(auto &sec : prim->m_secChildren)
       {
-        for(int i = 0; i<64; ++i)
+        for(auto &leaf : sec->m_leafChildren)
         {
-          for(int j = 0; j<8 ; ++j)
+          for(int i = 0; i<64; ++i)
           {
-            if(leaf->m_VoxelData[i] & (1<<j))
+            for(int j = 0; j<8 ; ++j)
             {
-              float _x = (i/8)*unitVoxelLength +leaf->m_origin[0];
-              float _y = (i-(floor(i/8)*8))*unitVoxelLength+leaf->m_origin[1];
-              float _z = j*unitVoxelLength+leaf->m_origin[2];
-              float _u =  unitVoxelLength;//*10;
-
-
-              glm::vec3 n = DOF;
-
-              float incre = _u/5;
-
-      //        for(int k = 0; k<5; ++k)
-      //        {
-      //          glm::vec3 one = glm::vec3(_x,_y,k*_u+_z);
-      //          glm::vec3 two = glm::vec3(_x+_u,_y,(n.x*_x + n.y*_y + n.z*_z - n.x*(_x+_u) - n.y*+y)/n.z);
-      //          glm::vec3 thr = glm::vec3(_x+_u,_y+_u,(n.x*_x + n.y*_y + n.z*_z - n.x*(_x+_u) - n.y*+y)/n.z);
-      //        }
-
-              /*
-              float x1 = 0.4;
-              float z1 = 0.4;
-              float y1 = (n.x*_x + n.y*_y + n.z*_z - n.x*x1 - n.z*z1)/n.y;
-
-              float x2 = 0.2;
-              float z2 = 0.4;
-              float y2 = (n.x*_x + n.y*_y + n.z*_z - n.x*x2 - n.z*z2)/n.y;
-
-              m_vertexes->push_back(_x);
-              m_vertexes->push_back(_y);
-              m_vertexes->push_back(_z);
-              m_vertexes->push_back(x1);
-              m_vertexes->push_back(y1);
-              m_vertexes->push_back(z1);
-              m_vertexes->push_back(x2);
-              m_vertexes->push_back(y2);
-              m_vertexes->push_back(z2);
-              */
-
-
-              // BACK FACE
-              if(!isVoxel(glm::vec3(_x,_y,_z-unitVoxelLength)) && !(j>0 && leaf->m_VoxelData[i] & (1<<(j-1))))
+              if(leaf->m_VoxelData[i] & (1<<j))
               {
-                // 1
+                float _x = (i/8)*unitVoxelLength +leaf->m_origin[0];
+                float _y = (i-(floor(i/8)*8))*unitVoxelLength+leaf->m_origin[1];
+                float _z = j*unitVoxelLength+leaf->m_origin[2];
+                float _u =  unitVoxelLength;//*10;
+
+
+                glm::vec3 n = DOF;
+
+                float incre = _u/5;
+
+        //        for(int k = 0; k<5; ++k)
+        //        {
+        //          glm::vec3 one = glm::vec3(_x,_y,k*_u+_z);
+        //          glm::vec3 two = glm::vec3(_x+_u,_y,(n.x*_x + n.y*_y + n.z*_z - n.x*(_x+_u) - n.y*+y)/n.z);
+        //          glm::vec3 thr = glm::vec3(_x+_u,_y+_u,(n.x*_x + n.y*_y + n.z*_z - n.x*(_x+_u) - n.y*+y)/n.z);
+        //        }
+
+                /*
+                float x1 = 0.4;
+                float z1 = 0.4;
+                float y1 = (n.x*_x + n.y*_y + n.z*_z - n.x*x1 - n.z*z1)/n.y;
+                float x2 = 0.2;
+                float z2 = 0.4;
+                float y2 = (n.x*_x + n.y*_y + n.z*_z - n.x*x2 - n.z*z2)/n.y;
                 m_vertexes->push_back(_x);
                 m_vertexes->push_back(_y);
+                m_vertexes->push_back(_z);
+                m_vertexes->push_back(x1);
+                m_vertexes->push_back(y1);
+                m_vertexes->push_back(z1);
+                m_vertexes->push_back(x2);
+                m_vertexes->push_back(y2);
+                m_vertexes->push_back(z2);
+                */
+
+
+                // BACK FACE
+                if(!isVoxel(glm::vec3(_x,_y,_z-unitVoxelLength)) && !(j>0 && leaf->m_VoxelData[i] & (1<<(j-1))))
+                {
+                  // 1
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z);
+
+                  // 2
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z);
+
+                }
+                // FRONT FACE
+                if(!isVoxel(glm::vec3(_x,_y,_z+unitVoxelLength)) && !(j<7 && leaf->m_VoxelData[i] & (1<<(j+1))))
+                {
+                  // 3
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z+_u);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z+_u);
+
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z+_u);
+                  // 4
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z+_u);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z+_u);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z+_u);
+                }
+                // LEFT FACE
+                if(!isVoxel(glm::vec3(_x-unitVoxelLength,_y,_z)) && !(i>7 && leaf->m_VoxelData[i-8] & (1<<j)))
+                {
+                  // 5
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z+_u);
+                  // 6
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z+_u);
+
+                  m_vertexes->push_back(_x);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z+_u);
+                }
+                // RIGHT FACE
+                if(!isVoxel(glm::vec3(_x+unitVoxelLength,_y,_z)) && !(i<=56 && leaf->m_VoxelData[i+8] & (1<<j)))
+                {
+                  // 7
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z+_u);
+                  // 8
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y);
+                  m_vertexes->push_back(_z+_u);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z);
+
+                  m_vertexes->push_back(_x+_u);
+                  m_vertexes->push_back(_y+_u);
+                  m_vertexes->push_back(_z+_u);
+                }
+
+                if(!isVoxel(glm::vec3(_x,_y+unitVoxelLength,_z)) && !(i%8<7 && leaf->m_VoxelData[i+1] & (1<<j)))
+                {
+                // 9
+                m_vertexes->push_back(_x);
+                m_vertexes->push_back(_y+_u);
                 m_vertexes->push_back(_z);
 
                 m_vertexes->push_back(_x);
                 m_vertexes->push_back(_y+_u);
+                m_vertexes->push_back(_z+_u);
+
+                m_vertexes->push_back(_x+_u);
+                m_vertexes->push_back(_y+_u);
+                m_vertexes->push_back(_z+_u);
+                // 10
+                m_vertexes->push_back(_x);
+                m_vertexes->push_back(_y+_u);
+                m_vertexes->push_back(_z);
+
+                m_vertexes->push_back(_x+_u);
+                m_vertexes->push_back(_y+_u);
+                m_vertexes->push_back(_z+_u);
+
+                m_vertexes->push_back(_x+_u);
+                m_vertexes->push_back(_y+_u);
+                m_vertexes->push_back(_z);
+                }
+                if(!isVoxel(glm::vec3(_x,_y-unitVoxelLength,_z)) && !(i%8>0 && leaf->m_VoxelData[i-1] & (1<<j)))
+                {
+                // 11
+                m_vertexes->push_back(_x);
+                m_vertexes->push_back(_y);
                 m_vertexes->push_back(_z);
 
                 m_vertexes->push_back(_x+_u);
                 m_vertexes->push_back(_y);
                 m_vertexes->push_back(_z);
 
-                // 2
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z);
-
                 m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y+_u);
+                m_vertexes->push_back(_y);
+                m_vertexes->push_back(_z+_u);
+                // 12
+                m_vertexes->push_back(_x);
+                m_vertexes->push_back(_y);
                 m_vertexes->push_back(_z);
 
                 m_vertexes->push_back(_x+_u);
                 m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z);
+                m_vertexes->push_back(_z+_u);
 
+                m_vertexes->push_back(_x);
+                m_vertexes->push_back(_y);
+                m_vertexes->push_back(_z+_u);
+                }
+                // */
               }
-              // FRONT FACE
-              if(!isVoxel(glm::vec3(_x,_y,_z+unitVoxelLength)) && !(j<7 && leaf->m_VoxelData[i] & (1<<(j+1))))
-              {
-                // 3
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z+_u);
-
-                m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z+_u);
-
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z+_u);
-                // 4
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z+_u);
-
-                m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z+_u);
-
-                m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z+_u);
-              }
-              // LEFT FACE
-              if(!isVoxel(glm::vec3(_x-unitVoxelLength,_y,_z)) && !(i>7 && leaf->m_VoxelData[i-8] & (1<<j)))
-              {
-                // 5
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z);
-
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z);
-
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z+_u);
-                // 6
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z);
-
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z+_u);
-
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z+_u);
-              }
-              // RIGHT FACE
-              if(!isVoxel(glm::vec3(_x+unitVoxelLength,_y,_z)) && !(i<=56 && leaf->m_VoxelData[i+8] & (1<<j)))
-              {
-                // 7
-                m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z);
-
-                m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z);
-
-                m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z+_u);
-                // 8
-                m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z+_u);
-
-                m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z);
-
-                m_vertexes->push_back(_x+_u);
-                m_vertexes->push_back(_y+_u);
-                m_vertexes->push_back(_z+_u);
-              }
-
-              if(!isVoxel(glm::vec3(_x,_y+unitVoxelLength,_z)) && !(i%8<7 && leaf->m_VoxelData[i+1] & (1<<j)))
-              {
-              // 9
-              m_vertexes->push_back(_x);
-              m_vertexes->push_back(_y+_u);
-              m_vertexes->push_back(_z);
-
-              m_vertexes->push_back(_x);
-              m_vertexes->push_back(_y+_u);
-              m_vertexes->push_back(_z+_u);
-
-              m_vertexes->push_back(_x+_u);
-              m_vertexes->push_back(_y+_u);
-              m_vertexes->push_back(_z+_u);
-              // 10
-              m_vertexes->push_back(_x);
-              m_vertexes->push_back(_y+_u);
-              m_vertexes->push_back(_z);
-
-              m_vertexes->push_back(_x+_u);
-              m_vertexes->push_back(_y+_u);
-              m_vertexes->push_back(_z+_u);
-
-              m_vertexes->push_back(_x+_u);
-              m_vertexes->push_back(_y+_u);
-              m_vertexes->push_back(_z);
-              }
-              if(!isVoxel(glm::vec3(_x,_y-unitVoxelLength,_z)) && !(i%8>0 && leaf->m_VoxelData[i-1] & (1<<j)))
-              {
-              // 11
-              m_vertexes->push_back(_x);
-              m_vertexes->push_back(_y);
-              m_vertexes->push_back(_z);
-
-              m_vertexes->push_back(_x+_u);
-              m_vertexes->push_back(_y);
-              m_vertexes->push_back(_z);
-
-              m_vertexes->push_back(_x+_u);
-              m_vertexes->push_back(_y);
-              m_vertexes->push_back(_z+_u);
-              // 12
-              m_vertexes->push_back(_x);
-              m_vertexes->push_back(_y);
-              m_vertexes->push_back(_z);
-
-              m_vertexes->push_back(_x+_u);
-              m_vertexes->push_back(_y);
-              m_vertexes->push_back(_z+_u);
-
-              m_vertexes->push_back(_x);
-              m_vertexes->push_back(_y);
-              m_vertexes->push_back(_z+_u);
-              }
-              // */
             }
           }
         }
       }
-    }
-  }
-
-  printf("%d",m_vertexes->size()/3);
-
 }
-
+}
 void RootNode::createSphere(glm::vec3 _position, int _radius)
 {
   for(int x = -_radius; x<_radius; ++x)
@@ -326,6 +332,23 @@ void RootNode::createSphere(glm::vec3 _position, int _radius)
           }
         }
       }
+  }
+
+  for(int i = 0; i<m_vertexes->size(); i+=9)
+  {
+    glm::vec3 a = glm::vec3(m_vertexes->at(i+0),m_vertexes->at(i+1),m_vertexes->at(i+2));
+    glm::vec3 b = glm::vec3(m_vertexes->at(i+3),m_vertexes->at(i+4),m_vertexes->at(i+5));
+    glm::vec3 c = glm::vec3(m_vertexes->at(i+6),m_vertexes->at(i+7),m_vertexes->at(i+8));
+    glm::vec3 A = b - a;
+    glm::vec3 B = c - a;
+    glm::vec3 N = glm::cross(A,B);
+    N = glm::normalize(N);
+    for(int j=0; j<3; ++j)
+    {
+      m_normals->push_back(N[0]);
+      m_normals->push_back(N[1]);
+      m_normals->push_back(N[2]);
+    }
   }
 }
 
@@ -352,6 +375,27 @@ void RootNode::createTorus(glm::vec3 _position, glm::vec2 _t)
   }
 }
 
+void RootNode::loadVBO(GLuint shaderID, GLuint vbo, GLuint nbo)
+{
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, m_vertexes->size() * sizeof(float), 0, GL_STATIC_DRAW);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, m_vertexes->size() * sizeof(float), m_vertexes->data());
+
+  glBindBuffer(GL_ARRAY_BUFFER, nbo);
+  glBufferData(GL_ARRAY_BUFFER, m_vertexes->size() * sizeof(float), 0, GL_STATIC_DRAW);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, m_vertexes->size() * sizeof(float), m_normals->data());
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  GLint pos = glGetAttribLocation(shaderID, "VertexPosition");
+  glEnableVertexAttribArray(pos);
+  glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,3*sizeof(float),0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, nbo);
+  GLint n = glGetAttribLocation(shaderID, "VertexNormal");
+  glEnableVertexAttribArray(n);
+  glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
+}
+
 //void createRoundBox( glm::vec3 p, glm::vec3 b, float r )
 //{
 //  return length(max(abs(p)-b,0.0))-r;
@@ -375,3 +419,56 @@ void RootNode::createTorus(glm::vec3 _position, glm::vec2 _t)
 //      }
 //  }
 //}
+
+void RootNode::drawBox(ngl::Vec3 _min, ngl::Vec3 _max)
+{
+  _max=_max*10;
+  _min=_min*10;
+  ngl::Vec3 diff = _max-_min;
+  diff=diff/unitVoxelLength;
+
+  for(int i = 0; i<(int)std::ceil(diff.m_x); ++i)
+  {
+    for(int j = 0; j<(int)std::ceil(diff.m_y); ++j)
+    {
+      for(int k = 0; k<(int)std::ceil(diff.m_z); ++k)
+      {
+        addVoxel(glm::vec3(_min.m_x+i*unitVoxelLength,_min.m_y+j*unitVoxelLength,_min.m_z+k*unitVoxelLength));
+      }
+    }
+  }
+  //printf("poo%f",diff.m_x);
+}
+
+void RootNode::importObj(ngl::Obj * _mesh)
+{
+  std::vector<ngl::Vec3> verts = _mesh->getVertexList();
+  std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
+  for(std::vector<ngl::Face>::iterator itr=objFaceList.begin(); itr!=objFaceList.end(); ++itr)
+  {
+    int numVertexInFace = itr->m_vert.size();
+    ngl::Vec3 min = verts[itr->m_vert[0]];
+    ngl::Vec3 max = min;
+
+    for(int i=1;i<numVertexInFace;i++)
+    {
+      if(verts[itr->m_vert[i]].m_x<min.m_x) {min.m_x=verts[itr->m_vert[i]].m_x;}
+      if(verts[itr->m_vert[i]].m_y<min.m_y) {min.m_y=verts[itr->m_vert[i]].m_y;}
+      if(verts[itr->m_vert[i]].m_z<min.m_z) {min.m_z=verts[itr->m_vert[i]].m_z;}
+
+      if(verts[itr->m_vert[i]].m_x>max.m_x) {max.m_x=verts[itr->m_vert[i]].m_x;}
+      if(verts[itr->m_vert[i]].m_y>max.m_y) {max.m_y=verts[itr->m_vert[i]].m_y;}
+      if(verts[itr->m_vert[i]].m_z>max.m_z) {max.m_z=verts[itr->m_vert[i]].m_z;}
+      //addVoxel(glm::vec3(verts[itr->m_vert[i]].m_x,verts[itr->m_vert[i]].m_y,verts[itr->m_vert[i]].m_z));
+    }
+    drawBox(min,max);
+    }
+//  int scale = 4;
+//  for(auto& i : verts)
+//  {
+//    addVoxel(glm::vec3(i.m_x*scale,i.m_y*scale,i.m_z*scale));
+//  }
+
+  }
+
+

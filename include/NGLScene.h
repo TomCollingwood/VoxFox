@@ -5,6 +5,7 @@
 #include <ngl/Colour.h>
 #include <ngl/Light.h>
 #include <ngl/Text.h>
+#include <ngl/Obj.h>
 #include <QOpenGLWindow>
 #include "include/RootNode.h"
 //----------------------------------------------------------------------------------------------------------------------
@@ -48,6 +49,9 @@ public:
   void resizeGL(int _w, int _h);
 
   RootNode * myRoot;
+
+  GLuint vao, vbo, nbo;
+  std::vector<float> normals;
 
 private:
   //----------------------------------------------------------------------------------------------------------------------

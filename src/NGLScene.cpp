@@ -102,88 +102,107 @@ void NGLScene::initializeGL()
 
   glEnable(GL_CULL_FACE);
   float unit = 0.01953125;
+
   myRoot = new RootNode();
-  myRoot->addVoxel(glm::vec3(0,0,0));
-  myRoot->addVoxel(glm::vec3(0,0,1));
-//  myRoot->addVoxel(glm::vec3(unit,0,0));
-
-  //myRoot->createSphere(glm::vec3(0,0,0),50);
-  myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(0.55,0.06));
-  myRoot->createSphere(glm::vec3(0,0,0),20);
 
 
-//  for(int i = 0; i<40 ; ++i)
-//  {
-//  myRoot->createSphere(glm::vec3(((float)i)/5,0,0),5);
-//  }
- //myRoot->createSphere(glm::vec3(1,-1,0),10);
- //myRoot->createSphere(glm::vec3(-1,-1,0),20);
+  ngl::Obj * m_mesh = new ngl::Obj("models/bunny.obj");
+  myRoot->importObj(m_mesh);
+  //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
 
+  //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(0.55,0.06));
+  //myRoot->createSphere(glm::vec3(0,0,0),20);
 
-//  for(int i = 0; i<10; ++i)
-//  {
-//    myRoot->addVoxel(glm::vec3(0,0,i*unit));
-//    myRoot->addVoxel(glm::vec3(0,i*unit,0));
-//    myRoot->addVoxel(glm::vec3(i*unit,0,0));
-//  }
 
   ngl::Mat4 MV = m_mouseGlobalTX * m_cam.getViewMatrix();
-  myRoot->draw(MV);
+  myRoot->calculatePolys(MV);
 
+//  glGenVertexArrays(1, &vao);
+//  glBindVertexArray(vao);
+//  glGenBuffers(1, &vbo);
+//  glGenBuffers(1, &nbo);
 
+  //myRoot->loadVBO(shader->getProgramID("Phong"),vbo,nbo);
 
-  GLuint vao;
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-
-  GLuint vbo;
-  glGenBuffers(1, &vbo);
-
-  GLuint nbo;
-  glGenBuffers(1, &nbo);
-
-  int amountVertexData = myRoot->getVertexSize();
-  //printf("MAX SIZET: %d",myRoot->getVertexes()->max_size());
 
   // CALCULATE NORMALS ---
-  float normals[amountVertexData];
-  for(int i = 0; i<amountVertexData; i+=9)
-  {
-    glm::vec3 a = glm::vec3(myRoot->getFloat(i+0),myRoot->getFloat(i+1),myRoot->getFloat(i+2));
-    glm::vec3 b = glm::vec3(myRoot->getFloat(i+3),myRoot->getFloat(i+4),myRoot->getFloat(i+5));
-    glm::vec3 c = glm::vec3(myRoot->getFloat(i+6),myRoot->getFloat(i+7),myRoot->getFloat(i+8));
-    glm::vec3 A = b - a;
-    glm::vec3 B = c - a;
-    glm::vec3 N = glm::cross(A,B);
-    N = glm::normalize(N);
-    for(int j=0; j<9; j+=3)
-    {
-      normals[i+j]=N[0];
-      normals[i+j+1]=N[1];
-      normals[i+j+2]=N[2];
-    }
-  }
+
+
+  // shader->getProgramID(shaderProgram)
 
   //printf("YOOO%d \n",amountVertexData * sizeof(float));
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
-  glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), myRoot->getVertexes()->data());
+//  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+//  glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
+//  glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), myRoot->getVertexes()->data());
 
-  glBindBuffer(GL_ARRAY_BUFFER, nbo);
-  glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
-  glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), normals);
+//  glBindBuffer(GL_ARRAY_BUFFER, nbo);
+//  glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
+//  glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), myRoot->getNormals()->data());
 
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
-  glEnableVertexAttribArray(pos);
-  glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,3*sizeof(float),0);
+//  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+//  GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
+//  glEnableVertexAttribArray(pos);
+//  glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,3*sizeof(float),0);
+//  //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
+
+//  glBindBuffer(GL_ARRAY_BUFFER, nbo);
+//  GLint n = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexNormal");
+//  glEnableVertexAttribArray(n);
+//  glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
   //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
 
-  glBindBuffer(GL_ARRAY_BUFFER, nbo);
-  GLint n = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexNormal");
-  glEnableVertexAttribArray(n);
-  glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
-  //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
+  GLuint vao;
+   glGenVertexArrays(1, &vao);
+   glBindVertexArray(vao);
+
+   GLuint vbo;
+   glGenBuffers(1, &vbo);
+
+   GLuint nbo;
+   glGenBuffers(1, &nbo);
+
+   int amountVertexData = myRoot->getVertexSize();
+   //printf("MAX SIZET: %d",myRoot->getVertexes()->max_size());
+
+   // CALCULATE NORMALS ---
+   float normals[amountVertexData];
+   for(int i = 0; i<amountVertexData; i+=9)
+   {
+     glm::vec3 a = glm::vec3(myRoot->getFloat(i+0),myRoot->getFloat(i+1),myRoot->getFloat(i+2));
+     glm::vec3 b = glm::vec3(myRoot->getFloat(i+3),myRoot->getFloat(i+4),myRoot->getFloat(i+5));
+     glm::vec3 c = glm::vec3(myRoot->getFloat(i+6),myRoot->getFloat(i+7),myRoot->getFloat(i+8));
+     glm::vec3 A = b - a;
+     glm::vec3 B = c - a;
+     glm::vec3 N = glm::cross(A,B);
+     N = glm::normalize(N);
+     for(int j=0; j<9; j+=3)
+     {
+       normals[i+j]=N[0];
+       normals[i+j+1]=N[1];
+       normals[i+j+2]=N[2];
+     }
+   }
+
+   //printf("YOOO%d \n",amountVertexData * sizeof(float));
+   glBindBuffer(GL_ARRAY_BUFFER, vbo);
+   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
+   glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), myRoot->getVertexes()->data());
+
+   glBindBuffer(GL_ARRAY_BUFFER, nbo);
+   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
+   glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), normals);
+
+   glBindBuffer(GL_ARRAY_BUFFER, vbo);
+   GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
+   glEnableVertexAttribArray(pos);
+   glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,3*sizeof(float),0);
+   //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
+
+   glBindBuffer(GL_ARRAY_BUFFER, nbo);
+   GLint n = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexNormal");
+   glEnableVertexAttribArray(n);
+   glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
+   //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
 }
 
 
@@ -234,8 +253,9 @@ void NGLScene::paintGL()
   // draw
 
   //prim->draw( "teapot" );
-  //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-  //myRoot->draw(m_mouseGlobalTX* m_cam.getViewMatrix());
+  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  myRoot->calculatePolys(m_mouseGlobalTX* m_cam.getViewMatrix());
+  //myRoot->loadVBO(shader->getProgramID("Phong"),vbo,nbo);
   loadMatricesToShader();
   glDrawArrays(GL_TRIANGLES,0,myRoot->getVertexSize()/3);
 }
