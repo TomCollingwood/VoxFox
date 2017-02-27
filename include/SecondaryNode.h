@@ -14,7 +14,7 @@ class SecondaryNode
 public:
   SecondaryNode();
   SecondaryNode(glm::vec3 _origin);
-  void addVoxel(glm::vec3 _position, LeafNode * _leafAccessor);
+  bool addVoxel(glm::vec3 _position, LeafNode * _leafAccessor);
   bool isVoxel(glm::vec3 _position);
   void draw(std::vector<float> * _vertexes, glm::vec3 _DOF);
   glm::vec3 getOrigin() {return m_origin; }
@@ -23,6 +23,7 @@ public:
 private:
   bool full;
   glm::vec3 m_origin;
+  float unitSecondaryLength = 1.25;
   float unitChildLength = 0.15625;
 
   RootNode * m_grandparent;

@@ -21,11 +21,19 @@ bool LeafNode::isVoxel(glm::vec3 _position)
   return m_VoxelData[((int)xyz.x)*8 + (int)xyz.y] & (unsigned int) 1<<(int)xyz.z;
 }
 
-void LeafNode::addVoxel(glm::vec3 _position)
+bool LeafNode::addVoxel(glm::vec3 _position)
 {
   glm::vec3 xyz = _position-m_origin;
-  xyz = floor(xyz/unitVoxelLength);
-  m_VoxelData[((int)xyz.x)*8 + (int)xyz.y] |= (unsigned int) 1<<(int)xyz.z;
+  if(xyz.x>=0 && xyz.x<unitLeafLength && xyz.y>=0 && xyz.y<unitLeafLength && xyz.z>=0 && xyz.z<unitLeafLength )
+  {
+    xyz = floor(xyz/unitVoxelLength);
+    m_VoxelData[((int)xyz.x)*8 + (int)xyz.y] |= (unsigned int) 1<<(int)xyz.z;
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 void LeafNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)

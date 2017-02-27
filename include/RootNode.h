@@ -30,18 +30,23 @@ public:
   void createSphere(glm::vec3 _position, int _radius);
   void createTorus(glm::vec3 _position, glm::vec2 _t);
   void importObj(ngl::Obj * _mesh);
+  void importAccurateObj(ngl::Obj * _mesh);
   void drawBox(ngl::Vec3 _min, ngl::Vec3 _max);
+
+  void fill();
   bool full;
+  bool empty = true;
 private:
+  glm::vec3 min, max;
   const float unitChildLength = 10.0;
   const int depth = 3;
   float unitVoxelLength = 0.01953125;
   std::vector<LeafNode *> m_leafTable;
   std::vector<PrimaryNode *> m_primChildren;
-  LeafNode * m_leafAccessor;
-  SecondaryNode * m_secAccessor;
-  PrimaryNode * m_primAccessor;
-  float numberOfVoxels;
+  LeafNode * m_leafAccessor =nullptr;
+  SecondaryNode * m_secAccessor =nullptr;
+  PrimaryNode * m_primAccessor =nullptr;
+  float numberOfVoxels=0;
   std::vector<float> * m_vertexes;
   std::vector<float> * m_normals;
 };

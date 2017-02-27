@@ -107,7 +107,8 @@ void NGLScene::initializeGL()
 
 
   ngl::Obj * m_mesh = new ngl::Obj("models/bunny.obj");
-  myRoot->importObj(m_mesh);
+  myRoot->importAccurateObj(m_mesh);
+  //myRoot->importObj(m_mesh);
   //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
 
   //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(0.55,0.06));
@@ -166,7 +167,7 @@ void NGLScene::initializeGL()
 
    // CALCULATE NORMALS ---
    float normals[amountVertexData];
-   for(int i = 0; i<amountVertexData; i+=9)
+   for(int i = 0; i<amountVertexData-9; i+=9)
    {
      glm::vec3 a = glm::vec3(myRoot->getFloat(i+0),myRoot->getFloat(i+1),myRoot->getFloat(i+2));
      glm::vec3 b = glm::vec3(myRoot->getFloat(i+3),myRoot->getFloat(i+4),myRoot->getFloat(i+5));
@@ -253,8 +254,8 @@ void NGLScene::paintGL()
   // draw
 
   //prim->draw( "teapot" );
-  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-  myRoot->calculatePolys(m_mouseGlobalTX* m_cam.getViewMatrix());
+  //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  //myRoot->calculatePolys(m_mouseGlobalTX* m_cam.getViewMatrix());
   //myRoot->loadVBO(shader->getProgramID("Phong"),vbo,nbo);
   loadMatricesToShader();
   glDrawArrays(GL_TRIANGLES,0,myRoot->getVertexSize()/3);

@@ -19,7 +19,7 @@ class LeafNode
 public:
   LeafNode();
   LeafNode(glm::vec3 _origin);
-  void addVoxel(glm::vec3 _position);
+  bool addVoxel(glm::vec3 _position);
   bool isVoxel(glm::vec3 _position);
   glm::vec3 getOrigin() {return m_origin; }
   void draw(std::vector<float> * _vertexes, glm::vec3 _DOF);
@@ -32,6 +32,7 @@ private:
   int m_voxNumber;
 
   float unitVoxelLength = 0.01953125;
+  float unitLeafLength = 0.15625;
 };
 
 #endif // LEAFNODE_H

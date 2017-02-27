@@ -53,24 +53,31 @@ bool RootNode::isVoxel(glm::vec3 _position)
 
 void RootNode::addVoxel(glm::vec3 _position)
 {
-  bool found = false;
-  for (auto &prim : m_primChildren) // access by reference to avoid copying
-      {
-        if(_position[0]<prim->getOrigin()[0] || _position[0]>=prim->getOrigin()[0]+unitChildLength) continue;
-        if(_position[1]<prim->getOrigin()[1] || _position[1]>=prim->getOrigin()[1]+unitChildLength) continue;
-        if(_position[2]<prim->getOrigin()[2] || _position[2]>=prim->getOrigin()[2]+unitChildLength) continue;
-        m_primAccessor=prim;
-        prim->addVoxel(_position,m_secAccessor,m_leafAccessor);
-        found = true;
-        break;
-      }
-  if(!found)
+  if((m_leafAccessor==nullptr && m_secAccessor==nullptr) ||
+     (m_leafAccessor!=nullptr && !m_leafAccessor->addVoxel(_position) &&
+     m_secAccessor!=nullptr && !m_secAccessor->addVoxel(_position,m_leafAccessor)))
   {
-    glm::vec3 newOrigin = floor(_position/unitChildLength)*unitChildLength;
-    m_primChildren.push_back(new PrimaryNode(newOrigin));
-    m_primChildren.back()->addVoxel(_position,m_secAccessor,m_leafAccessor);
-  }
-  numberOfVoxels++;
+    bool found = false;
+    for (auto &prim : m_primChildren) // access by reference to avoid copying
+        {
+          if(_position[0]<prim->getOrigin()[0] || _position[0]>=prim->getOrigin()[0]+unitChildLength) continue;
+          if(_position[1]<prim->getOrigin()[1] || _position[1]>=prim->getOrigin()[1]+unitChildLength) continue;
+          if(_position[2]<prim->getOrigin()[2] || _position[2]>=prim->getOrigin()[2]+unitChildLength) continue;
+          m_primAccessor=prim;
+          prim->addVoxel(_position,m_secAccessor,m_leafAccessor);
+          found = true;
+          break;
+        }
+    if(!found)
+    {
+      glm::vec3 newOrigin = floor(_position/unitChildLength)*unitChildLength;
+      m_primChildren.push_back(new PrimaryNode(newOrigin));
+      m_primChildren.back()->addVoxel(_position,m_secAccessor,m_leafAccessor);
+      min=glm::vec3(glm::min(min.x,newOrigin.x),glm::min(min.y,newOrigin.y),glm::min(min.z,newOrigin.z));
+      max=glm::vec3(glm::max(min.x,newOrigin.x+unitChildLength),glm::max(min.y,newOrigin.y+unitChildLength),glm::max(min.z,newOrigin.z+unitChildLength));
+    }
+    numberOfVoxels++;
+}
 }
 
 //                glm::vec3 one = glm::vec3(_x,_y,k*incre+_z);
@@ -461,7 +468,7 @@ void RootNode::importObj(ngl::Obj * _mesh)
       if(verts[itr->m_vert[i]].m_z>max.m_z) {max.m_z=verts[itr->m_vert[i]].m_z;}
       //addVoxel(glm::vec3(verts[itr->m_vert[i]].m_x,verts[itr->m_vert[i]].m_y,verts[itr->m_vert[i]].m_z));
     }
-    drawBox(min,max);
+    if(numVertexInFace==3) drawBox(min,max);
     }
 //  int scale = 4;
 //  for(auto& i : verts)
@@ -469,6 +476,45 @@ void RootNode::importObj(ngl::Obj * _mesh)
 //    addVoxel(glm::vec3(i.m_x*scale,i.m_y*scale,i.m_z*scale));
 //  }
 
-  }
+}
+
+void RootNode::importAccurateObj(ngl::Obj * _mesh)
+{
+  std::vector<ngl::Vec3> verts = _mesh->getVertexList();
+  std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
+  for(std::vector<ngl::Face>::iterator itr=objFaceList.begin(); itr!=objFaceList.end(); ++itr)
+  {
+    if(itr->m_vert.size()==3)
+    {
+      ngl::Vec3 a, b, c, e1;
+      a = verts[itr->m_vert[0]]*20- ngl::Vec3(0,1,0);
+      b = verts[itr->m_vert[1]]*20 - ngl::Vec3(0,1,0);
+      c = verts[itr->m_vert[2]]*20 - ngl::Vec3(0,1,0);
+      e1 = b - a;
+      int steps = std::ceil(e1.length()/unitVoxelLength);
+      ngl::Vec3 vecStep = e1/steps;
+
+      for(int i =0; i<steps+1; ++i)
+      {
+        ngl::Vec3 pos = a+(vecStep*i);
+        ngl::Vec3 line = c-pos;
+        int jsteps = std::ceil(line.length()/unitVoxelLength);
+        ngl::Vec3 mystep = line*(unitVoxelLength / line.length());
+
+        for(int j = 0; j<=jsteps; ++j)
+        {
+          pos = pos + mystep;
+          addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z));
+        }
+      }
+    }
+ }
+}
+
+
+void fill()
+{
+
+}
 
 
