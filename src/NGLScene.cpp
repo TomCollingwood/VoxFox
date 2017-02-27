@@ -9,6 +9,7 @@
 #include <ngl/NGLStream.h>
 #include <ngl/ShaderLib.h>
 #include <ngl/VAOPrimitives.h>
+#include <ctime>
 
 
 NGLScene::NGLScene()
@@ -106,17 +107,25 @@ void NGLScene::initializeGL()
   myRoot = new RootNode();
 
 
-  ngl::Obj * m_mesh = new ngl::Obj("models/bunny.obj");
+  ngl::Obj * m_mesh = new ngl::Obj("models/Helix.obj");
+  std::cout<<"Importing..\n"<<std::endl;
+  clock_t begin = clock();
   myRoot->importAccurateObj(m_mesh);
+  clock_t end = clock();
+  double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+  std::cout<<"Import took"<<elapsed_secs<<"seconds \n"<<std::endl;
   //myRoot->importObj(m_mesh);
   //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
 
   //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(0.55,0.06));
   //myRoot->createSphere(glm::vec3(0,0,0),20);
 
-
+  begin = clock();
   ngl::Mat4 MV = m_mouseGlobalTX * m_cam.getViewMatrix();
   myRoot->calculatePolys(MV);
+  end = clock();
+  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+  std::cout<<"Polycalc took"<<elapsed_secs<<"seconds \n"<<std::endl;
 
 //  glGenVertexArrays(1, &vao);
 //  glBindVertexArray(vao);
@@ -165,8 +174,9 @@ void NGLScene::initializeGL()
    int amountVertexData = myRoot->getVertexSize();
    //printf("MAX SIZET: %d",myRoot->getVertexes()->max_size());
 
+   begin = clock();
    // CALCULATE NORMALS ---
-   float normals[amountVertexData];
+   float * normals = new float[amountVertexData];
    for(int i = 0; i<amountVertexData-9; i+=9)
    {
      glm::vec3 a = glm::vec3(myRoot->getFloat(i+0),myRoot->getFloat(i+1),myRoot->getFloat(i+2));
@@ -183,6 +193,10 @@ void NGLScene::initializeGL()
        normals[i+j+2]=N[2];
      }
    }
+   end = clock();
+   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+
+   std::cout<<"Normals took"<<elapsed_secs<<"seconds \n"<<std::endl;
 
    //printf("YOOO%d \n",amountVertexData * sizeof(float));
    glBindBuffer(GL_ARRAY_BUFFER, vbo);

@@ -1,0 +1,13 @@
+QMAKE_DEFAULT_INCDIRS = \
+    /usr/include/c++/4.8.5 \
+    /usr/include/c++/4.8.5/x86_64-redhat-linux \
+    /usr/include/c++/4.8.5/backward \
+    /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include \
+    /usr/local/include \
+    /usr/include
+QMAKE_DEFAULT_LIBDIRS = \
+    /usr/lib/gcc/x86_64-redhat-linux/4.8.5 \
+    /usr/lib64 \
+    /lib64 \
+    /usr/lib \
+    /lib

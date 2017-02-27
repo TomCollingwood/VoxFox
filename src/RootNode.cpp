@@ -487,9 +487,9 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
     if(itr->m_vert.size()==3)
     {
       ngl::Vec3 a, b, c, e1;
-      a = verts[itr->m_vert[0]]*20- ngl::Vec3(0,1,0);
-      b = verts[itr->m_vert[1]]*20 - ngl::Vec3(0,1,0);
-      c = verts[itr->m_vert[2]]*20 - ngl::Vec3(0,1,0);
+      a = verts[itr->m_vert[0]]*3 ;//*15- ngl::Vec3(0,1,0);
+      b = verts[itr->m_vert[1]]*3 ;//*15- ngl::Vec3(0,1,0);
+      c = verts[itr->m_vert[2]]*3 ;//*15- ngl::Vec3(0,1,0);
       e1 = b - a;
       int steps = std::ceil(e1.length()/unitVoxelLength);
       ngl::Vec3 vecStep = e1/steps;
@@ -499,12 +499,21 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
         ngl::Vec3 pos = a+(vecStep*i);
         ngl::Vec3 line = c-pos;
         int jsteps = std::ceil(line.length()/unitVoxelLength);
+
+        if(i!=steps)
+        {
+          if(i%2==1) jsteps/=2;
+          else if(i%4==2) jsteps*=0.75;
+          else if(i%8==4) jsteps*=0.875;
+        }
+
+
         ngl::Vec3 mystep = line*(unitVoxelLength / line.length());
 
-        for(int j = 0; j<=jsteps; ++j)
+        for(int j = 0; j<=jsteps+1; ++j)
         {
-          pos = pos + mystep;
           addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z));
+          pos = pos + mystep;
         }
       }
     }
