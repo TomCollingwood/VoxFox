@@ -75,15 +75,15 @@ void NGLScene::wheelEvent( QWheelEvent* _event )
   // check the diff of the wheel position (0 means no change)
   if ( _event->delta() > 0 )
   {
-    m_modelPos.m_z += ZOOM/3;
-    m_modelPos.m_x += ZOOM/3;
-    m_modelPos.m_y += ZOOM/3;
+    m_modelPos.m_z += ZOOM*3;
+    m_modelPos.m_x += ZOOM*3;
+    m_modelPos.m_y += ZOOM*3;
   }
   else if ( _event->delta() < 0 )
   {
-    m_modelPos.m_z -= ZOOM/3;
-    m_modelPos.m_x -= ZOOM/3;
-    m_modelPos.m_y -= ZOOM/3;
+    m_modelPos.m_z -= ZOOM*3;
+    m_modelPos.m_x -= ZOOM*3;
+    m_modelPos.m_y -= ZOOM*3;
   }
   update();
 }

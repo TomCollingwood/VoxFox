@@ -34,14 +34,20 @@ public:
   void importAccurateObj(ngl::Obj * _mesh);
   void drawBox(ngl::Vec3 _min, ngl::Vec3 _max);
 
+  //bool intersectBox(glm::vec3 _ray, , glm::vec3 _origin, glm::vec3 _min, glm::vec3 _max);
+
   void fill();
   bool full;
   bool empty = true;
 private:
   glm::vec3 min, max;
-  const float unitChildLength = 10.0;
+
+  const float m_primUnit = 10.0;
+  const float m_secUnit = 1.25;
+  const float m_leafUnit = 0.15625;
+  const float m_voxUnit = 0.01953125;
+
   const int depth = 3;
-  float unitVoxelLength = 0.01953125;
   std::vector<LeafNode *> m_leafTable;
   std::vector<PrimaryNode *> m_primChildren;
   LeafNode * m_leafAccessor =nullptr;
