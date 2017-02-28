@@ -14,9 +14,9 @@ class PrimaryNode
 public:
   PrimaryNode();
   PrimaryNode(glm::vec3 _origin);
-  void addVoxel(glm::vec3 _position, SecondaryNode * _secAccessor, LeafNode * _leafAccessor);
+  void addVoxel(glm::vec3 _position, SecondaryNode ** _secAccessor, LeafNode ** _leafAccessor);
   void draw(std::vector<float> * _vertexes, glm::vec3 _DOF);
-  bool isVoxel(glm::vec3 _position);
+  bool isVoxel(glm::vec3 _position, SecondaryNode ** _secAccessor, LeafNode ** _leafAccessor);
   glm::vec3 getOrigin() {return m_origin; }
   RootNode * m_parent;
   bool full;

@@ -102,7 +102,6 @@ void NGLScene::initializeGL()
   light.loadToShader( "light" );
 
   glEnable(GL_CULL_FACE);
-  float unit = 0.01953125;
 
   myRoot = new RootNode();
 
@@ -117,8 +116,8 @@ void NGLScene::initializeGL()
   //myRoot->importObj(m_mesh);
   //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
 
-  //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(0.55,0.06));
-  //myRoot->createSphere(glm::vec3(0,0,0),20);
+  //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
+  //myRoot->createSphere(glm::vec3(0,0,0),50);
 
   begin = clock();
   ngl::Mat4 MV = m_mouseGlobalTX * m_cam.getViewMatrix();
@@ -127,49 +126,19 @@ void NGLScene::initializeGL()
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Polycalc took"<<elapsed_secs<<"seconds \n"<<std::endl;
 
-//  glGenVertexArrays(1, &vao);
-//  glBindVertexArray(vao);
-//  glGenBuffers(1, &vbo);
-//  glGenBuffers(1, &nbo);
 
-  //myRoot->loadVBO(shader->getProgramID("Phong"),vbo,nbo);
-
-
-  // CALCULATE NORMALS ---
-
-
-  // shader->getProgramID(shaderProgram)
-
-  //printf("YOOO%d \n",amountVertexData * sizeof(float));
-//  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-//  glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
-//  glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), myRoot->getVertexes()->data());
-
-//  glBindBuffer(GL_ARRAY_BUFFER, nbo);
-//  glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
-//  glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), myRoot->getNormals()->data());
-
-//  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-//  GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
-//  glEnableVertexAttribArray(pos);
-//  glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,3*sizeof(float),0);
-//  //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
-
-//  glBindBuffer(GL_ARRAY_BUFFER, nbo);
-//  GLint n = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexNormal");
-//  glEnableVertexAttribArray(n);
-//  glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
-  //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
-
-  GLuint vao;
+   // GENERATION
+   GLuint vao;
    glGenVertexArrays(1, &vao);
-   glBindVertexArray(vao);
 
    GLuint vbo;
    glGenBuffers(1, &vbo);
 
    GLuint nbo;
    glGenBuffers(1, &nbo);
+
+   // BINDING AND CALCULATE
+   glBindVertexArray(vao);
 
    int amountVertexData = myRoot->getVertexSize();
    //printf("MAX SIZET: %d",myRoot->getVertexes()->max_size());
@@ -198,26 +167,23 @@ void NGLScene::initializeGL()
 
    std::cout<<"Normals took"<<elapsed_secs<<"seconds \n"<<std::endl;
 
-   //printf("YOOO%d \n",amountVertexData * sizeof(float));
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
-   glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), myRoot->getVertexes()->data());
+   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getVertexes()->data(), GL_STATIC_DRAW);
 
    glBindBuffer(GL_ARRAY_BUFFER, nbo);
-   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), 0, GL_STATIC_DRAW);
-   glBufferSubData(GL_ARRAY_BUFFER, 0, amountVertexData * sizeof(float), normals);
+   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), normals, GL_STATIC_DRAW);
 
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
    glEnableVertexAttribArray(pos);
    glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,3*sizeof(float),0);
-   //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
 
    glBindBuffer(GL_ARRAY_BUFFER, nbo);
    GLint n = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexNormal");
    glEnableVertexAttribArray(n);
    glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
-   //glVertexAttribPointer(pos,3,GL_FLOAT,GL_FALSE,0,0);
+
+   //glBufferData();
 }
 
 

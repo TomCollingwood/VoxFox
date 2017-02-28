@@ -15,9 +15,7 @@ bool LeafNode::isVoxel(glm::vec3 _position)
   glm::vec3 xyz = _position-m_origin;
   xyz = floor(xyz/unitVoxelLength);
   // this goes negative?? shiii man!!!!!!!
-//  if(xyz.x<0 || xyz.x>7 ) xyz.x = 0;//-xyz.x;
-//  if(xyz.y<0|| xyz.y>7) xyz.y = 0;//-xyz.y;
-//  if(xyz.z<0|| xyz.z>7) xyz.z = 0;//-xyz.z;
+  if(xyz.x<0 || xyz.x>7 || xyz.y<0|| xyz.y>7 || xyz.z<0|| xyz.z>7) return false;
   return m_VoxelData[((int)xyz.x)*8 + (int)xyz.y] & (unsigned int) 1<<(int)xyz.z;
 }
 

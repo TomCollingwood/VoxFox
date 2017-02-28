@@ -9,6 +9,7 @@
 #include <ngl/Vec4.h>
 #include <ngl/BBox.h>
 #include <ngl/Obj.h>
+#include <ngl/ShaderLib.h>
 
 #include "include/LeafNode.h"
 #include "include/PrimaryNode.h"
@@ -24,7 +25,7 @@ public:
   void printVertexes();
   std::vector<float> * getVertexes();
   std::vector<float> * getNormals();
-  void loadVBO(GLuint shaderID, GLuint vbo, GLuint nbo);
+  //void loadVBO(ngl::ShaderLib* shader, constexpr auto shaderProgram, GLuint vbo, GLuint nbo, float * normals);
   float getFloat(int i);
   int getVertexSize();
   void createSphere(glm::vec3 _position, int _radius);
@@ -46,7 +47,7 @@ private:
   LeafNode * m_leafAccessor =nullptr;
   SecondaryNode * m_secAccessor =nullptr;
   PrimaryNode * m_primAccessor =nullptr;
-  float numberOfVoxels=0;
+  int numberOfVoxels=0;
   std::vector<float> * m_vertexes;
   std::vector<float> * m_normals;
 };

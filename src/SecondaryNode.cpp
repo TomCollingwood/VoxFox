@@ -7,19 +7,20 @@ SecondaryNode::SecondaryNode()
 
 SecondaryNode::SecondaryNode(glm::vec3 _origin) : m_origin(_origin) {}
 
-bool SecondaryNode::isVoxel(glm::vec3 _position)
+bool SecondaryNode::isVoxel(glm::vec3 _position, LeafNode ** _leafAccessor)
 {
   for (auto &leaf : m_leafChildren) // access by reference to avoid copying
       {
         if(_position[0]<leaf->getOrigin()[0] || _position[0]>=leaf->getOrigin()[0]+unitChildLength) continue;
         if(_position[1]<leaf->getOrigin()[1] || _position[1]>=leaf->getOrigin()[1]+unitChildLength) continue;
         if(_position[2]<leaf->getOrigin()[2] || _position[2]>=leaf->getOrigin()[2]+unitChildLength) continue;
+        (*_leafAccessor)=leaf;
         return leaf->isVoxel(_position);
       }
   return false;
 }
 
-bool SecondaryNode::addVoxel(glm::vec3 _position, LeafNode * _leafAccessor)
+bool SecondaryNode::addVoxel(glm::vec3 _position, LeafNode ** _leafAccessor)
 {
   for (auto &leaf : m_leafChildren) // access by reference to avoid copying
       {
@@ -30,9 +31,8 @@ bool SecondaryNode::addVoxel(glm::vec3 _position, LeafNode * _leafAccessor)
         //if(glm::all(glm::lessThan(_position,leaf->getOrigin)) && glm::all(glm::greaterThanEqual(_position,)))
 
         leaf->addVoxel(_position);
-        _leafAccessor=leaf;
+        (*_leafAccessor)=leaf;
         return true;
-        break;
       }
 
   glm::vec3 newOrigin = floor(_position/unitChildLength)*unitChildLength;
