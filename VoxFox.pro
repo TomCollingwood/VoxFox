@@ -22,7 +22,8 @@ SOURCES+= $$PWD/src/NGLScene.cpp    \
     src/RootNode.cpp \
     src/SecondaryNode.cpp \
     src/PrimaryNode.cpp \
-    src/PolyToVoxel.cpp
+    src/PolyToVoxel.cpp \
+    src/Voxel.cpp
 # same for the .h files
 HEADERS+= $$PWD/include/NGLScene.h \
           $$PWD/include/WindowParams.h \
@@ -30,14 +31,16 @@ HEADERS+= $$PWD/include/NGLScene.h \
     include/LeafNode.h \
     include/SecondaryNode.h \
     include/PrimaryNode.h \
-    include/PolyToVoxel.h
+    include/PolyToVoxel.h \
+    include/Voxel.h
 # and add the include dir into the search path for Qt and make
 INCLUDEPATH +=./include
 # where our exe is going to live (root of project)
 DESTDIR=./
 # add the glsl shader files
 OTHER_FILES+= shaders/*.glsl \
-							README.md
+              README.md \
+              models/*.obj
 # were are going to default to a console app
 CONFIG += console
 # note each command you add needs a ; as it will be run as a single line

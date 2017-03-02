@@ -112,19 +112,27 @@ void NGLScene::initializeGL()
   myRoot->importAccurateObj(m_mesh);
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout<<"Import took"<<elapsed_secs<<"seconds \n"<<std::endl;
+  std::cout<<"Import took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+
+  std::cout<<"Filling..\n"<<std::endl;
+  begin = clock();
+  myRoot->fill();
+  end = clock();
+  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+  std::cout<<"Filling took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
   //myRoot->importObj(m_mesh);
   //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
 
   //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
   //myRoot->createSphere(glm::vec3(0,0,0),50);
 
+  std::cout<<"Poly Calculating..\n"<<std::endl;
   begin = clock();
   ngl::Mat4 MV = m_mouseGlobalTX * m_cam.getViewMatrix();
   myRoot->calculatePolys(MV);
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout<<"Polycalc took"<<elapsed_secs<<"seconds \n"<<std::endl;
+  std::cout<<"Polycalc took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
 
 
    // GENERATION
@@ -165,7 +173,7 @@ void NGLScene::initializeGL()
    end = clock();
    elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
-   std::cout<<"Normals took"<<elapsed_secs<<"seconds \n"<<std::endl;
+   std::cout<<"Normals took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
 
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getVertexes()->data(), GL_STATIC_DRAW);

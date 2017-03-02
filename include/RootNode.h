@@ -10,6 +10,7 @@
 #include <ngl/BBox.h>
 #include <ngl/Obj.h>
 #include <ngl/ShaderLib.h>
+#include <cmath>
 
 #include "include/LeafNode.h"
 #include "include/PrimaryNode.h"
@@ -20,7 +21,7 @@ public:
   RootNode();
   int getSize();
   void calculatePolys(ngl::Mat4 MV);
-  void addVoxel(glm::vec3 _position);
+  void addVoxel(glm::vec3 _position, Voxel _data);
   bool isVoxel(glm::vec3 _position);
   void printVertexes();
   std::vector<float> * getVertexes();
@@ -34,11 +35,12 @@ public:
   void importAccurateObj(ngl::Obj * _mesh);
   void drawBox(ngl::Vec3 _min, ngl::Vec3 _max);
 
-  //bool intersectBox(glm::vec3 _ray, , glm::vec3 _origin, glm::vec3 _min, glm::vec3 _max);
+  bool intersectBox(glm::vec3 _ray, glm::vec3 _origin, glm::vec3 _min, glm::vec3 _max);
 
   void fill();
   bool full;
   bool empty = true;
+  void addVoxelLine(ngl::Vec3 p0, ngl::Vec3 p1, ngl::Vec3 n0, ngl::Vec3 n1, Voxel _voxel);
 private:
   glm::vec3 min, max;
 

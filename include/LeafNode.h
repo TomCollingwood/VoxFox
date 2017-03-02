@@ -9,7 +9,9 @@
 #include <ngl/Colour.h>
 #include <ngl/Light.h>
 #include <ngl/Text.h>
+
 #include "lib/glm/glm/glm.hpp"
+#include "Voxel.h"
 
 class SecondaryNode;
 class RootNode;
@@ -19,7 +21,7 @@ class LeafNode
 public:
   LeafNode();
   LeafNode(glm::vec3 _origin);
-  bool addVoxel(glm::vec3 _position);
+  bool addVoxel(glm::vec3 _position, Voxel _voxel);
   bool isVoxel(glm::vec3 _position);
   glm::vec3 getOrigin() {return m_origin; }
   void draw(std::vector<float> * _vertexes, glm::vec3 _DOF);
@@ -27,7 +29,9 @@ public:
   SecondaryNode * m_parent;
   RootNode * m_root;
   glm::vec3 m_origin;
-  char * m_VoxelData;
+  char * m_VoxelMap;
+  std::vector<Voxel> m_VoxelData;
+
 private:
   int m_voxNumber;
 
