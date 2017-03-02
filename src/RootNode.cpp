@@ -513,9 +513,9 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
       if(itr->m_vert.size()==3)
       {
         ngl::Vec3 a, b, c, e1;
-        a = verts[itr->m_vert[0]] ;//*15- ngl::Vec3(0,1,0);
-        b = verts[itr->m_vert[1]] ;//*15- ngl::Vec3(0,1,0);
-        c = verts[itr->m_vert[2]] ;//*15- ngl::Vec3(0,1,0);
+        a = verts[itr->m_vert[0]]*1 ;//*15- ngl::Vec3(0,1,0);
+        b = verts[itr->m_vert[1]]*1 ;//*15- ngl::Vec3(0,1,0);
+        c = verts[itr->m_vert[2]]*1 ;//*15- ngl::Vec3(0,1,0);
         e1 = b - a;
       int steps = std::ceil(e1.length()/m_voxUnit);
       ngl::Vec3 vecStep = e1/(2*steps); // scaled
@@ -718,10 +718,18 @@ void RootNode::fill()
       glm::vec3 rayorig = glm::vec3(i*m_voxUnit,j*m_voxUnit,min.z);
       for(auto& p : m_primChildren)
       {
-        if(intersectBox(raydir,rayorig,p->getOrigin(),p->getOrigin()+m_primUnit))
+        glm::vec3 posPrim=rayorig;
+
+        if(p->getOrigin()[0]<=posPrim[0] && p->getOrigin()[0]+m_primUnit>posPrim[0] &&
+           p->getOrigin()[1]<=posPrim[1] && p->getOrigin()[1]+m_primUnit>posPrim[1] &&
+           p->getOrigin()[2]<=posPrim[2] && p->getOrigin()[2]+m_primUnit>posPrim[2])
         {
+
+
+
           for(auto& s : p->m_secChildren)
           {
+            glm::vec3 posSec = rayorig;
             if(intersectBox(raydir,rayorig,s->getOrigin(),s->getOrigin()+m_secUnit))
             {
               for(auto& l : s->m_leafChildren)
@@ -747,7 +755,7 @@ void RootNode::fill()
                     else if(inVoxels && !isVoxel(currentpos))
                     {
                       inVoxels=false;
-                      if(inVoxels%2==0)
+                      if(numInstersections%2==0)
                       {
                         inside=true;
                         beginEndStrips.push_back(currentpos);
@@ -758,9 +766,13 @@ void RootNode::fill()
                 }
               }
             }
+
           }
         }
+
+        posPrim+=glm::vec3(0,0,m_primUnit);
       }
+      if(beginEndStrips.size()%2==1) beginEndStrips.pop_back();
     }
   }
 

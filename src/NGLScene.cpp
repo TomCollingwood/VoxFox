@@ -116,7 +116,7 @@ void NGLScene::initializeGL()
 
   std::cout<<"Filling..\n"<<std::endl;
   begin = clock();
-  myRoot->fill();
+  //myRoot->fill();
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Filling took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
@@ -242,7 +242,7 @@ void NGLScene::paintGL()
   // draw
 
   //prim->draw( "teapot" );
-  //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
   //myRoot->calculatePolys(m_mouseGlobalTX* m_cam.getViewMatrix());
   //myRoot->loadVBO(shader->getProgramID("Phong"),vbo,nbo);
   loadMatricesToShader();
