@@ -27,10 +27,13 @@ HEADERS+=   $$PWD/include/RootNode.h \
             $$PWD/include/SecondaryNode.h \
             $$PWD/include/PrimaryNode.h \
             $$PWD/include/PolyToVoxel.h \
-            $$PWD/include/Voxel.h
+            $$PWD/include/Voxel.h \
+    include/DataStructs.h
 # and add the include dir into the search path for Qt and make
 INCLUDEPATH +=./include \
               $$PWD/lib
+
+
 # note each command you add needs a ; as it will be run as a single line
 # first check if we are shadow building or not easiest way is to check out against current
 #!equals(PWD, $${OUT_PWD}){

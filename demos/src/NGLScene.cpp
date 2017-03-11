@@ -176,10 +176,10 @@ void NGLScene::initializeGL()
    std::cout<<"Normals took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
 
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getVertexes()->data(), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getVertexes().data(), GL_STATIC_DRAW);
 
    glBindBuffer(GL_ARRAY_BUFFER, nbo);
-   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), normals, GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getNormals().data(), GL_STATIC_DRAW);
 
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
@@ -242,7 +242,8 @@ void NGLScene::paintGL()
   // draw
 
   //prim->draw( "teapot" );
-  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  //glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,GL_TRUE);
   //myRoot->calculatePolys(m_mouseGlobalTX* m_cam.getViewMatrix());
   //myRoot->loadVBO(shader->getProgramID("Phong"),vbo,nbo);
   loadMatricesToShader();

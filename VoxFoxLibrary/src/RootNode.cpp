@@ -2,16 +2,17 @@
 
 RootNode::RootNode()
 {
-  m_vertexes = new std::vector<float>(0);
-  m_normals = new std::vector<float>(0);
+  m_primAccessor= {initialized=false};
+  m_secAccessor= {initialized=false};
+  m_leafAccessor= {initialized=false};
 }
 
-std::vector<float> * RootNode::getVertexes()
+std::vector<float> RootNode::getVertexes()
 {
   return m_vertexes;
 }
 
-std::vector<float> * RootNode::getNormals()
+std::vector<float> RootNode::getNormals()
 {
   return m_normals;
 }
@@ -23,17 +24,17 @@ int RootNode::getSize()
 
 float RootNode::getVertexFloat(int i)
 {
-  return m_vertexes->at(i);
+  return m_vertexes.at(i);
 }
 
 int RootNode::getVertexSize()
 {
-  return m_vertexes->size();
+  return m_vertexes.size();
 }
 
 void RootNode::printVertexes()
 {
-  for (std::vector<float>::const_iterator i = m_vertexes->begin(); i != m_vertexes->end(); ++i)
+  for (std::vector<float>::const_iterator i = m_vertexes.begin(); i != m_vertexes.end(); ++i)
       std::cout << *i << ' ';
 }
 bool RootNode::isVoxel(glm::vec3 _position)
@@ -44,42 +45,54 @@ bool RootNode::isVoxel(glm::vec3 _position)
 //  {
     for (auto &prim : m_primChildren) // access by reference to avoid copying
         {
-          if(_position[0]<prim->getOrigin()[0] || _position[0]>=prim->getOrigin()[0]+m_primUnit) continue;
-          if(_position[1]<prim->getOrigin()[1] || _position[1]>=prim->getOrigin()[1]+m_primUnit) continue;
-          if(_position[2]<prim->getOrigin()[2] || _position[2]>=prim->getOrigin()[2]+m_primUnit) continue;
-          m_primAccessor=prim;
-          return prim->isVoxel(_position,&m_secAccessor,&m_leafAccessor);
+          if(_position[0]<prim.getOrigin()[0] || _position[0]>=prim.getOrigin()[0]+m_primUnit) continue;
+          if(_position[1]<prim.getOrigin()[1] || _position[1]>=prim.getOrigin()[1]+m_primUnit) continue;
+          if(_position[2]<prim.getOrigin()[2] || _position[2]>=prim.getOrigin()[2]+m_primUnit) continue;
+          m_primAccessor={prim.getIndex(),true};
+          return prim.isVoxel(_position,&m_secAccessor,&m_leafAccessor);
         }
     return false;
 //  }
 }
 
+LeafNode * RootNode::getLeaf(LeafAccessor _leafAcc)
+{
+  return &(m_primChildren[_leafAcc.primIndex].m_secChildren[_leafAcc.secIndex].m_leafChildren[_leafAcc.leafIndex]);
+}
+
+SecondaryNode * RootNode::getSecondary(SecAccessor _secAcc)
+{
+  return &(m_primChildren[_secAcc.primIndex].m_secChildren[_secAcc.secIndex]);
+}
+
 void RootNode::addVoxel(glm::vec3 _position, Voxel _data)
 {
-  if((m_leafAccessor==nullptr && m_secAccessor==nullptr) ||
-     (m_leafAccessor!=nullptr && !m_leafAccessor->addVoxel(_position, _data) &&
-     m_secAccessor!=nullptr && !m_secAccessor->addVoxel(_position,_data,&m_leafAccessor)))
+  if((!m_leafAccessor.initialized && !m_secAccessor.initialized) ||
+     (m_leafAccessor.initialized && !getLeaf(m_leafAccessor)->addVoxel(_position, _data) &&
+     m_secAccessor.initialized && !getSecondary(m_secAccessor)->addVoxel(_position,_data,&m_leafAccessor)))
   {
     bool found = false;
     for (auto &prim : m_primChildren) // access by reference to avoid copying
-        {
-          if(_position[0]<prim->getOrigin()[0] || _position[0]>=prim->getOrigin()[0]+m_primUnit) continue;
-          if(_position[1]<prim->getOrigin()[1] || _position[1]>=prim->getOrigin()[1]+m_primUnit) continue;
-          if(_position[2]<prim->getOrigin()[2] || _position[2]>=prim->getOrigin()[2]+m_primUnit) continue;
-          m_primAccessor=prim;
-          prim->addVoxel(_position,_data,&m_secAccessor,&m_leafAccessor);
-          found = true;
-          break;
-        }
+    {
+      if(_position[0]<prim.getOrigin()[0] || _position[0]>=prim.getOrigin()[0]+m_primUnit) continue;
+      if(_position[1]<prim.getOrigin()[1] || _position[1]>=prim.getOrigin()[1]+m_primUnit) continue;
+      if(_position[2]<prim.getOrigin()[2] || _position[2]>=prim.getOrigin()[2]+m_primUnit) continue;
+      m_primAccessor={prim.getIndex(),true};
+      prim.addVoxel(_position,_data,m_secAccessor,m_leafAccessor);
+      found = true;
+      break;
+    }
     if(!found)
     {
       glm::vec3 newOrigin = floor(_position/m_primUnit)*m_primUnit;
-      m_primChildren.push_back(new PrimaryNode(newOrigin));
-      m_primChildren.back()->addVoxel(_position,_data,&m_secAccessor,&m_leafAccessor);
+
+      int primSize = m_primChildren.size();
+      m_primChildren.push_back(PrimaryNode(newOrigin,primSize));
+
+      m_primChildren.back().addVoxel(_position,_data,&m_secAccessor,&m_leafAccessor);
       min=glm::vec3(glm::min(min.x,newOrigin.x),glm::min(min.y,newOrigin.y),glm::min(min.z,newOrigin.z));
       max=glm::vec3(glm::max(min.x,newOrigin.x+m_primUnit),glm::max(min.y,newOrigin.y+m_primUnit),glm::max(min.z,newOrigin.z+m_primUnit));
     }
-
 }
   numberOfVoxels++;
 }
@@ -91,7 +104,7 @@ void RootNode::addVoxel(glm::vec3 _position, Voxel _data)
 
 void RootNode::calculatePolys()
 {
- m_vertexes->clear();
+ m_vertexes.clear();
 
     //glm::vec3 DOF = glm::vec3(-MV.m_02,-MV.m_12,-MV.m_22);
 
@@ -101,22 +114,23 @@ void RootNode::calculatePolys()
 
     for (auto &prim : m_primChildren) // access by reference to avoid copying
     {
-      //prim->draw(m_vertexes, DOF);
-      for(auto &sec : prim->m_secChildren)
+      //prim.draw(m_vertexes, DOF);
+      for(auto &sec : prim.m_secChildren)
       {
-        for(auto &leaf : sec->m_leafChildren)
+        for(auto &leaf : sec.m_leafChildren)
         {
           int voxelindex=0;
           for(int i = 0; i<64; ++i)
           {
             for(int j = 0; j<8 ; ++j)
             {
-              if(leaf->m_VoxelMap[i] & (1<<j))
+              if(leaf.m_VoxelMap[i] & (1<<j))
               {
-                float _x = (i/8)*m_voxUnit +leaf->m_origin[0];
-                float _y = (i-(floor(i/8)*8))*m_voxUnit+leaf->m_origin[1];
-                float _z = j*m_voxUnit+leaf->m_origin[2];
+                float _x = (i/8)*m_voxUnit+leaf.m_origin[0];
+                float _y = (i-(floor(i/8)*8))*m_voxUnit+leaf.m_origin[1];
+                float _z = j*m_voxUnit+leaf.m_origin[2];
                 float _u =  m_voxUnit;//*10;
+
 
 
                 int numberOfFaces =0;
@@ -135,207 +149,209 @@ void RootNode::calculatePolys()
                 float x2 = 0.2;
                 float z2 = 0.4;
                 float y2 = (n.x*_x + n.y*_y + n.z*_z - n.x*x2 - n.z*z2)/n.y;
-                m_vertexes->push_back(_x);
-                m_vertexes->push_back(_y);
-                m_vertexes->push_back(_z);
-                m_vertexes->push_back(x1);
-                m_vertexes->push_back(y1);
-                m_vertexes->push_back(z1);
-                m_vertexes->push_back(x2);
-                m_vertexes->push_back(y2);
-                m_vertexes->push_back(z2);
+                m_vertexes.push_back(_x);
+                m_vertexes.push_back(_y);
+                m_vertexes.push_back(_z);
+                m_vertexes.push_back(x1);
+                m_vertexes.push_back(y1);
+                m_vertexes.push_back(z1);
+                m_vertexes.push_back(x2);
+                m_vertexes.push_back(y2);
+                m_vertexes.push_back(z2);
                 */
 
 
                 // BACK FACE
                 // isVoxel
-                if((j>0 && !(leaf->m_VoxelMap[i] & (1<<(j-1))))     ||      (j==0 && !isVoxel(glm::vec3(_x,_y,_z-m_voxUnit))))
+                if((j>0 && !(leaf.m_VoxelMap[i] & (1<<(j-1))))     ||      (j==0 && !isVoxel(glm::vec3(_x,_y,_z-m_voxUnit))))
                 {
                   // 1
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z);
 
                   // 2
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z);
 
                   ++numberOfFaces;
 
                 }
                 // FRONT FACE
-                if((j<7 && !(leaf->m_VoxelMap[i] & (1<<(j+1))))       ||        (j==7 && !isVoxel(glm::vec3(_x,_y,_z+m_voxUnit))))
+                if((j<7 && !(leaf.m_VoxelMap[i] & (1<<(j+1))))       ||        (j==7 && !isVoxel(glm::vec3(_x,_y,_z+m_voxUnit))))
                 {
                   // 3
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
 
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z+_u);
                   // 4
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z+_u);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z+_u);
                   ++numberOfFaces;
                 }
                 // LEFT FACE
-                if((i>7 && !(leaf->m_VoxelMap[i-8] & (1<<j)))    ||  (i<=7 && !isVoxel(glm::vec3(_x-m_voxUnit,_y,_z))))
+                if((i>7 && !(leaf.m_VoxelMap[i-8] & (1<<j)))    ||  (i<=7 && !isVoxel(glm::vec3(_x-m_voxUnit,_y,_z))))
                 {
                   // 5
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
                   // 6
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
 
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z+_u);
 
                   ++numberOfFaces;
                 }
                 // RIGHT FACE
-                if( (i<=56 && !(leaf->m_VoxelMap[i+8] & (1<<j)))  ||   (i>56 && !isVoxel(glm::vec3(_x+m_voxUnit,_y,_z))))
+                if( (i<=56 && !(leaf.m_VoxelMap[i+8] & (1<<j)))  ||   (i>56 && !isVoxel(glm::vec3(_x+m_voxUnit,_y,_z))))
                 {
                   // 7
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
                   // 8
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z+_u);
 
                   ++numberOfFaces;
                 }
 
-                if((i%8<7 && !(leaf->m_VoxelMap[i+1] & (1<<j)))  ||   (i%8==7 && !isVoxel(glm::vec3(_x,_y+m_voxUnit,_z))))
+                if((i%8<7 && !(leaf.m_VoxelMap[i+1] & (1<<j)))  ||   (i%8==7 && !isVoxel(glm::vec3(_x,_y+m_voxUnit,_z))))
                 {
                   // 9
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z+_u);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z+_u);
                   // 10
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z+_u);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y+_u);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y+_u);
+                  m_vertexes.push_back(_z);
 
                   ++numberOfFaces;
                 }
-                if((i%8>0 && !(leaf->m_VoxelMap[i-1] & (1<<j)))  ||  (i%8==0 && !isVoxel(glm::vec3(_x,_y-m_voxUnit,_z))))
+                if((i%8>0 && !(leaf.m_VoxelMap[i-1] & (1<<j)))  ||  (i%8==0 && !isVoxel(glm::vec3(_x,_y-m_voxUnit,_z))))
                 {
                   // 11
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
                   // 12
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z);
 
-                  m_vertexes->push_back(_x+_u);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x+_u);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
 
-                  m_vertexes->push_back(_x);
-                  m_vertexes->push_back(_y);
-                  m_vertexes->push_back(_z+_u);
+                  m_vertexes.push_back(_x);
+                  m_vertexes.push_back(_y);
+                  m_vertexes.push_back(_z+_u);
 
                   ++numberOfFaces;
                 }
-                if(leaf->m_VoxelData.size()>=voxelindex+1)
+                if(leaf.m_VoxelData.size()>=voxelindex+1)
                 {
-                for(int o=0; o<numberOfFaces*6; ++o)
-                {
-                  m_normals->push_back(leaf->m_VoxelData[voxelindex].nx);
-                  m_normals->push_back(leaf->m_VoxelData[voxelindex].ny);
-                  m_normals->push_back(leaf->m_VoxelData[voxelindex].nz);
-                }
+                  for(int o=0; o<numberOfFaces*6; ++o)
+                  {
+                    m_normals.push_back(leaf.m_VoxelData[voxelindex].nx);
+                    m_normals.push_back(leaf.m_VoxelData[voxelindex].ny);
+                    m_normals.push_back(leaf.m_VoxelData[voxelindex].nz);
+                    m_texturecoordinates.push_back(leaf.m_VoxelData[voxelindex].u);
+                    m_texturecoordinates.push_back(leaf.m_VoxelData[voxelindex].v);
+                  }
                 }
                 // */
                 ++voxelindex;
@@ -366,20 +382,20 @@ void RootNode::createSphere(glm::vec3 _position, int _radius)
       }
   }
 
-  for(int i = 0; i<m_vertexes->size(); i+=9)
+  for(int i = 0; i<m_vertexes.size(); i+=9)
   {
-    glm::vec3 a = glm::vec3(m_vertexes->at(i+0),m_vertexes->at(i+1),m_vertexes->at(i+2));
-    glm::vec3 b = glm::vec3(m_vertexes->at(i+3),m_vertexes->at(i+4),m_vertexes->at(i+5));
-    glm::vec3 c = glm::vec3(m_vertexes->at(i+6),m_vertexes->at(i+7),m_vertexes->at(i+8));
+    glm::vec3 a = glm::vec3(m_vertexes[i+0],m_vertexes[i+1],m_vertexes[i+2]);
+    glm::vec3 b = glm::vec3(m_vertexes[i+3],m_vertexes[i+4],m_vertexes[i+5]);
+    glm::vec3 c = glm::vec3(m_vertexes[i+6],m_vertexes[i+7],m_vertexes[i+8]);
     glm::vec3 A = b - a;
     glm::vec3 B = c - a;
     glm::vec3 N = glm::cross(A,B);
     N = glm::normalize(N);
     for(int j=0; j<3; ++j)
     {
-      m_normals->push_back(N[0]);
-      m_normals->push_back(N[1]);
-      m_normals->push_back(N[2]);
+      m_normals.push_back(N[0]);
+      m_normals.push_back(N[1]);
+      m_normals.push_back(N[2]);
     }
   }
 }
@@ -506,6 +522,25 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
     std::vector<ngl::Vec3> verts = _mesh->getVertexList();
     std::vector<ngl::Vec3> textures = _mesh->getTextureCordList();
     std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
+    std::vector<ngl::Vec3> normalList = _mesh->getNormalList();
+
+
+    std::vector<ngl::Vec3> vertNormals = std::vector<ngl::Vec3>(verts.size());
+    std::fill(vertNormals.begin(), vertNormals.end(), 0);
+    std::vector<int> numberOfFacesPerVert = std::vector<int>(verts.size());
+
+    for(int i = 0; i<objFaceList.size(); ++i)
+    {
+      ngl::Vec3 tmpNormal;
+
+      tmpNormal = (verts[objFaceList[i].m_vert[1]]-verts[objFaceList[i].m_vert[0]]).cross(verts[objFaceList[i].m_vert[2]]-verts[objFaceList[i].m_vert[0]]);
+      tmpNormal.normalize();
+      for(int j =0; j<objFaceList[i].m_vert.size(); ++j)
+      {
+        vertNormals[objFaceList[i].m_vert[j]] = tmpNormal;
+      }
+      numberOfFacesPerVert[i]=objFaceList[i].m_vert.size();
+    }
 
     // FOR EACH FACE
     for(std::vector<ngl::Face>::iterator itr=objFaceList.begin(); itr!=objFaceList.end(); ++itr)
@@ -513,12 +548,25 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
       if(itr->m_vert.size()==3)
       {
         ngl::Vec3 a, b, c, e1;
-        a = verts[itr->m_vert[0]]*1 ;//*15- ngl::Vec3(0,1,0);
-        b = verts[itr->m_vert[1]]*1 ;//*15- ngl::Vec3(0,1,0);
-        c = verts[itr->m_vert[2]]*1 ;//*15- ngl::Vec3(0,1,0);
+        a = verts[itr->m_vert[0]]*1;
+        b = verts[itr->m_vert[1]]*1;
+        c = verts[itr->m_vert[2]]*1;
         e1 = b - a;
         int steps = std::ceil(e1.length()/m_voxUnit);
         ngl::Vec3 vecStep = e1/(2*steps); // scaled
+
+        ngl::Vec3 an, bn, cn;
+        an = vertNormals[itr->m_vert[0]]/numberOfFacesPerVert[itr->m_vert[0]];
+        bn = vertNormals[itr->m_vert[1]]/numberOfFacesPerVert[itr->m_vert[1]];
+        cn = vertNormals[itr->m_vert[2]]/numberOfFacesPerVert[itr->m_vert[2]];
+        an.normalize();
+        bn.normalize();
+        cn.normalize();
+
+
+//        an = normalList[itr->m_vert[0]];
+//        bn = normalList[itr->m_vert[1]];
+//        cn = normalList[itr->m_vert[2]];
 
         float au = textures[itr->m_vert[0]].m_x;
         float av = textures[itr->m_vert[0]].m_y;
@@ -533,8 +581,11 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
           ngl::Vec3 pos = a+(vecStep*i);
           ngl::Vec3 line = c-pos;
           int jsteps = std::ceil(line.length()/m_voxUnit);
-          float lineu = ngl::lerp(au,bu,i/(steps-1));
-          float linev = ngl::lerp(av,bv,i/(steps-1));
+          float howFarAlongLine = 0;
+          if(steps>1) howFarAlongLine=((float)i)/((float)(steps-1));
+          float lineu = ngl::lerp(au,bu,howFarAlongLine);
+          float linev = ngl::lerp(av,bv,howFarAlongLine);
+          ngl::Vec3 linenormal = ngl::lerp(an,bn,howFarAlongLine);
           if(i!=steps)
           {
             if(i%2==1) jsteps/=2;
@@ -548,10 +599,20 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
           jsteps*=3; //scaled
           for(int j = 0; j<jsteps; ++j)
           {
+            float howFarAlongLine2=0;
+            if(jsteps>1) howFarAlongLine2=((float)j)/((float)(jsteps-1));
             Voxel insertVoxel = Voxel();
-            insertVoxel.u=ngl::lerp(lineu, cu, j/(jsteps-1));
-            insertVoxel.v=ngl::lerp(linev, cv, j/(jsteps-1));
-            addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),Voxel());
+            insertVoxel.u=ngl::lerp(lineu, cu, howFarAlongLine2);
+            insertVoxel.v=ngl::lerp(linev, cv, howFarAlongLine2);
+            ngl::Vec3 voxelNormal = lerp(linenormal,cn,howFarAlongLine2);
+            voxelNormal.normalize();
+            if(voxelNormal.m_x==voxelNormal.m_x && voxelNormal.m_y==voxelNormal.m_y && voxelNormal.m_z==voxelNormal.m_z)
+            {
+              insertVoxel.nx = voxelNormal.m_x;
+              insertVoxel.ny = voxelNormal.m_y;
+              insertVoxel.nz = voxelNormal.m_z;
+            }
+            addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),insertVoxel);
             pos = pos + mystep;
           }
         }
@@ -669,7 +730,6 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
 
     }
  }
- printf("Number of voxels: %d",numberOfVoxels);
 }
 
 bool RootNode::intersectBox(glm::vec3 _ray, glm::vec3 _origin, glm::vec3 _min, glm::vec3 _max)
@@ -717,11 +777,11 @@ void RootNode::fill()
   std::vector<glm::vec3> beginEndStrips;
 
   glm::vec3 min, max; // min and max for all primary nodes
-  min = max = m_primChildren[0]->getOrigin();
+  min = max = m_primChildren[0].getOrigin();
   for(auto& i : m_primChildren)
   {
-    min = glm::vec3(glm::min(i->getOrigin().x,min.x),glm::min(i->getOrigin().y,min.y),glm::min(i->getOrigin().z,min.z));
-    max = glm::vec3(glm::max(i->getOrigin().x+10.0f,max.x),glm::max(i->getOrigin().y+10.0f,max.y),glm::max(i->getOrigin().z+10.0f,max.z));
+    min = glm::vec3(glm::min(i.getOrigin().x,min.x),glm::min(i.getOrigin().y,min.y),glm::min(i.getOrigin().z,min.z));
+    max = glm::vec3(glm::max(i.getOrigin().x+10.0f,max.x),glm::max(i.getOrigin().y+10.0f,max.y),glm::max(i.getOrigin().z+10.0f,max.z));
   }
 
   glm::vec3 raydir=glm::vec3(0.0,0.0,1.0);
@@ -735,24 +795,24 @@ void RootNode::fill()
       {
         glm::vec3 posPrim=rayorig;
 
-        if(p->getOrigin()[0]<=posPrim[0] && p->getOrigin()[0]+m_primUnit>posPrim[0] &&
-           p->getOrigin()[1]<=posPrim[1] && p->getOrigin()[1]+m_primUnit>posPrim[1] &&
-           p->getOrigin()[2]<=posPrim[2] && p->getOrigin()[2]+m_primUnit>posPrim[2])
+        if(p.getOrigin()[0]<=posPrim[0] && p.getOrigin()[0]+m_primUnit>posPrim[0] &&
+           p.getOrigin()[1]<=posPrim[1] && p.getOrigin()[1]+m_primUnit>posPrim[1] &&
+           p.getOrigin()[2]<=posPrim[2] && p.getOrigin()[2]+m_primUnit>posPrim[2])
         {
 
 
 
-          for(auto& s : p->m_secChildren)
+          for(auto& s : p.m_secChildren)
           {
-            glm::vec3 posSec = rayorig;
-            if(intersectBox(raydir,rayorig,s->getOrigin(),s->getOrigin()+m_secUnit))
+            //glm::vec3 posSec = rayorig;
+            if(intersectBox(raydir,rayorig,s.getOrigin(),s.getOrigin()+m_secUnit))
             {
-              for(auto& l : s->m_leafChildren)
+              for(auto& l : s.m_leafChildren)
               {
-                if(intersectBox(raydir,rayorig,l->getOrigin(),l->getOrigin()+m_leafUnit))
+                if(intersectBox(raydir,rayorig,l.getOrigin(),l.getOrigin()+m_leafUnit))
                 {
                   glm::vec3 origleaf = rayorig;
-                  origleaf.z=l->getOrigin().z;
+                  origleaf.z=l.getOrigin().z;
                   glm::vec3 currentpos = origleaf;
 
                   for(int k=0; k<8; ++k)
@@ -761,7 +821,7 @@ void RootNode::fill()
                     {
                        numInstersections++;
                        inVoxels=true;
-                       if(inside=true)
+                       if(inside==true)
                        {
                          inside=false;
                          beginEndStrips.push_back(currentpos-glm::vec3(0,0,m_voxUnit));

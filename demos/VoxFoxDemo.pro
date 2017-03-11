@@ -1,5 +1,5 @@
 # This specifies the exe name
-TARGET=VoxFoxDemo
+TARGET=app.bin
 # where to put the .o files
 OBJECTS_DIR=$$PWD/obj
 # core Qt Libs to use add more here if needed.
@@ -15,6 +15,7 @@ INCLUDEPATH+=../VoxFoxLibrary/include
 DEPENDPATH+=../VoxFoxLibrary/include
 LIBS+= -L../VoxFoxLibrary/lib -lVoxFox
 OTHER_FILES+=$$PWD/app
+QMAKE_RPATHDIR+=../VoxFoxLibrary/lib
 
 # where to put moc auto generated files
 MOC_DIR=$$PWD/moc

@@ -2,12 +2,12 @@
 
 LeafNode::LeafNode()
 {
-  m_VoxelMap = (char*)malloc(64*sizeof(char));
-  memset(m_VoxelMap, 0, 64*sizeof(char));
+  m_VoxelData = std::deque<Voxel>(0);
 }
-LeafNode::LeafNode(glm::vec3 _origin) : m_origin(_origin) {
-  m_VoxelMap = (char*)malloc(64*sizeof(char));
-  memset(m_VoxelMap, 0, 64*sizeof(char));
+
+glm::vec3 LeafNode::getOrigin()
+{
+  return m_origin;
 }
 
 bool LeafNode::isVoxel(glm::vec3 _position)
@@ -19,54 +19,29 @@ bool LeafNode::isVoxel(glm::vec3 _position)
   return m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] & (unsigned int) 1<<(int)xyz.z;
 }
 
-//bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
-//{
-//  glm::vec3 xyz = _position-m_origin;
-//  if(xyz.x>=0 && xyz.x<unitLeafLength && xyz.y>=0 && xyz.y<unitLeafLength && xyz.z>=0 && xyz.z<unitLeafLength )
-//  {
-//    Voxel insertVoxel = Voxel(_voxel);
-//    xyz = floor(xyz/unitVoxelLength);
-//    insertVoxel.index = (int) (xyz.x*8*8 + xyz.y*8 + xyz.z);
-
-//    if(!(m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] & (unsigned int) 1<<(int)xyz.z))
-//    {
-//      bool found = false;
-//      for(std::vector<Voxel>::iterator it = m_VoxelData.begin(); it != m_VoxelData.end(); ++it)
-//      {
-//        if(it->index>insertVoxel.index)
-//        {
-//          m_VoxelData.insert(it,_voxel);
-//          found = true;
-//          break;
-//        }
-//        if(!found)
-//        {
-//           m_VoxelData.push_back(_voxel);
-//        }
-//      }
-//      m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] |= (unsigned int) 1<<(int)xyz.z;
-//    }
-//    else
-//    {
-//      m_VoxelData.push_back(_voxel);
-//    }
-//    return true;
-//  }
-//  else
-//  {
-//    return false;
-//  }
-//}
-
-//old non Voxel
 bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
 {
   glm::vec3 xyz = _position-m_origin;
   if(xyz.x>=0 && xyz.x<unitLeafLength && xyz.y>=0 && xyz.y<unitLeafLength && xyz.z>=0 && xyz.z<unitLeafLength )
   {
+    Voxel insertVoxel = _voxel;
     xyz = floor(xyz/unitVoxelLength);
-    m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] |= (unsigned int) 1<<(int)xyz.z;
-
+    insertVoxel.index = (int) (xyz.x*8*8 + xyz.y*8 + xyz.z);
+    if(!(m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] & (unsigned int) 1<<(int)xyz.z))
+    {
+      int count = 0;
+      if(m_VoxelData.size()>0)
+      {
+        while(m_VoxelData[count].index<insertVoxel.index)
+        {
+          ++count;
+          if(count+1>m_VoxelData.size())  break;
+        }
+        m_VoxelData.insert(m_VoxelData.begin()+count,insertVoxel);
+      }
+      m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] |= (unsigned int) 1<<(int)xyz.z;
+    }
+    // */
     return true;
   }
   else
@@ -74,6 +49,23 @@ bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
     return false;
   }
 }
+
+//old non Voxel
+//bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
+//{
+//  glm::vec3 xyz = _position-m_origin;
+//  if(xyz.x>=0 && xyz.x<unitLeafLength && xyz.y>=0 && xyz.y<unitLeafLength && xyz.z>=0 && xyz.z<unitLeafLength )
+//  {
+//    xyz = floor(xyz/unitVoxelLength);
+//    m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] |= (unsigned int) 1<<(int)xyz.z;
+
+//    return true;
+//  }
+//  else
+//  {
+//    return false;
+//  }
+//}
 
 void LeafNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)
 {
@@ -88,9 +80,9 @@ void LeafNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)
         float _z = j*unitVoxelLength+m_origin[2];
         float _u =  unitVoxelLength;//*10;
 
-        glm::vec3 n = _DOF;
+        //glm::vec3 n = _DOF;
 
-        float incre = _u/5;
+        //float incre = _u/5;
 
 //        for(int k = 0; k<5; ++k)
 //        {

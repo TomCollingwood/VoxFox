@@ -14,11 +14,13 @@
 
 #include "LeafNode.h"
 #include "PrimaryNode.h"
+#include "DataStructs.h"
 
 class RootNode
 {
 public:
   RootNode();
+  ~RootNode();
 
   void calculatePolys();
 
@@ -36,10 +38,10 @@ public:
   // ACCESSORS
   float getVertexFloat(int i);
   int   getVertexSize();
-  std::vector<float> * getVertexes();
-  std::vector<float> * getNormals();
+  std::vector<float> getVertexes();
+  std::vector<float> getNormals();
   int getSize();
-  std::vector<PrimaryNode *> * getChildren() {return &m_primChildren;}
+  std::vector<PrimaryNode> getChildren() {return m_primChildren;}
   //std::vector<float> * getVertexes() {return m_vertexes; }
 
   // SHAPES
@@ -65,18 +67,24 @@ public:
   const float m_leafUnit = 0.15625;
   const float m_voxUnit = 0.01953125;
 
+  LeafNode * getLeaf(LeafAccessor _leafAcc);
+  SecondaryNode * getSecondary(SecAccessor _secAcc);
+
 private:
   glm::vec3 min, max;
 
   const int depth = 3;
   std::vector<LeafNode *> m_leafTable;
-  std::vector<PrimaryNode *> m_primChildren;
-  LeafNode * m_leafAccessor =nullptr;
-  SecondaryNode * m_secAccessor =nullptr;
-  PrimaryNode * m_primAccessor =nullptr;
+  std::vector<PrimaryNode> m_primChildren;
+  struct LeafAccessor m_leafAccessor;
+  struct SecAccessor m_secAccessor;
+  struct PrimAccessor m_primAccessor;
+
+
   int numberOfVoxels=0;
-  std::vector<float> * m_vertexes;
-  std::vector<float> * m_normals;
+  std::vector<float> m_vertexes;
+  std::vector<float> m_normals;
+  std::vector<float> m_texturecoordinates;
 };
 
 #endif // ROOTNODE_H
