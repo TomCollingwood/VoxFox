@@ -17,7 +17,7 @@ public:
     ny=0;
     nz=0;
     index=0;
-  };
+  }
   float nx;
   float ny;
   float nz;
@@ -27,12 +27,6 @@ public:
   float g;
   float b;
   int index;
-//  {
-//    m_voxelmap = (char*)malloc(64*sizeof(char));
-//    memset(m_voxelmap, 0, 64*sizeof(char));
-//  }
-//  std::vector<Voxel> m_voxels;
-//  char * m_voxelmap[64];
 };
 
 #endif // VOXELDATA_H

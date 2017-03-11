@@ -2,15 +2,14 @@
 
 RootNode::RootNode()
 {
-  //m_vertexes = new std::vector<float>(0);
-  //m_normals = new std::vector<float>(0);
+  m_vertexes = new std::vector<float>(0);
+  m_normals = new std::vector<float>(0);
 }
 
 std::vector<float> * RootNode::getVertexes()
 {
   return m_vertexes;
 }
-
 
 std::vector<float> * RootNode::getNormals()
 {
@@ -504,8 +503,11 @@ void RootNode::importObj(ngl::Obj * _mesh)
 
 void RootNode::importAccurateObj(ngl::Obj * _mesh)
 {
-  std::vector<ngl::Vec3> verts = _mesh->getVertexList();
+    std::vector<ngl::Vec3> verts = _mesh->getVertexList();
+    std::vector<ngl::Vec3> textures = _mesh->getTextureCordList();
     std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
+
+    // FOR EACH FACE
     for(std::vector<ngl::Face>::iterator itr=objFaceList.begin(); itr!=objFaceList.end(); ++itr)
     {
       if(itr->m_vert.size()==3)
@@ -515,32 +517,47 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
         b = verts[itr->m_vert[1]]*1 ;//*15- ngl::Vec3(0,1,0);
         c = verts[itr->m_vert[2]]*1 ;//*15- ngl::Vec3(0,1,0);
         e1 = b - a;
-      int steps = std::ceil(e1.length()/m_voxUnit);
-      ngl::Vec3 vecStep = e1/(2*steps); // scaled
+        int steps = std::ceil(e1.length()/m_voxUnit);
+        ngl::Vec3 vecStep = e1/(2*steps); // scaled
 
-      for(int i =0; i<(steps+1)*2; ++i) //scaled
-      {
-        ngl::Vec3 pos = a+(vecStep*i);
-        ngl::Vec3 line = c-pos;
-        int jsteps = std::ceil(line.length()/m_voxUnit);
-
-        if(i!=steps)
+        float au = textures[itr->m_vert[0]].m_x;
+        float av = textures[itr->m_vert[0]].m_y;
+        float bu = textures[itr->m_vert[1]].m_x;
+        float bv = textures[itr->m_vert[1]].m_y;
+        float cu = textures[itr->m_vert[2]].m_x;
+        float cv = textures[itr->m_vert[2]].m_y;
+        // FOR EACH LINE
+        steps = (steps+1)*2; //scaled
+        for(int i =0; i<steps; ++i)
         {
-          if(i%2==1) jsteps/=2;
-          else if(i%4==2) jsteps*=0.75;
-          else if(i%8==4) jsteps*=0.875;
-        }
+          ngl::Vec3 pos = a+(vecStep*i);
+          ngl::Vec3 line = c-pos;
+          int jsteps = std::ceil(line.length()/m_voxUnit);
+          float lineu = ngl::lerp(au,bu,i/(steps-1));
+          float linev = ngl::lerp(av,bv,i/(steps-1));
+          if(i!=steps)
+          {
+            if(i%2==1) jsteps/=2;
+            else if(i%4==2) jsteps*=0.75;
+            else if(i%8==4) jsteps*=0.875;
+          }
 
-        ngl::Vec3 mystep = line*(m_voxUnit / (3*line.length())); //scaled
+          ngl::Vec3 mystep = line*(m_voxUnit / (3*line.length())); //scaled
 
-        for(int j = 0; j<jsteps*3; ++j) //scaled
-        {
-          addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),Voxel());
-          pos = pos + mystep;
+          // FOR EACH VOXEL ON LINE
+          jsteps*=3; //scaled
+          for(int j = 0; j<jsteps; ++j)
+          {
+            Voxel insertVoxel = Voxel();
+            insertVoxel.u=ngl::lerp(lineu, cu, j/(jsteps-1));
+            insertVoxel.v=ngl::lerp(linev, cv, j/(jsteps-1));
+            addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),Voxel());
+            pos = pos + mystep;
+          }
         }
-      }
 
           /*
+          // SEE https://github.com/Forceflow/cuda_voxelizer/blob/master/src/voxelize.cu
 
           // COMPUTE COMMON TRIANGLE PROPE_maxIES
           glm::vec3 v0 = glm::vec3(ve_maxs[itr->m_ve_max[0]].m_x, ve_maxs[itr->m_ve_max[0]].m_y, ve_maxs[itr->m_ve_max[0]].m_z) ;//- info.bbox.min; // get v0 and move to origin

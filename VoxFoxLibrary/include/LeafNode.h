@@ -9,8 +9,7 @@
 #include <ngl/Colour.h>
 #include <ngl/Light.h>
 #include <ngl/Text.h>
-
-#include "../lib/glm/glm/glm.hpp"
+#include <glm/glm.hpp>
 #include "Voxel.h"
 
 class SecondaryNode;

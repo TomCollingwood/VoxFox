@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "../lib/glm/glm/glm.hpp"
+#include <glm/glm.hpp>
 
 #include <ngl/Vec3.h>
 #include <ngl/Vec4.h>

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "../lib/glm/glm/glm.hpp"
+#include <glm/glm.hpp>
 
 #include "LeafNode.h"
 #include "SecondaryNode.h"

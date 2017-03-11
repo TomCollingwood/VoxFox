@@ -129,7 +129,7 @@ void NGLScene::initializeGL()
   std::cout<<"Poly Calculating..\n"<<std::endl;
   begin = clock();
   ngl::Mat4 MV = m_mouseGlobalTX * m_cam.getViewMatrix();
-  myRoot->calculatePolys(MV);
+  myRoot->calculatePolys();
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Polycalc took "<<elapsed_secs<<" seconds \n\n"<<std::endl;

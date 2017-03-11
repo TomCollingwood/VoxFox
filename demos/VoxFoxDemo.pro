@@ -1,7 +1,7 @@
 # This specifies the exe name
 TARGET=VoxFoxDemo
 # where to put the .o files
-OBJECTS_DIR=obj
+OBJECTS_DIR=$$PWD/obj
 # core Qt Libs to use add more here if needed.
 QT+=gui opengl core
 # as I want to support 4.8 and 5 this will set a flag for some of the mac stuff
@@ -17,7 +17,7 @@ LIBS+= -L../VoxFoxLibrary/lib -lVoxFox
 OTHER_FILES+=$$PWD/app
 
 # where to put moc auto generated files
-MOC_DIR=moc
+MOC_DIR=$$PWD/moc
 # on a mac we don't create a .app bundle file ( for ease of multiplatform use)
 CONFIG-=app_bundle
 # Auto include all .cpp files in the project src directory (can specifiy individually if required)
@@ -61,6 +61,7 @@ CONFIG += console
 macx{
   LIBS+= -framework OpenGL
   LIBS+= -framework GLUT
+  #LIBS+= -framework glm
 }
 NGLPATH=$$(NGLDIR)
 isEmpty(NGLPATH){ # note brace must be here
