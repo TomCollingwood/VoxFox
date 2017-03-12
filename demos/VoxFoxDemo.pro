@@ -1,7 +1,7 @@
 # This specifies the exe name
-TARGET=app.bin
+TARGET=VoxFoxDemo
 # where to put the .o files
-OBJECTS_DIR=$$PWD/obj
+OBJECTS_DIR=obj
 # core Qt Libs to use add more here if needed.
 QT+=gui opengl core
 # as I want to support 4.8 and 5 this will set a flag for some of the mac stuff
@@ -15,10 +15,9 @@ INCLUDEPATH+=../VoxFoxLibrary/include
 DEPENDPATH+=../VoxFoxLibrary/include
 LIBS+= -L../VoxFoxLibrary/lib -lVoxFox
 OTHER_FILES+=$$PWD/app
-QMAKE_RPATHDIR+=../VoxFoxLibrary/lib
 
 # where to put moc auto generated files
-MOC_DIR=$$PWD/moc
+MOC_DIR=moc
 # on a mac we don't create a .app bundle file ( for ease of multiplatform use)
 CONFIG-=app_bundle
 # Auto include all .cpp files in the project src directory (can specifiy individually if required)
@@ -30,7 +29,7 @@ SOURCES+= $$PWD/src/NGLScene.cpp    \
 HEADERS+= $$PWD/include/NGLScene.h \
           $$PWD/include/WindowParams.h \
 # and add the include dir into the search path for Qt and make
-#INCLUDEPATH +=./include
+INCLUDEPATH +=./include
 # where our exe is going to live (root of project)
 DESTDIR=./
 # add the glsl shader files
@@ -62,7 +61,6 @@ CONFIG += console
 macx{
   LIBS+= -framework OpenGL
   LIBS+= -framework GLUT
-  #LIBS+= -framework glm
 }
 NGLPATH=$$(NGLDIR)
 isEmpty(NGLPATH){ # note brace must be here

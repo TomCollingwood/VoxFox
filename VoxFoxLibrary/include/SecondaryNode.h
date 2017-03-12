@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "LeafNode.h"
-#include "DataStructs.h"
 
 class RootNode;
 class PrimaryNode;
@@ -14,16 +13,14 @@ class SecondaryNode
 {
 public:
   SecondaryNode();
-  SecondaryNode(glm::vec3 _origin, SecondaryNodeIndex _index) : m_index(_index), m_origin(_origin) {}
-  bool addVoxel(glm::vec3 _position, struct Voxel _voxel, LeafNodeIndex &_leafAccessor);
-  bool isVoxel(glm::vec3 _position, LeafNodeIndex &_leafAccessor);
+  SecondaryNode(glm::vec3 _origin);
+  bool addVoxel(glm::vec3 _position, Voxel _voxel, LeafNode ** _leafAccessor);
+  bool isVoxel(glm::vec3 _position, LeafNode ** _leafAccessor);
   void draw(std::vector<float> * _vertexes, glm::vec3 _DOF);
   glm::vec3 getOrigin() {return m_origin; }
   PrimaryNode * m_parent;
-  std::vector<LeafNode> m_leafChildren;
-  SecondaryNodeIndex getIndex() { return m_index; }
+  std::vector<LeafNode *> m_leafChildren;
 private:
-  SecondaryNodeIndex m_index = SecondaryNodeIndex();
   bool full;
   glm::vec3 m_origin;
   float unitSecondaryLength = 1.25;

@@ -151,27 +151,27 @@ void NGLScene::initializeGL()
    int amountVertexData = myRoot->getVertexSize();
    //printf("MAX SIZET: %d",myRoot->getVertexes()->max_size());
 
-   begin = clock();
+//   begin = clock();
    // CALCULATE NORMALS ---
-   float * normals = new float[amountVertexData];
-   for(int i = 0; i<amountVertexData-9; i+=9)
-   {
-     glm::vec3 a = glm::vec3(myRoot->getVertexFloat(i+0),myRoot->getVertexFloat(i+1),myRoot->getVertexFloat(i+2));
-     glm::vec3 b = glm::vec3(myRoot->getVertexFloat(i+3),myRoot->getVertexFloat(i+4),myRoot->getVertexFloat(i+5));
-     glm::vec3 c = glm::vec3(myRoot->getVertexFloat(i+6),myRoot->getVertexFloat(i+7),myRoot->getVertexFloat(i+8));
-     glm::vec3 A = b - a;
-     glm::vec3 B = c - a;
-     glm::vec3 N = glm::cross(A,B);
-     N = glm::normalize(N);
-     for(int j=0; j<9; j+=3)
-     {
-       normals[i+j]=N[0];
-       normals[i+j+1]=N[1];
-       normals[i+j+2]=N[2];
-     }
-   }
-   end = clock();
-   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+//   float * normals = new float[amountVertexData];
+//   for(int i = 0; i<amountVertexData-9; i+=9)
+//   {
+//     glm::vec3 a = glm::vec3(myRoot->getVertexFloat(i+0),myRoot->getVertexFloat(i+1),myRoot->getVertexFloat(i+2));
+//     glm::vec3 b = glm::vec3(myRoot->getVertexFloat(i+3),myRoot->getVertexFloat(i+4),myRoot->getVertexFloat(i+5));
+//     glm::vec3 c = glm::vec3(myRoot->getVertexFloat(i+6),myRoot->getVertexFloat(i+7),myRoot->getVertexFloat(i+8));
+//     glm::vec3 A = b - a;
+//     glm::vec3 B = c - a;
+//     glm::vec3 N = glm::cross(A,B);
+//     N = glm::normalize(N);
+//     for(int j=0; j<9; j+=3)
+//     {
+//       normals[i+j]=N[0];
+//       normals[i+j+1]=N[1];
+//       normals[i+j+2]=N[2];
+//     }
+//   }
+//   end = clock();
+//   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
    std::cout<<"Normals took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
 
@@ -243,7 +243,6 @@ void NGLScene::paintGL()
 
   //prim->draw( "teapot" );
   //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-  //glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,GL_TRUE);
   //myRoot->calculatePolys(m_mouseGlobalTX* m_cam.getViewMatrix());
   //myRoot->loadVBO(shader->getProgramID("Phong"),vbo,nbo);
   loadMatricesToShader();

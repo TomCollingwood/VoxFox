@@ -1,7 +1,7 @@
 #ifndef DATASTRUCTS_H
 #define DATASTRUCTS_H
 
-struct Voxel{
+typedef struct Voxel{
   float nx;
   float ny;
   float nz;
@@ -21,9 +21,13 @@ struct Voxel{
     g(0.0f),
     b(0.0f),
     index(0){}
-};
 
-struct PrimaryNodeIndex{
+  Voxel(float _u, float _v) : u(_u), v(_v){}
+
+  Voxel(float _nx, float _ny, float _nz) : nx(_nx), ny(_ny), nz(_nz){}
+}Voxel;
+
+typedef struct PrimaryNodeIndex{
   int primIndex;
   bool initialized;
 
@@ -34,9 +38,9 @@ struct PrimaryNodeIndex{
   PrimaryNodeIndex() :
     primIndex(0),
     initialized(false){}
-};
+}PrimaryNodeIndex;
 
-struct SecondaryNodeIndex{
+typedef struct SecondaryNodeIndex{
   int primIndex;
   int secIndex;
   bool initialized;
@@ -50,9 +54,9 @@ struct SecondaryNodeIndex{
     primIndex(0),
     secIndex(0),
     initialized(false){}
-};
+}SecondaryNodeIndex;
 
-struct LeafNodeIndex{
+typedef struct LeafNodeIndex{
   int primIndex;
   int secIndex;
   int leafIndex;
@@ -69,6 +73,6 @@ struct LeafNodeIndex{
     secIndex(0),
     leafIndex(0),
     initialized(false){}
-};
+}LeafNodeIndex;
 
 #endif // DATASTRUCTS_H

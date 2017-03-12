@@ -1,2 +1,2 @@
-#include "include/DataStructs.h"
+#include "include/Voxel.h"
 

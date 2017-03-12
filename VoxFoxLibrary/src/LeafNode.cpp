@@ -1,8 +1,13 @@
 #include "include/LeafNode.h"
 
-glm::vec3 LeafNode::getOrigin()
+LeafNode::LeafNode()
 {
-  return m_origin;
+  m_VoxelMap = (char*)malloc(64*sizeof(char));
+  memset(m_VoxelMap, 0, 64*sizeof(char));
+}
+LeafNode::LeafNode(glm::vec3 _origin) : m_origin(_origin) {
+  m_VoxelMap = (char*)malloc(64*sizeof(char));
+  memset(m_VoxelMap, 0, 64*sizeof(char));
 }
 
 bool LeafNode::isVoxel(glm::vec3 _position)
@@ -45,23 +50,6 @@ bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
   }
 }
 
-//old non Voxel
-//bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
-//{
-//  glm::vec3 xyz = _position-m_origin;
-//  if(xyz.x>=0 && xyz.x<unitLeafLength && xyz.y>=0 && xyz.y<unitLeafLength && xyz.z>=0 && xyz.z<unitLeafLength )
-//  {
-//    xyz = floor(xyz/unitVoxelLength);
-//    m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] |= (unsigned int) 1<<(int)xyz.z;
-
-//    return true;
-//  }
-//  else
-//  {
-//    return false;
-//  }
-//}
-
 void LeafNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)
 {
   for(int i = 0; i<64; ++i)
@@ -75,9 +63,10 @@ void LeafNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)
         float _z = j*unitVoxelLength+m_origin[2];
         float _u =  unitVoxelLength;//*10;
 
-        //glm::vec3 n = _DOF;
 
-        //float incre = _u/5;
+        glm::vec3 n = _DOF;
+
+        float incre = _u/5;
 
 //        for(int k = 0; k<5; ++k)
 //        {
@@ -275,6 +264,8 @@ void LeafNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)
         _vertexes->push_back(_y);
         _vertexes->push_back(_z+_u);
         }
+
+
         // */
       }
     }
