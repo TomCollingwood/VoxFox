@@ -36,9 +36,9 @@ bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
         {
           ++count;
           if(count+1>m_VoxelData.size())  break;
-        }
-        m_VoxelData.insert(m_VoxelData.begin()+count,insertVoxel);
+        }      
       }
+      m_VoxelData.insert(m_VoxelData.begin()+count,insertVoxel);
       m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] |= (unsigned int) 1<<(int)xyz.z;
     }
     // */

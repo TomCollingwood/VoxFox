@@ -15,7 +15,7 @@ CXX           = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefau
 DEFINES       = -DQT5BUILD -DQT5BUILD -DNGL_DEBUG -DQT_QML_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.9 $(EXPORT_QMAKE_XARCH_CFLAGS) -g -Wall -W -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.9 $(EXPORT_QMAKE_XARCH_CFLAGS) -msse -msse2 -msse3 -arch x86_64 -g -std=gnu++11 -Wall -W -Wno-unused-parameter -fPIC $(DEFINES)
-INCPATH       = -IVoxFoxLibrary -I. -IVoxFoxLibrary/include -IVoxFoxLibrary/lib -isystem /usr/local/include -I/usr/local/Cellar -I/usr/local/lib -isystem /usr/local/include -I/Users/Tom/NGL/include -I/Users/Tom/Qt2/5.8/clang_64/lib/QtOpenGL.framework/Headers -I/Users/Tom/Qt2/5.8/clang_64/lib/QtWidgets.framework/Headers -I/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers -I/Users/Tom/Qt2/5.8/clang_64/lib/QtCore.framework/Headers -IVoxFoxLibrary/moc -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/AGL.framework/Headers -I/Users/Tom/Qt2/5.8/clang_64/mkspecs/macx-clang -F/Users/Tom/Qt2/5.8/clang_64/lib
+INCPATH       = -IVoxFoxLibrary -I. -IVoxFoxLibrary/include -IVoxFoxLibrary/lib -isystem /usr/local/include -I/usr/local/Cellar -I/usr/local/lib -isystem /usr/local/include -I/Users/Tom/NGL/include -I/Users/Tom/Qt2/5.8/clang_64/lib/QtOpenGL.framework/Headers -I/Users/Tom/Qt2/5.8/clang_64/lib/QtWidgets.framework/Headers -I/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers -I/Users/Tom/Qt2/5.8/clang_64/lib/QtCore.framework/Headers -Imoc -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/AGL.framework/Headers -I/Users/Tom/Qt2/5.8/clang_64/mkspecs/macx-clang -F/Users/Tom/Qt2/5.8/clang_64/lib
 QMAKE         = /Users/Tom/Qt2/5.8/clang_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -33,7 +33,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = VoxFox1.0.0
-DISTDIR = /Users/Tom/Documents/GitHubStuff/VoxFox/VoxFoxLibrary/obj/VoxFox1.0.0
+DISTDIR = /Users/Tom/Documents/GitHubStuff/VoxFox/obj/VoxFox1.0.0
 LINK          = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 LFLAGS        = -headerpad_max_install_names -stdlib=libc++ -Wl,-syslibroot,/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.9 $(EXPORT_QMAKE_XARCH_LFLAGS) -Wl,-rpath,@loader_path/L/Users/Tom/NGL/lib -Wl,-rpath,/Users/Tom/NGL/lib -Wl,-rpath,/Users/Tom/Qt2/5.8/clang_64/lib -single_module -dynamiclib -compatibility_version	1.0 -current_version	1.0.0 -install_name	libVoxFox.1.dylib
 LIBS          = $(SUBLIBS) -F/Users/Tom/Qt2/5.8/clang_64/lib -framework OpenGL -framework GLUT -L/usr/local/lib -L/Users/Tom/NGL/lib -l NGL -framework QtOpenGL -framework QtWidgets -framework QtGui -framework QtCore -framework DiskArbitration -framework IOKit -framework AGL 
@@ -44,7 +44,7 @@ STRIP         = strip
 
 ####### Output directory
 
-OBJECTS_DIR   = VoxFoxLibrary/obj/
+OBJECTS_DIR   = obj/
 
 ####### Files
 
@@ -52,25 +52,22 @@ SOURCES       = VoxFoxLibrary/src/LeafNode.cpp \
 		VoxFoxLibrary/src/RootNode.cpp \
 		VoxFoxLibrary/src/SecondaryNode.cpp \
 		VoxFoxLibrary/src/PrimaryNode.cpp \
-		VoxFoxLibrary/src/PolyToVoxel.cpp \
-		VoxFoxLibrary/src/Voxel.cpp 
-OBJECTS       = VoxFoxLibrary/obj/LeafNode.o \
-		VoxFoxLibrary/obj/RootNode.o \
-		VoxFoxLibrary/obj/SecondaryNode.o \
-		VoxFoxLibrary/obj/PrimaryNode.o \
-		VoxFoxLibrary/obj/PolyToVoxel.o \
-		VoxFoxLibrary/obj/Voxel.o
+		VoxFoxLibrary/src/PolyToVoxel.cpp 
+OBJECTS       = obj/LeafNode.o \
+		obj/RootNode.o \
+		obj/SecondaryNode.o \
+		obj/PrimaryNode.o \
+		obj/PolyToVoxel.o
 DIST          = VoxFoxLibrary/VoxFoxLibrary/VoxFox.pro VoxFoxLibrary/include/RootNode.h \
 		VoxFoxLibrary/include/LeafNode.h \
 		VoxFoxLibrary/include/SecondaryNode.h \
 		VoxFoxLibrary/include/PrimaryNode.h \
 		VoxFoxLibrary/include/PolyToVoxel.h \
-		VoxFoxLibrary/include/Voxel.h VoxFoxLibrary/src/LeafNode.cpp \
+		VoxFoxLibrary/include/DataStructs.h VoxFoxLibrary/src/LeafNode.cpp \
 		VoxFoxLibrary/src/RootNode.cpp \
 		VoxFoxLibrary/src/SecondaryNode.cpp \
 		VoxFoxLibrary/src/PrimaryNode.cpp \
-		VoxFoxLibrary/src/PolyToVoxel.cpp \
-		VoxFoxLibrary/src/Voxel.cpp
+		VoxFoxLibrary/src/PolyToVoxel.cpp
 QMAKE_TARGET  = VoxFox
 DESTDIR       = VoxFoxLibrary/lib/
 TARGET        = libVoxFox.1.0.0.dylib
@@ -491,8 +488,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /Users/Tom/Qt2/5.8/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents VoxFoxLibrary/include/RootNode.h VoxFoxLibrary/include/LeafNode.h VoxFoxLibrary/include/SecondaryNode.h VoxFoxLibrary/include/PrimaryNode.h VoxFoxLibrary/include/PolyToVoxel.h VoxFoxLibrary/include/Voxel.h $(DISTDIR)/
-	$(COPY_FILE) --parents VoxFoxLibrary/src/LeafNode.cpp VoxFoxLibrary/src/RootNode.cpp VoxFoxLibrary/src/SecondaryNode.cpp VoxFoxLibrary/src/PrimaryNode.cpp VoxFoxLibrary/src/PolyToVoxel.cpp VoxFoxLibrary/src/Voxel.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents VoxFoxLibrary/include/RootNode.h VoxFoxLibrary/include/LeafNode.h VoxFoxLibrary/include/SecondaryNode.h VoxFoxLibrary/include/PrimaryNode.h VoxFoxLibrary/include/PolyToVoxel.h VoxFoxLibrary/include/DataStructs.h $(DISTDIR)/
+	$(COPY_FILE) --parents VoxFoxLibrary/src/LeafNode.cpp VoxFoxLibrary/src/RootNode.cpp VoxFoxLibrary/src/SecondaryNode.cpp VoxFoxLibrary/src/PrimaryNode.cpp VoxFoxLibrary/src/PolyToVoxel.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -509,6 +506,11 @@ distclean: clean
 
 ####### Sub-libraries
 
+first: $(first) copydata
+
+copydata:
+	echo creating destination dirs ; mkdir -p /Users/Tom/Documents/GitHubStuff/VoxFox/shaders ; echo copying files ; $(COPY_DIR) /Users/Tom/Documents/GitHubStuff/VoxFox/VoxFoxLibrary/shaders/* /Users/Tom/Documents/GitHubStuff/VoxFox/shaders/ ;
+
 mocclean: compiler_moc_header_clean compiler_moc_source_clean
 
 mocables: compiler_moc_header_make_all compiler_moc_source_make_all
@@ -519,11 +521,11 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_predefs_make_all: VoxFoxLibrary/moc/moc_predefs.h
+compiler_moc_predefs_make_all: moc/moc_predefs.h
 compiler_moc_predefs_clean:
-	-$(DEL_FILE) VoxFoxLibrary/moc/moc_predefs.h
-VoxFoxLibrary/moc/moc_predefs.h: /Users/Tom/Qt2/5.8/clang_64/mkspecs/features/data/dummy.cpp
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.9 $(EXPORT_QMAKE_XARCH_CFLAGS) -msse -msse2 -msse3 -arch x86_64 -g -std=gnu++11 -Wall -W -Wno-unused-parameter -dM -E -o VoxFoxLibrary/moc/moc_predefs.h /Users/Tom/Qt2/5.8/clang_64/mkspecs/features/data/dummy.cpp
+	-$(DEL_FILE) moc/moc_predefs.h
+moc/moc_predefs.h: /Users/Tom/Qt2/5.8/clang_64/mkspecs/features/data/dummy.cpp
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.9 $(EXPORT_QMAKE_XARCH_CFLAGS) -msse -msse2 -msse3 -arch x86_64 -g -std=gnu++11 -Wall -W -Wno-unused-parameter -dM -E -o moc/moc_predefs.h /Users/Tom/Qt2/5.8/clang_64/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all:
 compiler_moc_header_clean:
@@ -543,7 +545,7 @@ compiler_clean: compiler_moc_predefs_clean
 
 ####### Compile
 
-VoxFoxLibrary/obj/LeafNode.o: VoxFoxLibrary/src/LeafNode.cpp VoxFoxLibrary/include/LeafNode.h \
+obj/LeafNode.o: VoxFoxLibrary/src/LeafNode.cpp VoxFoxLibrary/include/LeafNode.h \
 		/Users/Tom/NGL/include/ngl/Camera.h \
 		/Users/Tom/NGL/include/ngl/Types.h \
 		/Users/Tom/NGL/include/ngl/glew.h \
@@ -565,10 +567,10 @@ VoxFoxLibrary/obj/LeafNode.o: VoxFoxLibrary/src/LeafNode.cpp VoxFoxLibrary/inclu
 		/Users/Tom/NGL/include/ngl/SimpleVAO.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QFont \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qfont.h \
-		VoxFoxLibrary/include/Voxel.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o VoxFoxLibrary/obj/LeafNode.o VoxFoxLibrary/src/LeafNode.cpp
+		VoxFoxLibrary/include/DataStructs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/LeafNode.o VoxFoxLibrary/src/LeafNode.cpp
 
-VoxFoxLibrary/obj/RootNode.o: VoxFoxLibrary/src/RootNode.cpp VoxFoxLibrary/include/RootNode.h \
+obj/RootNode.o: VoxFoxLibrary/src/RootNode.cpp VoxFoxLibrary/include/RootNode.h \
 		/Users/Tom/NGL/include/ngl/Vec3.h \
 		/Users/Tom/NGL/include/ngl/Types.h \
 		/Users/Tom/NGL/include/ngl/glew.h \
@@ -602,12 +604,12 @@ VoxFoxLibrary/obj/RootNode.o: VoxFoxLibrary/src/RootNode.cpp VoxFoxLibrary/inclu
 		/Users/Tom/NGL/include/ngl/SimpleVAO.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QFont \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qfont.h \
-		VoxFoxLibrary/include/Voxel.h \
+		VoxFoxLibrary/include/DataStructs.h \
 		VoxFoxLibrary/include/PrimaryNode.h \
 		VoxFoxLibrary/include/SecondaryNode.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o VoxFoxLibrary/obj/RootNode.o VoxFoxLibrary/src/RootNode.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/RootNode.o VoxFoxLibrary/src/RootNode.cpp
 
-VoxFoxLibrary/obj/SecondaryNode.o: VoxFoxLibrary/src/SecondaryNode.cpp VoxFoxLibrary/include/SecondaryNode.h \
+obj/SecondaryNode.o: VoxFoxLibrary/src/SecondaryNode.cpp VoxFoxLibrary/include/SecondaryNode.h \
 		VoxFoxLibrary/include/LeafNode.h \
 		/Users/Tom/NGL/include/ngl/Camera.h \
 		/Users/Tom/NGL/include/ngl/Types.h \
@@ -630,10 +632,10 @@ VoxFoxLibrary/obj/SecondaryNode.o: VoxFoxLibrary/src/SecondaryNode.cpp VoxFoxLib
 		/Users/Tom/NGL/include/ngl/SimpleVAO.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QFont \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qfont.h \
-		VoxFoxLibrary/include/Voxel.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o VoxFoxLibrary/obj/SecondaryNode.o VoxFoxLibrary/src/SecondaryNode.cpp
+		VoxFoxLibrary/include/DataStructs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/SecondaryNode.o VoxFoxLibrary/src/SecondaryNode.cpp
 
-VoxFoxLibrary/obj/PrimaryNode.o: VoxFoxLibrary/src/PrimaryNode.cpp VoxFoxLibrary/include/PrimaryNode.h \
+obj/PrimaryNode.o: VoxFoxLibrary/src/PrimaryNode.cpp VoxFoxLibrary/include/PrimaryNode.h \
 		VoxFoxLibrary/include/LeafNode.h \
 		/Users/Tom/NGL/include/ngl/Camera.h \
 		/Users/Tom/NGL/include/ngl/Types.h \
@@ -656,15 +658,12 @@ VoxFoxLibrary/obj/PrimaryNode.o: VoxFoxLibrary/src/PrimaryNode.cpp VoxFoxLibrary
 		/Users/Tom/NGL/include/ngl/SimpleVAO.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QFont \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qfont.h \
-		VoxFoxLibrary/include/Voxel.h \
+		VoxFoxLibrary/include/DataStructs.h \
 		VoxFoxLibrary/include/SecondaryNode.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o VoxFoxLibrary/obj/PrimaryNode.o VoxFoxLibrary/src/PrimaryNode.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/PrimaryNode.o VoxFoxLibrary/src/PrimaryNode.cpp
 
-VoxFoxLibrary/obj/PolyToVoxel.o: VoxFoxLibrary/src/PolyToVoxel.cpp VoxFoxLibrary/include/PolyToVoxel.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o VoxFoxLibrary/obj/PolyToVoxel.o VoxFoxLibrary/src/PolyToVoxel.cpp
-
-VoxFoxLibrary/obj/Voxel.o: VoxFoxLibrary/src/Voxel.cpp VoxFoxLibrary/include/Voxel.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o VoxFoxLibrary/obj/Voxel.o VoxFoxLibrary/src/Voxel.cpp
+obj/PolyToVoxel.o: VoxFoxLibrary/src/PolyToVoxel.cpp VoxFoxLibrary/include/PolyToVoxel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/PolyToVoxel.o VoxFoxLibrary/src/PolyToVoxel.cpp
 
 ####### Install
 
