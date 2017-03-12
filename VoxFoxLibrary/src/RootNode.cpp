@@ -2,9 +2,6 @@
 
 RootNode::RootNode()
 {
-  m_primAccessor= {initialized=false};
-  m_secAccessor= {initialized=false};
-  m_leafAccessor= {initialized=false};
 }
 
 std::vector<float> RootNode::getVertexes()
@@ -39,8 +36,8 @@ void RootNode::printVertexes()
 }
 bool RootNode::isVoxel(glm::vec3 _position)
 {
-  if(m_leafAccessor!=nullptr && m_leafAccessor->isVoxel(_position)) return true;
-  else if ( m_secAccessor!=nullptr && m_secAccessor->isVoxel(_position,&m_leafAccessor)) return true;
+  if(m_leafAccessor.initialized && m_primChildren[m_leafAccessor.primIndex].m_secChildren[m_leafAccessor.secIndex].m_leafChildren[m_leafAccessor.leafIndex].isVoxel(_position)) return true;
+  else if ( m_secAccessor.initialized && m_primChildren[m_secAccessor.primIndex].m_secChildren[m_secAccessor.secIndex].isVoxel(_position,m_leafAccessor)) return true;
 //  else
 //  {
     for (auto &prim : m_primChildren) // access by reference to avoid copying
@@ -48,28 +45,23 @@ bool RootNode::isVoxel(glm::vec3 _position)
           if(_position[0]<prim.getOrigin()[0] || _position[0]>=prim.getOrigin()[0]+m_primUnit) continue;
           if(_position[1]<prim.getOrigin()[1] || _position[1]>=prim.getOrigin()[1]+m_primUnit) continue;
           if(_position[2]<prim.getOrigin()[2] || _position[2]>=prim.getOrigin()[2]+m_primUnit) continue;
-          m_primAccessor={prim.getIndex(),true};
-          return prim.isVoxel(_position,&m_secAccessor,&m_leafAccessor);
+          m_primAccessor=prim.getIndex();
+          return prim.isVoxel(_position,m_secAccessor,m_leafAccessor);
         }
     return false;
 //  }
 }
 
-LeafNode * RootNode::getLeaf(LeafAccessor _leafAcc)
-{
-  return &(m_primChildren[_leafAcc.primIndex].m_secChildren[_leafAcc.secIndex].m_leafChildren[_leafAcc.leafIndex]);
-}
-
-SecondaryNode * RootNode::getSecondary(SecAccessor _secAcc)
-{
-  return &(m_primChildren[_secAcc.primIndex].m_secChildren[_secAcc.secIndex]);
-}
-
 void RootNode::addVoxel(glm::vec3 _position, Voxel _data)
 {
   if((!m_leafAccessor.initialized && !m_secAccessor.initialized) ||
-     (m_leafAccessor.initialized && !getLeaf(m_leafAccessor)->addVoxel(_position, _data) &&
-     m_secAccessor.initialized && !getSecondary(m_secAccessor)->addVoxel(_position,_data,&m_leafAccessor)))
+      (
+        m_leafAccessor.initialized &&
+        !m_primChildren[m_leafAccessor.primIndex].m_secChildren[m_leafAccessor.secIndex].m_leafChildren[m_leafAccessor.leafIndex].addVoxel(_position, _data) &&
+        m_secAccessor.initialized &&
+        !m_primChildren[m_secAccessor.primIndex].m_secChildren[m_secAccessor.secIndex].addVoxel(_position,_data,m_leafAccessor)
+       )
+    )
   {
     bool found = false;
     for (auto &prim : m_primChildren) // access by reference to avoid copying
@@ -77,7 +69,7 @@ void RootNode::addVoxel(glm::vec3 _position, Voxel _data)
       if(_position[0]<prim.getOrigin()[0] || _position[0]>=prim.getOrigin()[0]+m_primUnit) continue;
       if(_position[1]<prim.getOrigin()[1] || _position[1]>=prim.getOrigin()[1]+m_primUnit) continue;
       if(_position[2]<prim.getOrigin()[2] || _position[2]>=prim.getOrigin()[2]+m_primUnit) continue;
-      m_primAccessor={prim.getIndex(),true};
+      m_primAccessor=prim.getIndex();
       prim.addVoxel(_position,_data,m_secAccessor,m_leafAccessor);
       found = true;
       break;
@@ -86,10 +78,9 @@ void RootNode::addVoxel(glm::vec3 _position, Voxel _data)
     {
       glm::vec3 newOrigin = floor(_position/m_primUnit)*m_primUnit;
 
-      int primSize = m_primChildren.size();
-      m_primChildren.push_back(PrimaryNode(newOrigin,primSize));
-
-      m_primChildren.back().addVoxel(_position,_data,&m_secAccessor,&m_leafAccessor);
+      PrimaryNodeIndex pindex= PrimaryNodeIndex(m_primChildren.size());
+      m_primChildren.push_back(PrimaryNode(newOrigin,pindex));
+      m_primChildren.back().addVoxel(_position,_data,m_secAccessor,m_leafAccessor);
       min=glm::vec3(glm::min(min.x,newOrigin.x),glm::min(min.y,newOrigin.y),glm::min(min.z,newOrigin.z));
       max=glm::vec3(glm::max(min.x,newOrigin.x+m_primUnit),glm::max(min.y,newOrigin.y+m_primUnit),glm::max(min.z,newOrigin.z+m_primUnit));
     }
@@ -342,7 +333,7 @@ void RootNode::calculatePolys()
 
                   ++numberOfFaces;
                 }
-                if(leaf.m_VoxelData.size()>=voxelindex+1)
+                if((int)leaf.m_VoxelData.size()>=voxelindex+1)
                 {
                   for(int o=0; o<numberOfFaces*6; ++o)
                   {
@@ -382,7 +373,7 @@ void RootNode::createSphere(glm::vec3 _position, int _radius)
       }
   }
 
-  for(int i = 0; i<m_vertexes.size(); i+=9)
+  for(int i = 0; i<(int)m_vertexes.size(); i+=9)
   {
     glm::vec3 a = glm::vec3(m_vertexes[i+0],m_vertexes[i+1],m_vertexes[i+2]);
     glm::vec3 b = glm::vec3(m_vertexes[i+3],m_vertexes[i+4],m_vertexes[i+5]);
@@ -529,13 +520,13 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
     std::fill(vertNormals.begin(), vertNormals.end(), 0);
     std::vector<int> numberOfFacesPerVert = std::vector<int>(verts.size());
 
-    for(int i = 0; i<objFaceList.size(); ++i)
+    for(int i = 0; i<(int)objFaceList.size(); ++i)
     {
       ngl::Vec3 tmpNormal;
 
       tmpNormal = (verts[objFaceList[i].m_vert[1]]-verts[objFaceList[i].m_vert[0]]).cross(verts[objFaceList[i].m_vert[2]]-verts[objFaceList[i].m_vert[0]]);
       tmpNormal.normalize();
-      for(int j =0; j<objFaceList[i].m_vert.size(); ++j)
+      for(int j =0; j<(int)objFaceList[i].m_vert.size(); ++j)
       {
         vertNormals[objFaceList[i].m_vert[j]] = tmpNormal;
       }
@@ -852,7 +843,7 @@ void RootNode::fill()
   }
 
   //RootNode filler = RootNode();
-  for(int i=1; i<beginEndStrips.size(); i+=2)
+  for(int i=1; i<(int)beginEndStrips.size(); i+=2)
   {
     glm::vec3 linelength = beginEndStrips[i]-beginEndStrips[i-1];
     int numVoxels = linelength[2]/m_voxUnit;

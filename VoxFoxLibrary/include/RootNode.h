@@ -20,11 +20,10 @@ class RootNode
 {
 public:
   RootNode();
-  ~RootNode();
 
   void calculatePolys();
 
-  void addVoxel(glm::vec3 _position, Voxel _data);
+  void addVoxel(glm::vec3 _position, struct Voxel _data);
   void addVoxel(float _x, float _y, float _z) {addVoxel(glm::vec3(_x,_y,_z));}
   void addVoxel(glm::vec3 _position) {addVoxel(_position,Voxel());}
 
@@ -56,30 +55,24 @@ public:
   bool intersectBox(glm::vec3 _ray, glm::vec3 _origin, glm::vec3 _min, glm::vec3 _max);
   void fill();
 
-
   bool full;
   bool empty = true;
 
-  void addVoxelLine(ngl::Vec3 p0, ngl::Vec3 p1, ngl::Vec3 n0, ngl::Vec3 n1, Voxel _voxel);
+  void addVoxelLine(ngl::Vec3 p0, ngl::Vec3 p1, ngl::Vec3 n0, ngl::Vec3 n1, struct Voxel _voxel);
 
   const float m_primUnit = 10.0;
   const float m_secUnit = 1.25;
   const float m_leafUnit = 0.15625;
   const float m_voxUnit = 0.01953125;
 
-  LeafNode * getLeaf(LeafAccessor _leafAcc);
-  SecondaryNode * getSecondary(SecAccessor _secAcc);
 
 private:
   glm::vec3 min, max;
-
-  const int depth = 3;
   std::vector<LeafNode *> m_leafTable;
   std::vector<PrimaryNode> m_primChildren;
-  struct LeafAccessor m_leafAccessor;
-  struct SecAccessor m_secAccessor;
-  struct PrimAccessor m_primAccessor;
-
+  struct LeafNodeIndex m_leafAccessor = LeafNodeIndex();
+  struct SecondaryNodeIndex m_secAccessor = SecondaryNodeIndex();
+  struct PrimaryNodeIndex m_primAccessor =PrimaryNodeIndex();
 
   int numberOfVoxels=0;
   std::vector<float> m_vertexes;

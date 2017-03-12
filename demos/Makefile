@@ -58,8 +58,7 @@ OBJECTS       = obj/NGLScene.o \
 DIST          = ../.qmake.stash \
 		VoxFoxDemo.pro include/NGLScene.h \
 		include/WindowParams.h \
-		INCLUDEPATH \
-		+=./include src/NGLScene.cpp \
+		DESTDIR=. src/NGLScene.cpp \
 		src/NGLSceneMouseControls.cpp \
 		src/main.cpp
 QMAKE_TARGET  = app.bin
@@ -455,7 +454,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /Users/Tom/Qt2/5.8/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents include/NGLScene.h include/WindowParams.h INCLUDEPATH +=./include $(DISTDIR)/
+	$(COPY_FILE) --parents include/NGLScene.h include/WindowParams.h DESTDIR=. $(DISTDIR)/
 	$(COPY_FILE) --parents src/NGLScene.cpp src/NGLSceneMouseControls.cpp src/main.cpp $(DISTDIR)/
 
 
@@ -527,7 +526,7 @@ moc/moc_NGLScene.cpp: include/WindowParams.h \
 		/Users/Tom/NGL/include/ngl/Singleton.h \
 		/Users/Tom/NGL/include/ngl/Mat3.h \
 		../VoxFoxLibrary/include/LeafNode.h \
-		../VoxFoxLibrary/include/Voxel.h \
+		../VoxFoxLibrary/include/DataStructs.h \
 		../VoxFoxLibrary/include/PrimaryNode.h \
 		../VoxFoxLibrary/include/SecondaryNode.h \
 		include/NGLScene.h \
@@ -589,7 +588,7 @@ obj/NGLScene.o: src/NGLScene.cpp include/NGLScene.h \
 		/Users/Tom/NGL/include/ngl/Singleton.h \
 		/Users/Tom/NGL/include/ngl/Mat3.h \
 		../VoxFoxLibrary/include/LeafNode.h \
-		../VoxFoxLibrary/include/Voxel.h \
+		../VoxFoxLibrary/include/DataStructs.h \
 		../VoxFoxLibrary/include/PrimaryNode.h \
 		../VoxFoxLibrary/include/SecondaryNode.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QGuiApplication \
@@ -640,7 +639,7 @@ obj/NGLSceneMouseControls.o: src/NGLSceneMouseControls.cpp include/NGLScene.h \
 		/Users/Tom/NGL/include/ngl/Singleton.h \
 		/Users/Tom/NGL/include/ngl/Mat3.h \
 		../VoxFoxLibrary/include/LeafNode.h \
-		../VoxFoxLibrary/include/Voxel.h \
+		../VoxFoxLibrary/include/DataStructs.h \
 		../VoxFoxLibrary/include/PrimaryNode.h \
 		../VoxFoxLibrary/include/SecondaryNode.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
@@ -685,7 +684,7 @@ obj/main.o: src/main.cpp include/NGLScene.h \
 		/Users/Tom/NGL/include/ngl/Singleton.h \
 		/Users/Tom/NGL/include/ngl/Mat3.h \
 		../VoxFoxLibrary/include/LeafNode.h \
-		../VoxFoxLibrary/include/Voxel.h \
+		../VoxFoxLibrary/include/DataStructs.h \
 		../VoxFoxLibrary/include/PrimaryNode.h \
 		../VoxFoxLibrary/include/SecondaryNode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/main.o src/main.cpp

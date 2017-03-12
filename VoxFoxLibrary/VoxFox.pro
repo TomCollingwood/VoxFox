@@ -19,15 +19,13 @@ SOURCES+=   $$PWD/src/LeafNode.cpp \
             $$PWD/src/RootNode.cpp \
             $$PWD/src/SecondaryNode.cpp \
             $$PWD/src/PrimaryNode.cpp \
-            $$PWD/src/PolyToVoxel.cpp \
-            $$PWD/src/Voxel.cpp
+            $$PWD/src/PolyToVoxel.cpp
 # same for the .h files
 HEADERS+=   $$PWD/include/RootNode.h \
             $$PWD/include/LeafNode.h \
             $$PWD/include/SecondaryNode.h \
             $$PWD/include/PrimaryNode.h \
-            $$PWD/include/PolyToVoxel.h \
-            $$PWD/include/Voxel.h \
+            $$PWD/include/PolyToVoxel.h
     include/DataStructs.h
 # and add the include dir into the search path for Qt and make
 INCLUDEPATH +=./include \

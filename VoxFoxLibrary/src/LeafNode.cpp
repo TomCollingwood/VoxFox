@@ -1,10 +1,5 @@
 #include "include/LeafNode.h"
 
-LeafNode::LeafNode()
-{
-  m_VoxelData = std::deque<Voxel>(0);
-}
-
 glm::vec3 LeafNode::getOrigin()
 {
   return m_origin;
