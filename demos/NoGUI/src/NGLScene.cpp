@@ -102,14 +102,11 @@ void NGLScene::initializeGL()
   light.loadToShader( "light" );
 
   glEnable(GL_CULL_FACE);
-
   myRoot = new RootNode();
-
-
-  ngl::Obj * m_mesh = new ngl::Obj("models/Helix.obj");
+  ngl::Obj * m_mesh = new ngl::Obj("models/bunny.obj");
   std::cout<<"Importing..\n"<<std::endl;
   clock_t begin = clock();
-  myRoot->importAccurateObj(m_mesh);
+  myRoot->importAccurateObj(m_mesh,40.0f);
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Import took "<<elapsed_secs<<" seconds \n\n"<<std::endl;

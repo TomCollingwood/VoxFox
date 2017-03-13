@@ -48,7 +48,7 @@ public:
 
   // OBJ
   void importObj(ngl::Obj * _mesh);
-  void importAccurateObj(ngl::Obj * _mesh);
+  void importAccurateObj(ngl::Obj * _mesh, float scale);
 
   bool intersectBox(glm::vec3 _ray, glm::vec3 _origin, glm::vec3 _min, glm::vec3 _max);
   void fill();

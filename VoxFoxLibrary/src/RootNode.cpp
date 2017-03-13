@@ -550,11 +550,13 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
 #endif
 #ifdef NEWOBIMPORT
 
-void RootNode::importAccurateObj(ngl::Obj * _mesh)
+void RootNode::importAccurateObj(ngl::Obj * _mesh,float scale)
 {
+
+  bool interpnormals = false;
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
-  std::vector<ngl::Vec3> normalList = _mesh->getNormalList();
+  //std::vector<ngl::Vec3> normalList = _mesh->getNormalList();
 
 
   std::vector<ngl::Vec3> vertNormals = std::vector<ngl::Vec3>(verts.size());
@@ -562,9 +564,11 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
   std::vector<int> numberOfFacesPerVert = std::vector<int>(verts.size());
   std::fill(numberOfFacesPerVert.begin(), numberOfFacesPerVert.end(), 0);
 
-
+  if(interpnormals)
+  {
   for(int i = 0; i<objFaceList.size(); ++i)
   {
+
     ngl::Vec3 tmpNormal;
 
     tmpNormal = (verts[objFaceList[i].m_vert[1]]-verts[objFaceList[i].m_vert[0]]).cross(verts[objFaceList[i].m_vert[2]]-verts[objFaceList[i].m_vert[0]]);
@@ -581,18 +585,38 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
     vertNormals[i]= vertNormals[i]/numberOfFacesPerVert[i] ;
     vertNormals[i].normalize();
   }
+  }
 
     for(std::vector<ngl::Face>::iterator itr=objFaceList.begin(); itr!=objFaceList.end(); ++itr)
     {
       if(itr->m_vert.size()==3)
       {
+        ngl::Vec3 tmpNormal = (verts[itr->m_vert[1]]-verts[itr->m_vert[0]]).cross(verts[itr->m_vert[2]]-verts[itr->m_vert[0]]);
 
         //-------------------------VERTEXES----------------------------
         ngl::Vec3 a, b, c, e1;
-        a = verts[itr->m_vert[0]]*1 ;//*15- ngl::Vec3(0,1,0);
-        b = verts[itr->m_vert[1]]*1 ;//*15- ngl::Vec3(0,1,0);
-        c = verts[itr->m_vert[2]]*1 ;//*15- ngl::Vec3(0,1,0);
+        a = verts[itr->m_vert[0]]*scale ;
+        b = verts[itr->m_vert[1]]*scale ;
+        c = verts[itr->m_vert[2]]*scale ;
         e1 = b - a;
+
+//        int e1DirX, e1DirY, e1DirZ;
+
+//        if(e1.m_x>0) e1DirX=1;
+//        else if(e1.m_x<0) e1DirX=-1;
+//        else e1DirX=0;
+
+//        if(e1.m_y>0) e1DirY=1;
+//        else if(e1.m_y<0) e1DirY=-1;
+//        else e1DirY=0;
+
+//        if(e1.m_z>0) e1DirZ=1;
+//        else if(e1.m_z<0) e1DirZ=-1;
+//        else e1DirZ=0;
+
+
+
+
 
         //--------------------------NORMALS-----------------------------
         ngl::Vec3 na, nb, nc;
@@ -604,9 +628,12 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
 //        }
 //        else
         //{
+        if(interpnormals)
+        {
           na = vertNormals[itr->m_vert[0]];
           nb = vertNormals[itr->m_vert[1]];
           nc = vertNormals[itr->m_vert[2]];
+        }
         //}
 
       int steps = std::ceil(e1.length()/m_voxUnit);
@@ -616,6 +643,7 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
       {
         ngl::Vec3 pos = a+(vecStep*i);
         ngl::Vec3 posnormal = ngl::lerp(na,nb,((float)i)/((float)(steps-1)));
+        //ngl::Vec2 posUV = ;
         ngl::Vec3 line = c-pos;
         int jsteps = std::ceil(line.length()/m_voxUnit);
 
@@ -630,10 +658,20 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
 
         for(int j = 0; j<jsteps*3; ++j) //scaled
         {
-          ngl::Vec3 posnormal2 = lerp(posnormal,nc,((float)j)/((float)(jsteps*3)));
-          float inNX = posnormal2.m_x;
-          float inNY = posnormal2.m_y;
-          float inNZ = posnormal2.m_z;
+          float inNX, inNY, inNZ;
+          if(interpnormals)
+          {
+            ngl::Vec3 posnormal2 = lerp(posnormal,nc,((float)j)/((float)(jsteps*3)));
+            inNX = posnormal2.m_x;
+            inNY = posnormal2.m_y;
+            inNZ = posnormal2.m_z;
+          }
+          else
+          {
+            inNX = tmpNormal.m_x;
+            inNY = tmpNormal.m_y;
+            inNZ = tmpNormal.m_z;
+          }
 
           addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),Voxel(inNX,inNY,inNZ));
           pos = pos + mystep;

@@ -1,5 +1,5 @@
 # This specifies the exe name
-TARGET=VoxFoxDemo
+TARGET=app.bin
 # where to put the .o files
 OBJECTS_DIR=obj
 # core Qt Libs to use add more here if needed.
@@ -7,13 +7,13 @@ QT+=gui opengl core
 # as I want to support 4.8 and 5 this will set a flag for some of the mac stuff
 # mainly in the types.h file for the setMacVisual which is native in Qt5
 isEqual(QT_MAJOR_VERSION, 5) {
-	cache()
-	DEFINES +=QT5BUILD
+  cache()
+  DEFINES +=QT5BUILD
 }
 
-INCLUDEPATH+=../VoxFoxLibrary/include
-DEPENDPATH+=../VoxFoxLibrary/include
-LIBS+= -L../VoxFoxLibrary/lib -lVoxFox
+INCLUDEPATH+=../../VoxFoxLibrary/include
+DEPENDPATH+=../../VoxFoxLibrary/include
+LIBS+= -L../../VoxFoxLibrary/lib -lVoxFox
 OTHER_FILES+=$$PWD/app
 
 # where to put moc auto generated files
@@ -41,18 +41,18 @@ CONFIG += console
 # note each command you add needs a ; as it will be run as a single line
 # first check if we are shadow building or not easiest way is to check out against current
 !equals(PWD, $${OUT_PWD}){
-	copydata.commands = echo "creating destination dirs" ;
-	# now make a dir
-	copydata.commands += mkdir -p $$OUT_PWD/shaders ;
-	copydata.commands += echo "copying files" ;
-	# then copy the files
-	copydata.commands += $(COPY_DIR) $$PWD/shaders/* $$OUT_PWD/shaders/ ;
-	# now make sure the first target is built before copy
-	first.depends = $(first) copydata
-	export(first.depends)
-	export(copydata.commands)
-	# now add it as an extra target
-	QMAKE_EXTRA_TARGETS += first copydata
+  copydata.commands = echo "creating destination dirs" ;
+  # now make a dir
+  copydata.commands += mkdir -p $$OUT_PWD/shaders ;
+  copydata.commands += echo "copying files" ;
+  # then copy the files
+  copydata.commands += $(COPY_DIR) $$PWD/shaders/* $$OUT_PWD/shaders/ ;
+  # now make sure the first target is built before copy
+  first.depends = $(first) copydata
+  export(first.depends)
+  export(copydata.commands)
+  # now add it as an extra target
+  QMAKE_EXTRA_TARGETS += first copydata
 }
   INCLUDEPATH += /usr/local/include
   INCLUDEPATH += /usr/local/Cellar
@@ -64,11 +64,13 @@ macx{
 }
 NGLPATH=$$(NGLDIR)
 isEmpty(NGLPATH){ # note brace must be here
-	message("including $HOME/NGL")
-	include($(HOME)/NGL/UseNGL.pri)
+  message("including $HOME/NGL")
+  include($(HOME)/NGL/UseNGL.pri)
 }
 else{ # note brace must be here
-	message("Using custom NGL location")
-	include($(NGLDIR)/UseNGL.pri)
+  message("Using custom NGL location")
+  include($(NGLDIR)/UseNGL.pri)
 }
+
+message("Compiled VoxFox")
 
