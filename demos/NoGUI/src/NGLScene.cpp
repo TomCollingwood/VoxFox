@@ -75,6 +75,14 @@ void NGLScene::initializeGL()
   shader->linkProgramObject( shaderProgram );
   // and make it active ready to load values
   ( *shader )[ shaderProgram ]->use();
+
+  // TEXTURE
+
+//  GLuint m_colourTex;
+//  initTexture(0, m_colourTex, "images/texture.jpg");
+//  GLuint pid = shader->getProgramID("Phong");
+//  glUniform1i(glGetUniformLocation(pid,"ColourTexture"),0);
+
   // the shader will use the currently active material and light0 so set them
   ngl::Material m( ngl::STDMAT::GOLD );
   // load our material values to the shader into the structure material (see Vertex shader)

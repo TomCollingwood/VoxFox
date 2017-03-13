@@ -553,7 +553,7 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
 void RootNode::importAccurateObj(ngl::Obj * _mesh,float scale)
 {
 
-  bool interpnormals = false;
+  bool interpnormals = true;
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
   //std::vector<ngl::Vec3> normalList = _mesh->getNormalList();

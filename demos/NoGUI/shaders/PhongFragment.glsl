@@ -3,11 +3,13 @@
 #version 410 core
 
 
+uniform sampler2D ColourTexture;
 
 // This is passed on from the vertex shader
 //in vec3 LightIntensity;
 in vec3 FragmentPosition;
 in vec3 FragmentNormal;
+//in vec2 FragmentTexCoord;
 in mat4 _MV;
 
 // This is no longer a built-in variable
@@ -72,10 +74,8 @@ void main() {
             Light.Ld * Material.Kd * max( dot(s, FragmentNormal), 0.0 ) +
             Light.Ls * Material.Ks * pow( max( dot(r,v), 0.0 ), Material.Shininess ));
 
-    vec3 test = 10*LightIntensity;
-    test[0] = int(test[0]);
-    test[1] = int(test[1]);
-    test[2] = int(test[2]);
+
+    //vec3 texColor = texture(ColourTexture, 1-FragmentTexCoord*10).rgb;
 
     // Set the output color of our current pixel
     FragColor = vec4(LightIntensity,1.0);
