@@ -50,225 +50,53 @@ bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
   }
 }
 
-void LeafNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)
+void LeafNode::add(LeafNode const& _l)
 {
   for(int i = 0; i<64; ++i)
   {
-    for(int j = 0; j<8 ; ++j)
+    m_VoxelMap[i] &= _l.m_VoxelMap[i];
+  }
+
+  int index1 =0;
+  int index2 =0;
+  std::vector<Voxel> newVoxelData;
+  bool done = false;
+
+  // mergesort might be back?
+
+  while(!done)
+  {
+    if(m_VoxelData[index1].index<_l.m_VoxelData[index2].index)
     {
-      if(m_VoxelMap[i] & (1<<j))
+      newVoxelData.push_back(m_VoxelData[index1]);
+      index1++;
+    }
+    else if(m_VoxelData[index1].index>_l.m_VoxelData[index2].index)
+    {
+      newVoxelData.push_back(m_VoxelData[index2]);
+      index2++;
+    }
+    else
+    {
+      newVoxelData.push_back(m_VoxelData[index1]);
+      index2++;
+      index1++;
+    }
+    if(index2>=_l.m_VoxelData.size())
+    {
+      for(int i=index1; i<m_VoxelData.size(); ++i)
       {
-        float _x = (i/8)*unitVoxelLength +m_origin[0];
-        float _y = (i-(floor(i/8)*8))*unitVoxelLength+m_origin[1];
-        float _z = j*unitVoxelLength+m_origin[2];
-        float _u =  unitVoxelLength;//*10;
-
-
-        glm::vec3 n = _DOF;
-
-        float incre = _u/5;
-
-//        for(int k = 0; k<5; ++k)
-//        {
-//          glm::vec3 one = glm::vec3(_x,_y,k*_u+_z);
-//          glm::vec3 two = glm::vec3(_x+_u,_y,(n.x*_x + n.y*_y + n.z*_z - n.x*(_x+_u) - n.y*+y)/n.z);
-//          glm::vec3 thr = glm::vec3(_x+_u,_y+_u,(n.x*_x + n.y*_y + n.z*_z - n.x*(_x+_u) - n.y*+y)/n.z);
-//        }
-
-        /*
-        float x1 = 0.4;
-        float z1 = 0.4;
-        float y1 = (n.x*_x + n.y*_y + n.z*_z - n.x*x1 - n.z*z1)/n.y;
-
-        float x2 = 0.2;
-        float z2 = 0.4;
-        float y2 = (n.x*_x + n.y*_y + n.z*_z - n.x*x2 - n.z*z2)/n.y;
-
-        _vertexes->push_back(_x);
-        _vertexes->push_back(_y);
-        _vertexes->push_back(_z);
-        _vertexes->push_back(x1);
-        _vertexes->push_back(y1);
-        _vertexes->push_back(z1);
-        _vertexes->push_back(x2);
-        _vertexes->push_back(y2);
-        _vertexes->push_back(z2);
-        */
-
-
-        // BACK FACE
-        if(!(j>0 && m_VoxelMap[i] & (1<<(j-1))))
-        {
-          // 1
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z);
-
-          // 2
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z);
-        }
-        // FRONT FACE
-        if(!(j<7 && m_VoxelMap[i] & (1<<(j+1))))
-        {
-          // 3
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z+_u);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z+_u);
-
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z+_u);
-          // 4
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z+_u);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z+_u);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z+_u);
-        }
-        // LEFT FACE
-        if(!(i>7 && m_VoxelMap[i-8] & (1<<j)))
-        {
-          // 5
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z+_u);
-          // 6
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z+_u);
-
-          _vertexes->push_back(_x);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z+_u);
-        }
-        // RIGHT FACE
-        if(!(i<=56 && m_VoxelMap[i+8] & (1<<j)))
-        {
-          // 7
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z+_u);
-          // 8
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y);
-          _vertexes->push_back(_z+_u);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z);
-
-          _vertexes->push_back(_x+_u);
-          _vertexes->push_back(_y+_u);
-          _vertexes->push_back(_z+_u);
-        }
-
-        if(!(i%8<7 && m_VoxelMap[i+1] & (1<<j)))
-        {
-        // 9
-        _vertexes->push_back(_x);
-        _vertexes->push_back(_y+_u);
-        _vertexes->push_back(_z);
-
-        _vertexes->push_back(_x);
-        _vertexes->push_back(_y+_u);
-        _vertexes->push_back(_z+_u);
-
-        _vertexes->push_back(_x+_u);
-        _vertexes->push_back(_y+_u);
-        _vertexes->push_back(_z+_u);
-        // 10
-        _vertexes->push_back(_x);
-        _vertexes->push_back(_y+_u);
-        _vertexes->push_back(_z);
-
-        _vertexes->push_back(_x+_u);
-        _vertexes->push_back(_y+_u);
-        _vertexes->push_back(_z+_u);
-
-        _vertexes->push_back(_x+_u);
-        _vertexes->push_back(_y+_u);
-        _vertexes->push_back(_z);
-        }
-        if(!(i%8>0 && m_VoxelMap[i-1] & (1<<j)))
-        {
-        // 11
-        _vertexes->push_back(_x);
-        _vertexes->push_back(_y);
-        _vertexes->push_back(_z);
-
-        _vertexes->push_back(_x+_u);
-        _vertexes->push_back(_y);
-        _vertexes->push_back(_z);
-
-        _vertexes->push_back(_x+_u);
-        _vertexes->push_back(_y);
-        _vertexes->push_back(_z+_u);
-        // 12
-        _vertexes->push_back(_x);
-        _vertexes->push_back(_y);
-        _vertexes->push_back(_z);
-
-        _vertexes->push_back(_x+_u);
-        _vertexes->push_back(_y);
-        _vertexes->push_back(_z+_u);
-
-        _vertexes->push_back(_x);
-        _vertexes->push_back(_y);
-        _vertexes->push_back(_z+_u);
-        }
-
-
-        // */
+        newVoxelData.push_back(m_VoxelData[i]);
       }
+      done=true;
+    }
+    else if(index1>=m_VoxelData.size())
+    {
+      for(int i=index2; i<_l.m_VoxelData.size(); ++i)
+      {
+        newVoxelData.push_back(_l.m_VoxelData[i]);
+      }
+      done=true;
     }
   }
 }
-

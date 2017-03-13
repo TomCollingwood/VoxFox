@@ -42,11 +42,17 @@ void PrimaryNode::addVoxel(glm::vec3 _position, Voxel _voxel, SecondaryNode ** _
   }
 }
 
-void PrimaryNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)
+void PrimaryNode::add(PrimaryNode const& _p)
 {
-  for (auto &sec : m_secChildren) // access by reference to avoid copying
+  for(auto & i : m_secChildren)
   {
-    sec->draw(_vertexes, _DOF);
+    for(auto & j : _p.m_secChildren)
+    {
+      if(j->getOrigin()==i->getOrigin())
+      {
+        i->add(*j);
+      }
+    }
   }
 }
 

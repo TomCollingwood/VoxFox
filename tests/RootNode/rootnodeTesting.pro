@@ -19,11 +19,8 @@ CONFIG-=app_bundle
 SOURCES+= $$PWD/rootnodeTesting.cpp
 
 INCLUDEPATH+=../../VoxFoxLibrary/include
-INCLUDEPATH+=../googletest/include
 DEPENDPATH+=../../VoxFoxLibrary/include
 LIBS+= -L../../VoxFoxLibrary/lib -lVoxFox
-LIBS+= -L../googletest -lgtest
-
 OTHER_FILES+=$$PWD/app
 
 # where our exe is going to live (root of project)

@@ -48,6 +48,8 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   void resizeGL(int _w, int _h);
 
+  void initTexture(const GLuint& texUnit, GLuint &texId, const char *filename);
+
   RootNode * myRoot;
 
   GLuint vao, vbo, nbo;

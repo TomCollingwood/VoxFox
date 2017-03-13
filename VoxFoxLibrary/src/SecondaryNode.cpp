@@ -51,10 +51,16 @@ bool SecondaryNode::addVoxel(glm::vec3 _position, Voxel _voxel, LeafNode ** _lea
   }
 }
 
-void SecondaryNode::draw(std::vector<float> * _vertexes, glm::vec3 _DOF)
+void SecondaryNode::add(SecondaryNode const& _s)
 {
-  for (auto &leaf : m_leafChildren) // access by reference to avoid copying
+  for(auto & i : m_leafChildren)
   {
-    leaf->draw(_vertexes, _DOF);
+    for(auto & j : _s.m_leafChildren)
+    {
+      if(j->getOrigin()==i->getOrigin())
+      {
+        i->add(*j);
+      }
+    }
   }
 }

@@ -32,6 +32,37 @@ void NGLScene::resizeGL( int _w, int _h )
   m_win.height = static_cast<int>( _h * devicePixelRatio() );
 }
 
+void NGLScene::initTexture(const GLuint& texUnit, GLuint &texId, const char *filename) {
+    // Set our active texture unit
+    glActiveTexture(GL_TEXTURE0 + texUnit);
+
+    // Load up the image using NGL routine
+    ngl::Image img(filename);
+
+    // Create storage for our new texture
+    glGenTextures(1, &texId);
+
+    // Bind the current texture
+    glBindTexture(GL_TEXTURE_2D, texId);
+
+    // Transfer image data onto the GPU using the teximage2D call
+    glTexImage2D (
+                GL_TEXTURE_2D,    // The target (in this case, which side of the cube)
+                0,                // Level of mipmap to load
+                img.format(),     // Internal format (number of colour components)
+                img.width(),      // Width in pixels
+                img.height(),     // Height in pixels
+                0,                // Border
+                GL_RGB,          // Format of the pixel data
+                GL_UNSIGNED_BYTE, // Data type of pixel data
+                img.getPixels()); // Pointer to image data in memory
+
+    // Set up parameters for our texture
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
 
 void NGLScene::initializeGL()
 {
@@ -78,10 +109,10 @@ void NGLScene::initializeGL()
 
   // TEXTURE
 
-//  GLuint m_colourTex;
-//  initTexture(0, m_colourTex, "images/texture.jpg");
-//  GLuint pid = shader->getProgramID("Phong");
-//  glUniform1i(glGetUniformLocation(pid,"ColourTexture"),0);
+  GLuint m_colourTex;
+  initTexture(0, m_colourTex, "images/texture.jpg");
+  GLuint pid = shader->getProgramID("Phong");
+  glUniform1i(glGetUniformLocation(pid,"ColourTexture"),0);
 
   // the shader will use the currently active material and light0 so set them
   ngl::Material m( ngl::STDMAT::GOLD );
@@ -111,10 +142,14 @@ void NGLScene::initializeGL()
 
   glEnable(GL_CULL_FACE);
   myRoot = new RootNode();
-  ngl::Obj * m_mesh = new ngl::Obj("models/bunny.obj");
+  RootNode * myRoot2 = new RootNode();
+  ngl::Obj * m_mesh = new ngl::Obj("models/deer-obj.obj");
+  ngl::Obj * m_mesh2 = new ngl::Obj("models/bunny.obj");
   std::cout<<"Importing..\n"<<std::endl;
   clock_t begin = clock();
-  myRoot->importAccurateObj(m_mesh,40.0f);
+  myRoot->importAccurateObj(m_mesh,0.2f);
+  myRoot2->importAccurateObj(m_mesh2,40.0f);
+  *myRoot+=*myRoot2;
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Import took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
@@ -149,6 +184,9 @@ void NGLScene::initializeGL()
 
    GLuint nbo;
    glGenBuffers(1, &nbo);
+
+   GLuint tbo;
+   glGenBuffers(1, &tbo);
 
    // BINDING AND CALCULATE
    glBindVertexArray(vao);
@@ -186,6 +224,9 @@ void NGLScene::initializeGL()
    glBindBuffer(GL_ARRAY_BUFFER, nbo);
    glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getNormals().data(), GL_STATIC_DRAW);
 
+   glBindBuffer(GL_ARRAY_BUFFER, tbo);
+   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getTextureCoords().data(), GL_STATIC_DRAW);
+
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
    glEnableVertexAttribArray(pos);
@@ -195,6 +236,11 @@ void NGLScene::initializeGL()
    GLint n = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexNormal");
    glEnableVertexAttribArray(n);
    glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
+
+   glBindBuffer(GL_ARRAY_BUFFER, tbo);
+   GLint t = glGetAttribLocation(shader->getProgramID(shaderProgram), "TexCoord");
+   glEnableVertexAttribArray(t);
+   glVertexAttribPointer(t,2,GL_FLOAT,GL_FALSE,0, 0);
 
    //glBufferData();
 }

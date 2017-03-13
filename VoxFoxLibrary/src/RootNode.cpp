@@ -8,6 +8,20 @@ RootNode::RootNode()
   //m_normals = new std::vector<float>(0);
 }
 
+RootNode RootNode::operator+=(RootNode const& r)
+{
+  for(auto & i : m_primChildren)
+  {
+    for(auto & j : r.m_primChildren)
+    {
+      if(i->getOrigin() == j->getOrigin())
+      {
+        i->add(*j);
+      }
+    }
+  }
+}
+
 std::vector<float> RootNode::getVertexes()
 {
   return m_vertexes;
@@ -17,6 +31,11 @@ std::vector<float> RootNode::getVertexes()
 std::vector<float> RootNode::getNormals()
 {
   return m_normals;
+}
+
+std::vector<float> RootNode::getTextureCoords()
+{
+  return m_textureCoords;
 }
 
 int RootNode::getSize()
@@ -333,14 +352,16 @@ void RootNode::calculatePolys()
                 }
                 if((int)leaf->m_VoxelData.size()>=voxelindex+1)
                 {
-                for(int o=0; o<numberOfFaces*6; ++o)
-                {
-                  m_normals.push_back(leaf->m_VoxelData[voxelindex].nx);
-                  m_normals.push_back(leaf->m_VoxelData[voxelindex].ny);
-                  m_normals.push_back(leaf->m_VoxelData[voxelindex].nz);
-                }
-                }
+                  for(int o=0; o<numberOfFaces*6; ++o)
+                  {
+                    m_normals.push_back(leaf->m_VoxelData[voxelindex].nx);
+                    m_normals.push_back(leaf->m_VoxelData[voxelindex].ny);
+                    m_normals.push_back(leaf->m_VoxelData[voxelindex].nz);
 
+                    m_textureCoords.push_back(leaf->m_VoxelData[voxelindex].u);
+                    m_textureCoords.push_back(leaf->m_VoxelData[voxelindex].v);
+                  }
+                }
                 // */
                 ++voxelindex;
               }
@@ -530,8 +551,7 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
 
         if(i!=steps)
         {
-          if(i%2==1) jsteps/=2;
-          else if(i%4==2) jsteps*=0.75;
+          if(i%2==1) jsteps/=2;          else if(i%4==2) jsteps*=0.75;
           else if(i%8==4) jsteps*=0.875;
         }
 
@@ -553,7 +573,7 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
 void RootNode::importAccurateObj(ngl::Obj * _mesh,float scale)
 {
 
-  bool interpnormals = true;
+  bool interpnormals = false;
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
   //std::vector<ngl::Vec3> normalList = _mesh->getNormalList();
@@ -563,6 +583,8 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh,float scale)
   std::fill(vertNormals.begin(), vertNormals.end(), ngl::Vec3(0.0f,0.0f,0.0f));
   std::vector<int> numberOfFacesPerVert = std::vector<int>(verts.size());
   std::fill(numberOfFacesPerVert.begin(), numberOfFacesPerVert.end(), 0);
+
+  std::vector<ngl::Vec3> vertTex = _mesh->getTextureCordList();
 
   if(interpnormals)
   {
@@ -614,8 +636,10 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh,float scale)
 //        else if(e1.m_z<0) e1DirZ=-1;
 //        else e1DirZ=0;
 
-
-
+        ngl::Vec3 ta, tb, tc;
+        ta = vertTex[itr->m_vert[0]];
+        tb = vertTex[itr->m_vert[1]];
+        tc = vertTex[itr->m_vert[2]];
 
 
         //--------------------------NORMALS-----------------------------
@@ -643,6 +667,7 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh,float scale)
       {
         ngl::Vec3 pos = a+(vecStep*i);
         ngl::Vec3 posnormal = ngl::lerp(na,nb,((float)i)/((float)(steps-1)));
+        ngl::Vec3 postexture = ngl::lerp(ta,tb,((float)i)/((float)(steps-1)));
         //ngl::Vec2 posUV = ;
         ngl::Vec3 line = c-pos;
         int jsteps = std::ceil(line.length()/m_voxUnit);
@@ -659,25 +684,31 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh,float scale)
         for(int j = 0; j<jsteps*3; ++j) //scaled
         {
           float inNX, inNY, inNZ;
+          float inU, inV;
           if(interpnormals)
           {
             ngl::Vec3 posnormal2 = lerp(posnormal,nc,((float)j)/((float)(jsteps*3)));
+            ngl::Vec3 postexture2 = lerp(postexture,tc,((float)j)/((float)(jsteps*3)));
             inNX = posnormal2.m_x;
             inNY = posnormal2.m_y;
             inNZ = posnormal2.m_z;
+            inU = postexture2.m_x;
+            inV = postexture2.m_y;
           }
           else
           {
             inNX = tmpNormal.m_x;
             inNY = tmpNormal.m_y;
             inNZ = tmpNormal.m_z;
+            inU = ta.m_x;
+            inV = tb.m_y;
           }
 
-          addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),Voxel(inNX,inNY,inNZ));
+          Voxel toinsert = Voxel(inNX,inNY,inNZ,inU,inV);
+          addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),toinsert);
           pos = pos + mystep;
         }
       }
-
     }
  }
  printf("Number of voxels: %d",numberOfVoxels);

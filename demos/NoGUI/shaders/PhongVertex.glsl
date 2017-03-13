@@ -23,6 +23,7 @@ layout (location=2) in vec3 VertexNormal;
 
 out vec3 FragmentPosition;
 out vec3 FragmentNormal;
+out vec2 FragmentTexCoord;
 
 out mat4 _MV;
 
@@ -33,7 +34,7 @@ void main() {
 
     FragmentPosition = vec3(MV * vec4(VertexPosition,1.0));
     FragmentNormal = N * VertexNormal;
-
+    FragmentTexCoord = TexCoord;
     _MV = MV;
 }
 

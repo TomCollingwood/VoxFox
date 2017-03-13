@@ -24,7 +24,7 @@ typedef struct Voxel{
 
   Voxel(float _u, float _v) : u(_u), v(_v){}
 
-  Voxel(float _nx, float _ny, float _nz) : nx(_nx), ny(_ny), nz(_nz){}
+  Voxel(float _nx, float _ny, float _nz, float _u, float _v) : nx(_nx), ny(_ny), nz(_nz), u(_u), v(_v){}
 }Voxel;
 
 typedef struct PrimaryNodeIndex{

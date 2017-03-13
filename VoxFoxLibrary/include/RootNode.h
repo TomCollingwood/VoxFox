@@ -19,6 +19,8 @@ class RootNode
 public:
   RootNode();
 
+  RootNode operator+=(RootNode const& r);
+
   void calculatePolys();
 
   void addVoxel(glm::vec3 _position, Voxel _data);
@@ -37,6 +39,7 @@ public:
   int   getVertexSize();
   std::vector<float> getVertexes();
   std::vector<float> getNormals();
+  std::vector<float> getTextureCoords();
   int getSize();
   std::vector<PrimaryNode *> * getChildren() {return &m_primChildren;}
   //std::vector<float> * getVertexes() {return m_vertexes; }
@@ -63,19 +66,21 @@ public:
   const float m_secUnit = 1.25;
   const float m_leafUnit = 0.15625;
   const float m_voxUnit = 0.01953125;
+  std::vector<PrimaryNode *> m_primChildren;
 
 private:
   glm::vec3 min, max;
 
   const int depth = 3;
   std::vector<LeafNode *> m_leafTable;
-  std::vector<PrimaryNode *> m_primChildren;
+
   LeafNode * m_leafAccessor =nullptr;
   SecondaryNode * m_secAccessor =nullptr;
   PrimaryNode * m_primAccessor =nullptr;
   int numberOfVoxels=0;
   std::vector<float> m_vertexes;
   std::vector<float> m_normals;
+  std::vector<float> m_textureCoords;
 };
 
 #endif // ROOTNODE_H

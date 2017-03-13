@@ -16,10 +16,10 @@ public:
   SecondaryNode(glm::vec3 _origin);
   bool addVoxel(glm::vec3 _position, Voxel _voxel, LeafNode ** _leafAccessor);
   bool isVoxel(glm::vec3 _position, LeafNode ** _leafAccessor);
-  void draw(std::vector<float> * _vertexes, glm::vec3 _DOF);
   glm::vec3 getOrigin() {return m_origin; }
   PrimaryNode * m_parent;
   std::vector<LeafNode *> m_leafChildren;
+  void add(SecondaryNode const& _s);
 private:
   bool full;
   glm::vec3 m_origin;

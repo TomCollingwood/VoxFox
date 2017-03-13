@@ -24,13 +24,14 @@ public:
   bool addVoxel(glm::vec3 _position, Voxel _voxel);
   bool isVoxel(glm::vec3 _position);
   glm::vec3 getOrigin() {return m_origin; }
-  void draw(std::vector<float> * _vertexes, glm::vec3 _DOF);
+//  /void draw(std::vector<float> * _vertexes, glm::vec3 _DOF);
   bool full;
   SecondaryNode * m_parent;
   RootNode * m_root;
   glm::vec3 m_origin;
   char * m_VoxelMap;
   std::vector<Voxel> m_VoxelData;
+  void add(LeafNode const& _l);
 
 private:
   int m_voxNumber;
