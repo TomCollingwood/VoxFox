@@ -34,7 +34,7 @@ void main() {
 
     FragmentPosition = vec3(MV * vec4(VertexPosition,1.0));
     FragmentNormal = N * VertexNormal;
-    FragmentTexCoord = TexCoord;
+    //FragmentTexCoord = TexCoord;
     _MV = MV;
 }
 

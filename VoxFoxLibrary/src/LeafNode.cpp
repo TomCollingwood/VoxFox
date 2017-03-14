@@ -5,9 +5,17 @@ LeafNode::LeafNode()
   m_VoxelMap = (char*)malloc(64*sizeof(char));
   memset(m_VoxelMap, 0, 64*sizeof(char));
 }
-LeafNode::LeafNode(glm::vec3 _origin) : m_origin(_origin) {
+LeafNode::LeafNode(glm::vec3 _origin) : m_origin(_origin)
+{
   m_VoxelMap = (char*)malloc(64*sizeof(char));
   memset(m_VoxelMap, 0, 64*sizeof(char));
+  idx = (int)(_origin[0]/m_leafUnit);
+  idy = (int)(_origin[1]/m_leafUnit);
+  idz = (int)(_origin[2]/m_leafUnit);
+}
+LeafNode::~LeafNode()
+{
+  free(m_VoxelMap);
 }
 
 bool LeafNode::isVoxel(glm::vec3 _position)
@@ -50,11 +58,11 @@ bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
   }
 }
 
-void LeafNode::add(LeafNode const& _l)
+void LeafNode::add(LeafNode *_l)
 {
   for(int i = 0; i<64; ++i)
   {
-    m_VoxelMap[i] &= _l.m_VoxelMap[i];
+    m_VoxelMap[i] &= _l->m_VoxelMap[i];
   }
 
   int index1 =0;
@@ -66,12 +74,12 @@ void LeafNode::add(LeafNode const& _l)
 
   while(!done)
   {
-    if(m_VoxelData[index1].index<_l.m_VoxelData[index2].index)
+    if(m_VoxelData[index1].index<_l->m_VoxelData[index2].index)
     {
       newVoxelData.push_back(m_VoxelData[index1]);
       index1++;
     }
-    else if(m_VoxelData[index1].index>_l.m_VoxelData[index2].index)
+    else if(m_VoxelData[index1].index>_l->m_VoxelData[index2].index)
     {
       newVoxelData.push_back(m_VoxelData[index2]);
       index2++;
@@ -82,7 +90,7 @@ void LeafNode::add(LeafNode const& _l)
       index2++;
       index1++;
     }
-    if(index2>=_l.m_VoxelData.size())
+    if(index2>=_l->m_VoxelData.size())
     {
       for(int i=index1; i<m_VoxelData.size(); ++i)
       {
@@ -92,9 +100,9 @@ void LeafNode::add(LeafNode const& _l)
     }
     else if(index1>=m_VoxelData.size())
     {
-      for(int i=index2; i<_l.m_VoxelData.size(); ++i)
+      for(int i=index2; i<_l->m_VoxelData.size(); ++i)
       {
-        newVoxelData.push_back(_l.m_VoxelData[i]);
+        newVoxelData.push_back(_l->m_VoxelData[i]);
       }
       done=true;
     }

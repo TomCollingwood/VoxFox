@@ -6,7 +6,11 @@ PrimaryNode::PrimaryNode()
 }
 
 PrimaryNode::PrimaryNode(glm::vec3 _origin) : m_origin(_origin)
-{}
+{
+  idx = (int)(_origin[0]/m_primUnit);
+  idy = (int)(_origin[1]/m_primUnit);
+  idz = (int)(_origin[2]/m_primUnit);
+}
 
 bool PrimaryNode::isVoxel(glm::vec3 _position, SecondaryNode ** _secAccessor, LeafNode ** _leafAccessor)
 {
@@ -42,15 +46,16 @@ void PrimaryNode::addVoxel(glm::vec3 _position, Voxel _voxel, SecondaryNode ** _
   }
 }
 
-void PrimaryNode::add(PrimaryNode const& _p)
+
+void PrimaryNode::add(PrimaryNode *_p)
 {
   for(auto & i : m_secChildren)
   {
-    for(auto & j : _p.m_secChildren)
+    for(auto & j : _p->m_secChildren)
     {
-      if(j->getOrigin()==i->getOrigin())
+      if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
-        i->add(*j);
+        i->add(j);
       }
     }
   }

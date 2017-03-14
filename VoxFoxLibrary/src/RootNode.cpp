@@ -8,15 +8,15 @@ RootNode::RootNode()
   //m_normals = new std::vector<float>(0);
 }
 
-RootNode RootNode::operator+=(RootNode const& r)
+void RootNode::operator+=(RootNode const& r)
 {
   for(auto & i : m_primChildren)
   {
     for(auto & j : r.m_primChildren)
     {
-      if(i->getOrigin() == j->getOrigin())
+      if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
-        i->add(*j);
+        i->add(j);
       }
     }
   }
@@ -38,27 +38,12 @@ std::vector<float> RootNode::getTextureCoords()
   return m_textureCoords;
 }
 
-int RootNode::getSize()
-{
-  return m_primChildren.size();
-}
-
-float RootNode::getVertexFloat(int i)
-{
-  return m_vertexes.at(i);
-}
-
 int RootNode::getVertexSize()
 {
   return m_vertexes.size();
 }
 
-void RootNode::printVertexes()
-{
-  for (std::vector<float>::const_iterator i = m_vertexes.begin(); i != m_vertexes.end(); ++i)
-      std::cout << *i << ' ';
-}
-bool RootNode::isVoxel(glm::vec3 _position)
+bool RootNode::isVoxel(glm::vec3 const &_position)
 {
   if(m_leafAccessor!=nullptr && m_leafAccessor->isVoxel(_position)) return true;
   else if ( m_secAccessor!=nullptr && m_secAccessor->isVoxel(_position,&m_leafAccessor)) return true;
@@ -76,7 +61,7 @@ bool RootNode::isVoxel(glm::vec3 _position)
 //  }
 }
 
-void RootNode::addVoxel(glm::vec3 _position, Voxel _data)
+void RootNode::addVoxel(glm::vec3 const &_position, Voxel const &_data)
 {
   if((m_leafAccessor==nullptr && m_secAccessor==nullptr) ||
      (m_leafAccessor!=nullptr && !m_leafAccessor->addVoxel(_position, _data) &&
@@ -126,8 +111,10 @@ void RootNode::calculatePolys()
       //prim->draw(m_vertexes, DOF);
       for(auto &sec : prim->m_secChildren)
       {
+
         for(auto &leaf : sec->m_leafChildren)
         {
+
           int voxelindex=0;
           for(int i = 0; i<64; ++i)
           {
@@ -367,11 +354,12 @@ void RootNode::calculatePolys()
               }
             }
           }
+
         }
       }
 }
 }
-void RootNode::createSphere(glm::vec3 _position, int _radius)
+void RootNode::createSphere(glm::vec3 const &_position, int const &_radius)
 {
   for(int x = -_radius; x<_radius; ++x)
   {
@@ -409,7 +397,7 @@ void RootNode::createSphere(glm::vec3 _position, int _radius)
   }
 }
 
-void RootNode::createTorus(glm::vec3 _position, glm::vec2 _t)
+void RootNode::createTorus(glm::vec3 const &_position, glm::vec2 const &_t)
 {
   int _radius = 50;
   for(int x = -_radius; x<_radius; ++x)
@@ -475,10 +463,8 @@ void RootNode::createTorus(glm::vec3 _position, glm::vec2 _t)
 //  }
 //}
 
-void RootNode::createBox(ngl::Vec3 _min, ngl::Vec3 _max)
+void RootNode::createBox(ngl::Vec3 const &_min, ngl::Vec3 const &_max)
 {
-  _max=_max*10;
-  _min=_min*10;
   ngl::Vec3 diff = _max-_min;
   diff=diff/m_voxUnit;
 
@@ -495,7 +481,7 @@ void RootNode::createBox(ngl::Vec3 _min, ngl::Vec3 _max)
   //printf("poo%f",diff.m_x);
 }
 
-void RootNode::importObj(ngl::Obj * _mesh)
+void RootNode::importQuickObj(ngl::Obj * _mesh)
 {
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
@@ -570,7 +556,7 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
 #endif
 #ifdef NEWOBIMPORT
 
-void RootNode::importAccurateObj(ngl::Obj * _mesh,float scale)
+void RootNode::importAccurateObj(ngl::Obj * _mesh,float const &scale)
 {
 
   bool interpnormals = false;
@@ -781,9 +767,6 @@ void RootNode::fill()
            p->getOrigin()[1]<=posPrim[1] && p->getOrigin()[1]+m_primUnit>posPrim[1] &&
            p->getOrigin()[2]<=posPrim[2] && p->getOrigin()[2]+m_primUnit>posPrim[2])
         {
-
-
-
           for(auto& s : p->m_secChildren)
           {
             glm::vec3 posSec = rayorig;
@@ -803,7 +786,7 @@ void RootNode::fill()
                     {
                        numInstersections++;
                        inVoxels=true;
-                       if(inside=true)
+                       if(inside==true)
                        {
                          inside=false;
                          beginEndStrips.push_back(currentpos-glm::vec3(0,0,m_voxUnit));
@@ -826,25 +809,67 @@ void RootNode::fill()
 
           }
         }
-
         posPrim+=glm::vec3(0,0,m_primUnit);
       }
       if(beginEndStrips.size()%2==1) beginEndStrips.pop_back();
     }
   }
 
-  //RootNode filler = RootNode();
+  // Time to gut the unneeded stuff
+  RootNode temp = RootNode();
   for(int i=1; i<beginEndStrips.size(); i+=2)
   {
-    glm::vec3 linelength = beginEndStrips[i]-beginEndStrips[i-1];
-    int numVoxels = linelength[2]/m_voxUnit;
-    glm::vec3 currentPos = beginEndStrips[i];
-    for(int j=0; j<numVoxels; ++j)
+    glm::vec3 currentPos = beginEndStrips[i-1];
+    while(currentPos[2]<=beginEndStrips[i][2])
     {
-      addVoxel(currentPos,Voxel());
+      temp.addVoxel(currentPos,Voxel());
       currentPos+=glm::vec3(0,0,m_voxUnit);
     }
   }
+
+ printf("\nTHIS MANY1: %d\n",(int)beginEndStrips.size());
+
+  for(int i=1; i<beginEndStrips.size(); i+=2)
+  {
+    glm::vec3 beginPos = beginEndStrips[i-1];
+    glm::vec3 endPos = beginEndStrips[i];
+    glm::vec3 currentPos = beginPos;
+    bool kill = false;
+    while(currentPos[2] < endPos[2] && !kill)
+    {
+      currentPos+=glm::vec3(0,0,m_voxUnit);
+      if(!temp.isVoxel(currentPos+glm::vec3(m_voxUnit,0,0)) || !isVoxel(currentPos+glm::vec3(m_voxUnit,0,0))) kill=true;
+      else if(!temp.isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0)) || !isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0))) kill=true;
+      else if(!temp.isVoxel(currentPos+glm::vec3(0,m_voxUnit,0)) || !isVoxel(currentPos+glm::vec3(0,m_voxUnit,0))) kill=true;
+      else if(!temp.isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0)) || !isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0))) kill=true;
+      else if(!temp.isVoxel(currentPos+glm::vec3(0,0,m_voxUnit)) || !isVoxel(currentPos+glm::vec3(0,0,m_voxUnit))) kill=true;
+      else if(!temp.isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit)) || !isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit))) kill=true;
+    }
+    if(kill)
+    {
+      beginEndStrips.erase(beginEndStrips.begin() + i);
+      beginEndStrips.erase(beginEndStrips.begin() + i - 1);
+      i-=2;
+    }
+  }
+
+
+  printf("\nTHIS MANY2: %d\n",(int)beginEndStrips.size());
+  int voxelsadded=0;
+  for(int i=1; i<beginEndStrips.size(); i+=2)
+  {
+    glm::vec3 currentPos = beginEndStrips[i-1];
+    while(currentPos[2]<=beginEndStrips[i][2])
+    {
+      addVoxel(currentPos,Voxel());
+      currentPos+=glm::vec3(0,0,m_voxUnit);
+      ++voxelsadded;
+    }
+  }
+
+  printf("\nTHIS MANY3: %d\n",voxelsadded);
+
+
 
 }
 

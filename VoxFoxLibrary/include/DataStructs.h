@@ -1,3 +1,11 @@
+/// \file DataStructs.h
+/// \brief DataStructs  Defines the Voxel struct that is used by all the other classes.
+///                     I chose struct as I did not need any functions for the object Voxel
+/// \author Thomas Collingwood
+/// \version 1.0
+/// \date 13/3/17 Updated to NCCA Coding standard
+/// Revision History : See https://github.com/TomCollingwood/VoxFox
+
 #ifndef DATASTRUCTS_H
 #define DATASTRUCTS_H
 

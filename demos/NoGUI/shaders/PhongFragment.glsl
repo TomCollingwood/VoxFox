@@ -9,7 +9,7 @@ uniform sampler2D ColourTexture;
 //in vec3 LightIntensity;
 in vec3 FragmentPosition;
 in vec3 FragmentNormal;
-in vec2 FragmentTexCoord;
+//in vec2 FragmentTexCoord;
 in mat4 _MV;
 
 // This is no longer a built-in variable
@@ -75,7 +75,7 @@ void main() {
             Light.Ls * Material.Ks * pow( max( dot(r,v), 0.0 ), Material.Shininess ));
 
 
-    vec3 texColor = texture(ColourTexture,1-FragmentTexCoord).rgb;
+    //vec3 texColor = texture(ColourTexture,FragmentTexCoord).rgb;
 
     // Set the output color of our current pixel
     FragColor = vec4(LightIntensity,1.0);

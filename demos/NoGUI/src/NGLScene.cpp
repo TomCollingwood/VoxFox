@@ -110,7 +110,7 @@ void NGLScene::initializeGL()
   // TEXTURE
 
   GLuint m_colourTex;
-  initTexture(0, m_colourTex, "images/texture.jpg");
+  initTexture(0, m_colourTex, "images/deertexture.jpg");
   GLuint pid = shader->getProgramID("Phong");
   glUniform1i(glGetUniformLocation(pid,"ColourTexture"),0);
 
@@ -141,34 +141,43 @@ void NGLScene::initializeGL()
   light.loadToShader( "light" );
 
   glEnable(GL_CULL_FACE);
+
+
+
   myRoot = new RootNode();
-  RootNode * myRoot2 = new RootNode();
+  RootNode myRoot2 = RootNode();
+
+  //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
+  //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
+  //myRoot->createSphere(glm::vec3(0,0,0),50);
+
   ngl::Obj * m_mesh = new ngl::Obj("models/deer-obj.obj");
-  ngl::Obj * m_mesh2 = new ngl::Obj("models/bunny.obj");
+  ngl::Obj * m_mesh2 = new ngl::Obj("models/Helix.obj");
+
   std::cout<<"Importing..\n"<<std::endl;
   clock_t begin = clock();
   myRoot->importAccurateObj(m_mesh,0.2f);
-  myRoot2->importAccurateObj(m_mesh2,40.0f);
-  *myRoot+=*myRoot2;
+  myRoot2.importAccurateObj(m_mesh2,1.0f);
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Import took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
 
-  std::cout<<"Filling..\n"<<std::endl;
+  std::cout<<"Unioning..\n"<<std::endl;
   begin = clock();
-  //myRoot->fill();
+  (*myRoot)+=myRoot2;
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout<<"Filling took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
-  //myRoot->importObj(m_mesh);
-  //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
+  std::cout<<"Unioning took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
 
-  //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
-  //myRoot->createSphere(glm::vec3(0,0,0),50);
+//  std::cout<<"Filling..\n"<<std::endl;
+//  begin = clock();
+//  myRoot->fill();
+//  end = clock();
+//  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+//  std::cout<<"Filling took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
 
   std::cout<<"Poly Calculating..\n"<<std::endl;
   begin = clock();
-  ngl::Mat4 MV = m_mouseGlobalTX * m_cam.getViewMatrix();
   myRoot->calculatePolys();
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
@@ -192,31 +201,6 @@ void NGLScene::initializeGL()
    glBindVertexArray(vao);
 
    int amountVertexData = myRoot->getVertexSize();
-   //printf("MAX SIZET: %d",myRoot->getVertexes()->max_size());
-
-//   begin = clock();
-   // CALCULATE NORMALS ---
-//   float * normals = new float[amountVertexData];
-//   for(int i = 0; i<amountVertexData-9; i+=9)
-//   {
-//     glm::vec3 a = glm::vec3(myRoot->getVertexFloat(i+0),myRoot->getVertexFloat(i+1),myRoot->getVertexFloat(i+2));
-//     glm::vec3 b = glm::vec3(myRoot->getVertexFloat(i+3),myRoot->getVertexFloat(i+4),myRoot->getVertexFloat(i+5));
-//     glm::vec3 c = glm::vec3(myRoot->getVertexFloat(i+6),myRoot->getVertexFloat(i+7),myRoot->getVertexFloat(i+8));
-//     glm::vec3 A = b - a;
-//     glm::vec3 B = c - a;
-//     glm::vec3 N = glm::cross(A,B);
-//     N = glm::normalize(N);
-//     for(int j=0; j<9; j+=3)
-//     {
-//       normals[i+j]=N[0];
-//       normals[i+j+1]=N[1];
-//       normals[i+j+2]=N[2];
-//     }
-//   }
-//   end = clock();
-//   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-
-   std::cout<<"Normals took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
 
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getVertexes().data(), GL_STATIC_DRAW);
@@ -224,8 +208,8 @@ void NGLScene::initializeGL()
    glBindBuffer(GL_ARRAY_BUFFER, nbo);
    glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getNormals().data(), GL_STATIC_DRAW);
 
-   glBindBuffer(GL_ARRAY_BUFFER, tbo);
-   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getTextureCoords().data(), GL_STATIC_DRAW);
+//   glBindBuffer(GL_ARRAY_BUFFER, tbo);
+//   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getTextureCoords().data(), GL_STATIC_DRAW);
 
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
@@ -237,12 +221,10 @@ void NGLScene::initializeGL()
    glEnableVertexAttribArray(n);
    glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
 
-   glBindBuffer(GL_ARRAY_BUFFER, tbo);
-   GLint t = glGetAttribLocation(shader->getProgramID(shaderProgram), "TexCoord");
-   glEnableVertexAttribArray(t);
-   glVertexAttribPointer(t,2,GL_FLOAT,GL_FALSE,0, 0);
-
-   //glBufferData();
+//   glBindBuffer(GL_ARRAY_BUFFER, tbo);
+//   GLint t = glGetAttribLocation(shader->getProgramID(shaderProgram), "TexCoord");
+//   glEnableVertexAttribArray(t);
+//   glVertexAttribPointer(t,2,GL_FLOAT,GL_FALSE,0, 0);
 }
 
 

@@ -5,9 +5,14 @@ SecondaryNode::SecondaryNode()
 
 }
 
-SecondaryNode::SecondaryNode(glm::vec3 _origin) : m_origin(_origin) {}
+SecondaryNode::SecondaryNode(glm::vec3 _origin) : m_origin(_origin)
+{
+  idx = (int)(_origin[0]/m_secUnit);
+  idy = (int)(_origin[1]/m_secUnit);
+  idz = (int)(_origin[2]/m_secUnit);
+}
 
-bool SecondaryNode::isVoxel(glm::vec3 _position, LeafNode ** _leafAccessor)
+bool SecondaryNode::isVoxel(glm::vec3 const &_position, LeafNode ** _leafAccessor)
 {
   for (auto &leaf : m_leafChildren) // access by reference to avoid copying
       {
@@ -51,15 +56,15 @@ bool SecondaryNode::addVoxel(glm::vec3 _position, Voxel _voxel, LeafNode ** _lea
   }
 }
 
-void SecondaryNode::add(SecondaryNode const& _s)
+void SecondaryNode::add(SecondaryNode *_s)
 {
   for(auto & i : m_leafChildren)
   {
-    for(auto & j : _s.m_leafChildren)
+    for(auto & j : _s->m_leafChildren)
     {
-      if(j->getOrigin()==i->getOrigin())
+      if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
-        i->add(*j);
+        i->add(j);
       }
     }
   }

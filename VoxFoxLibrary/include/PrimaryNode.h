@@ -1,3 +1,11 @@
+/// \file PrimaryNode.h
+/// \brief PrimaryNode.h  The highest node level that RootNode has.
+///                       PrimaryNode contains the SecondaryNodes (up to 8^3)
+/// \author Thomas Collingwood
+/// \version 1.0
+/// \date 13/3/17 Updated to NCCA Coding standard
+/// Revision History : See https://github.com/TomCollingwood/VoxFox
+
 #ifndef PRIMARYNODE_H
 #define PRIMARYNODE_H
 
@@ -19,10 +27,17 @@ public:
   RootNode * m_parent;
   bool full;
   std::vector<SecondaryNode *> m_secChildren;
-  void add(PrimaryNode const& _p);
+  void add(PrimaryNode *_p);
+    int idx, idy, idz;
 private:
   float unitChildLength = 1.25;
+  const float m_primUnit = 10.0;
+  const float m_secUnit = 1.25;
+  const float m_leafUnit = 0.15625;
+  const float m_voxUnit = 0.01953125;
   glm::vec3 m_origin;
+
+
 
 
 };
