@@ -62,7 +62,7 @@ void LeafNode::add(LeafNode *_l)
 {
   for(int i = 0; i<64; ++i)
   {
-    m_VoxelMap[i] &= _l->m_VoxelMap[i];
+    m_VoxelMap[i] |= _l->m_VoxelMap[i];
   }
 
   int index1 =0;
@@ -107,4 +107,5 @@ void LeafNode::add(LeafNode *_l)
       done=true;
     }
   }
+  m_VoxelData = newVoxelData;
 }

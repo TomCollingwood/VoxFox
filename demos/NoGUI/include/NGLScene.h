@@ -51,7 +51,6 @@ public:
   void initTexture(const GLuint& texUnit, GLuint &texId, const char *filename);
 
   RootNode * myRoot;
-
   GLuint vao, vbo, nbo;
   std::vector<float> normals;
 

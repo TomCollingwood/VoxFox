@@ -12,12 +12,18 @@ void RootNode::operator+=(RootNode const& r)
 {
   for(auto & i : m_primChildren)
   {
+    bool found = false;
     for(auto & j : r.m_primChildren)
     {
       if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
         i->add(j);
+        found = true;
       }
+    }
+    if(!found)
+    {
+
     }
   }
 }
@@ -559,7 +565,7 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh)
 void RootNode::importAccurateObj(ngl::Obj * _mesh,float const &scale)
 {
 
-  bool interpnormals = false;
+  bool interpnormals = true;
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
   //std::vector<ngl::Vec3> normalList = _mesh->getNormalList();
@@ -583,7 +589,7 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh,float const &scale)
     tmpNormal.normalize();
     for(int j =0; j<objFaceList[i].m_vert.size(); ++j)
     {
-      vertNormals[objFaceList[i].m_vert[j]] = tmpNormal;
+      vertNormals[objFaceList[i].m_vert[j]] += tmpNormal;
       numberOfFacesPerVert[objFaceList[i].m_vert[j]]++;
     }
   }
@@ -623,9 +629,9 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh,float const &scale)
 //        else e1DirZ=0;
 
         ngl::Vec3 ta, tb, tc;
-        ta = vertTex[itr->m_vert[0]];
-        tb = vertTex[itr->m_vert[1]];
-        tc = vertTex[itr->m_vert[2]];
+        ta = vertTex[itr->m_tex[0]];
+        tb = vertTex[itr->m_tex[1]];
+        tc = vertTex[itr->m_tex[2]];
 
 
         //--------------------------NORMALS-----------------------------
@@ -652,8 +658,8 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh,float const &scale)
       for(int i =0; i<(steps+1)*2; ++i) //scaled
       {
         ngl::Vec3 pos = a+(vecStep*i);
-        ngl::Vec3 posnormal = ngl::lerp(na,nb,((float)i)/((float)(steps-1)));
-        ngl::Vec3 postexture = ngl::lerp(ta,tb,((float)i)/((float)(steps-1)));
+        ngl::Vec3 posnormal = ngl::lerp(na,nb,((float)i)/((float)(((steps+1)*2)-1)));
+        ngl::Vec3 postexture = ngl::lerp(ta,tb,((float)i)/((float)(((steps+1)*2)-1)));
         //ngl::Vec2 posUV = ;
         ngl::Vec3 line = c-pos;
         int jsteps = std::ceil(line.length()/m_voxUnit);
@@ -673,8 +679,8 @@ void RootNode::importAccurateObj(ngl::Obj * _mesh,float const &scale)
           float inU, inV;
           if(interpnormals)
           {
-            ngl::Vec3 posnormal2 = lerp(posnormal,nc,((float)j)/((float)(jsteps*3)));
-            ngl::Vec3 postexture2 = lerp(postexture,tc,((float)j)/((float)(jsteps*3)));
+            ngl::Vec3 posnormal2 = lerp(posnormal,nc,((float)j)/((float)((jsteps*3) - 1)));
+            ngl::Vec3 postexture2 = lerp(postexture,tc,((float)j)/((float)((jsteps*3) - 1)));
             inNX = posnormal2.m_x;
             inNY = posnormal2.m_y;
             inNZ = posnormal2.m_z;
@@ -738,7 +744,7 @@ bool RootNode::intersectBox(glm::vec3 _ray, glm::vec3 _origin, glm::vec3 _min, g
   return true;
 }
 
-void RootNode::fill()
+void RootNode::fill(RootNode * _r)
 {
   bool inside = false;
   bool inVoxels = false;
@@ -755,8 +761,10 @@ void RootNode::fill()
   glm::vec3 raydir=glm::vec3(0.0,0.0,1.0);
   for(int i = min.x/m_voxUnit; i<max.x/m_voxUnit; ++i)
   {
-    for(int j = min.x/m_voxUnit; j<max.x/m_voxUnit; ++j)
+    for(int j = min.y/m_voxUnit; j<max.y/m_voxUnit; ++j)
     {
+      inside = false;
+      inVoxels = false;
       int numInstersections=0;
       glm::vec3 rayorig = glm::vec3(i*m_voxUnit,j*m_voxUnit,min.z);
       for(auto& p : m_primChildren)
@@ -811,7 +819,12 @@ void RootNode::fill()
         }
         posPrim+=glm::vec3(0,0,m_primUnit);
       }
+
       if(beginEndStrips.size()%2==1) beginEndStrips.pop_back();
+      // here needs to get the all intersections in this strip and get rid of when 1 > 2
+      // in pairs.
+      //
+
     }
   }
 
@@ -838,12 +851,12 @@ void RootNode::fill()
     while(currentPos[2] < endPos[2] && !kill)
     {
       currentPos+=glm::vec3(0,0,m_voxUnit);
-      if(!temp.isVoxel(currentPos+glm::vec3(m_voxUnit,0,0)) || !isVoxel(currentPos+glm::vec3(m_voxUnit,0,0))) kill=true;
-      else if(!temp.isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0)) || !isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0))) kill=true;
-      else if(!temp.isVoxel(currentPos+glm::vec3(0,m_voxUnit,0)) || !isVoxel(currentPos+glm::vec3(0,m_voxUnit,0))) kill=true;
-      else if(!temp.isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0)) || !isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0))) kill=true;
-      else if(!temp.isVoxel(currentPos+glm::vec3(0,0,m_voxUnit)) || !isVoxel(currentPos+glm::vec3(0,0,m_voxUnit))) kill=true;
-      else if(!temp.isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit)) || !isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit))) kill=true;
+      if(!(temp.isVoxel(currentPos+glm::vec3(m_voxUnit,0,0)) || isVoxel(currentPos+glm::vec3(m_voxUnit,0,0)))) kill=true;
+      else if(!(temp.isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0)) || isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0)))) kill=true;
+      else if(!(temp.isVoxel(currentPos+glm::vec3(0,m_voxUnit,0)) || isVoxel(currentPos+glm::vec3(0,m_voxUnit,0)))) kill=true;
+      else if(!(temp.isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0)) || isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0)))) kill=true;
+      else if(!(temp.isVoxel(currentPos+glm::vec3(0,0,m_voxUnit)) || isVoxel(currentPos+glm::vec3(0,0,m_voxUnit)))) kill=true;
+      else if(!(temp.isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit)) || isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit)))) kill=true;
     }
     if(kill)
     {
@@ -856,14 +869,20 @@ void RootNode::fill()
 
   printf("\nTHIS MANY2: %d\n",(int)beginEndStrips.size());
   int voxelsadded=0;
+
+
   for(int i=1; i<beginEndStrips.size(); i+=2)
   {
     glm::vec3 currentPos = beginEndStrips[i-1];
-    while(currentPos[2]<=beginEndStrips[i][2])
+    glm::vec3 endPos = beginEndStrips[i];
+    if(currentPos[2]>endPos[2]) ++i;
+    else{
+    while(currentPos[2]<=endPos[2])
     {
-      addVoxel(currentPos,Voxel());
+      _r->addVoxel(currentPos,Voxel());
       currentPos+=glm::vec3(0,0,m_voxUnit);
       ++voxelsadded;
+    }
     }
   }
 
