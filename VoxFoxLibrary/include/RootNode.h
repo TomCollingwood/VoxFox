@@ -90,7 +90,7 @@ public:
   ///                       It is done by simply drawing in the bounding boxes of the polygons
   /// \param[in] _mesh      The ngl::Obj object of the mesh
   //----------------------------------------------------------------------------------------------------------------------
-  void importQuickObj(ngl::Obj * _mesh);
+  void importQuickObj(ngl::Obj * _mesh, float const &_scale);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief importAccurateObj  Slowly imports a polygonal .obj file to the RootNode as voxel data

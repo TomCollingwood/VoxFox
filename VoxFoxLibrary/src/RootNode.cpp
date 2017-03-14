@@ -255,7 +255,7 @@ void RootNode::calculatePolys()
                   ++numberOfFaces;
                 }
                 // RIGHT FACE
-                if( (i<=56 && !(leaf->m_VoxelMap[i+8] & (1<<j)))  ||   (i>56 && !isVoxel(glm::vec3(_x+m_voxUnit,_y,_z))))
+                if( (i<56 && !(leaf->m_VoxelMap[i+8] & (1<<j)))  ||   (i>=56 && !isVoxel(glm::vec3(_x+m_voxUnit,_y,_z))))
                 {
                   // 7
                   m_vertexes.push_back(_x+_u);
@@ -487,7 +487,7 @@ void RootNode::createBox(ngl::Vec3 const &_min, ngl::Vec3 const &_max)
   //printf("poo%f",diff.m_x);
 }
 
-void RootNode::importQuickObj(ngl::Obj * _mesh)
+void RootNode::importQuickObj(ngl::Obj * _mesh, float const &_scale)
 {
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
@@ -499,13 +499,13 @@ void RootNode::importQuickObj(ngl::Obj * _mesh)
 
     for(int i=1;i<numVertexInFace;i++)
     {
-      if(verts[itr->m_vert[i]].m_x<min.m_x) {min.m_x=verts[itr->m_vert[i]].m_x;}
-      if(verts[itr->m_vert[i]].m_y<min.m_y) {min.m_y=verts[itr->m_vert[i]].m_y;}
-      if(verts[itr->m_vert[i]].m_z<min.m_z) {min.m_z=verts[itr->m_vert[i]].m_z;}
+      if(verts[itr->m_vert[i]].m_x<min.m_x) {min.m_x=verts[itr->m_vert[i]].m_x*_scale;}
+      if(verts[itr->m_vert[i]].m_y<min.m_y) {min.m_y=verts[itr->m_vert[i]].m_y*_scale;}
+      if(verts[itr->m_vert[i]].m_z<min.m_z) {min.m_z=verts[itr->m_vert[i]].m_z*_scale;}
 
-      if(verts[itr->m_vert[i]].m_x>max.m_x) {max.m_x=verts[itr->m_vert[i]].m_x;}
-      if(verts[itr->m_vert[i]].m_y>max.m_y) {max.m_y=verts[itr->m_vert[i]].m_y;}
-      if(verts[itr->m_vert[i]].m_z>max.m_z) {max.m_z=verts[itr->m_vert[i]].m_z;}
+      if(verts[itr->m_vert[i]].m_x>max.m_x) {max.m_x=verts[itr->m_vert[i]].m_x*_scale;}
+      if(verts[itr->m_vert[i]].m_y>max.m_y) {max.m_y=verts[itr->m_vert[i]].m_y*_scale;}
+      if(verts[itr->m_vert[i]].m_z>max.m_z) {max.m_z=verts[itr->m_vert[i]].m_z*_scale;}
       //addVoxel(glm::vec3(verts[itr->m_vert[i]].m_x,verts[itr->m_vert[i]].m_y,verts[itr->m_vert[i]].m_z));
     }
     if(numVertexInFace==3) createBox(min,max);
@@ -759,73 +759,47 @@ void RootNode::fill(RootNode * _r)
   }
 
   glm::vec3 raydir=glm::vec3(0.0,0.0,1.0);
-  for(int i = min.x/m_voxUnit; i<max.x/m_voxUnit; ++i)
+  for(int i = (int)(min.x/m_voxUnit); i<(int)(max.x/m_voxUnit); ++i)
   {
-    for(int j = min.y/m_voxUnit; j<max.y/m_voxUnit; ++j)
-    {
-      inside = false;
-      inVoxels = false;
-      int numInstersections=0;
-      glm::vec3 rayorig = glm::vec3(i*m_voxUnit,j*m_voxUnit,min.z);
-      for(auto& p : m_primChildren)
-      {
-        glm::vec3 posPrim=rayorig;
+//    for(int j = (int)(min.y/m_voxUnit); j<(int)(max.y/m_voxUnit); ++j)
+//    {
+//      inside = false;
+//      inVoxels = false;
+//      int numInstersections=0;
 
-        if(p->getOrigin()[0]<=posPrim[0] && p->getOrigin()[0]+m_primUnit>posPrim[0] &&
-           p->getOrigin()[1]<=posPrim[1] && p->getOrigin()[1]+m_primUnit>posPrim[1] &&
-           p->getOrigin()[2]<=posPrim[2] && p->getOrigin()[2]+m_primUnit>posPrim[2])
-        {
-          for(auto& s : p->m_secChildren)
-          {
-            glm::vec3 posSec = rayorig;
-            if(intersectBox(raydir,rayorig,s->getOrigin(),s->getOrigin()+m_secUnit))
-            {
-              for(auto& l : s->m_leafChildren)
-              {
-                if(intersectBox(raydir,rayorig,l->getOrigin(),l->getOrigin()+m_leafUnit))
-                {
-                  glm::vec3 origleaf = rayorig;
-                  origleaf.z=l->getOrigin().z;
-                  glm::vec3 currentpos = origleaf;
+//      // create function called isLeaf call that and get the leaf if there is a leaf. If (isLeaf) getLeaf ....
+//      // Boom shakalaka
 
-                  for(int k=0; k<8; ++k)
-                  {
-                    if(!inVoxels && isVoxel(currentpos))
-                    {
-                       numInstersections++;
-                       inVoxels=true;
-                       if(inside==true)
-                       {
-                         inside=false;
-                         beginEndStrips.push_back(currentpos-glm::vec3(0,0,m_voxUnit));
-                       }
-                    }
-                    else if(inVoxels && !isVoxel(currentpos))
-                    {
-                      inVoxels=false;
-                      if(numInstersections%2==0)
-                      {
-                        inside=true;
-                        beginEndStrips.push_back(currentpos);
-                      }
-                    }
-                    currentpos+=glm::vec3(0,0,m_voxUnit);
-                  }
-                }
-              }
-            }
+//                  //foreachleaf
+//                  glm::vec3 currentpos = glm::vec3(i*m_voxUnit,j*m_voxUnit,0);
+//                  for(int k=0; k<8; ++k)
+//                  {
+//                    if(!inVoxels && isVoxel(currentpos))
+//                    {
+//                       numInstersections++;
+//                       inVoxels=true;
+//                       if(inside==true)
+//                       {
+//                         inside=false;
+//                         beginEndStrips.push_back(currentpos-glm::vec3(0,0,m_voxUnit));
+//                       }
+//                    }
+//                    else if(inVoxels && !isVoxel(currentpos))
+//                    {
+//                      inVoxels=false;
+//                      if(numInstersections%2==0)
+//                      {
+//                        inside=true;
+//                        beginEndStrips.push_back(currentpos);
+//                      }
+//                    }
+//                    currentpos+=glm::vec3(0,0,m_voxUnit);
+//                  }
 
-          }
-        }
-        posPrim+=glm::vec3(0,0,m_primUnit);
-      }
 
-      if(beginEndStrips.size()%2==1) beginEndStrips.pop_back();
-      // here needs to get the all intersections in this strip and get rid of when 1 > 2
-      // in pairs.
-      //
 
-    }
+
+//    }
   }
 
   // Time to gut the unneeded stuff

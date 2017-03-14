@@ -11,6 +11,9 @@
 #include <ngl/VAOPrimitives.h>
 #include <ctime>
 
+//#define TESTINGFILL
+
+
 
 NGLScene::NGLScene()
 {
@@ -110,7 +113,7 @@ void NGLScene::initializeGL()
   // TEXTURE
 
   GLuint m_colourTex;
-  initTexture(0, m_colourTex, "images/deertexture.jpg");
+  initTexture(0, m_colourTex, "images/dwarf_2_1K_color.jpg");
   GLuint pid = shader->getProgramID("Phong");
   glUniform1i(glGetUniformLocation(pid,"ColourTexture"),0);
 
@@ -143,20 +146,26 @@ void NGLScene::initializeGL()
   glEnable(GL_CULL_FACE);
 
   myRoot = new RootNode();
-  //RootNode myRoot1 = RootNode();
+
   //RootNode myRoot2 = RootNode();
 
   //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
   //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
   //myRoot->createSphere(glm::vec3(0,0,0),50);
 
-  ngl::Obj * m_mesh = new ngl::Obj("models/deer-obj.obj");
+  ngl::Obj * m_mesh = new ngl::Obj("models/Dwarf_2_Low.obj");
   ngl::Obj * m_mesh2 = new ngl::Obj("models/Helix.obj");
 
   std::cout<<"Importing..\n"<<std::endl;
   clock_t begin = clock();
-  myRoot->importAccurateObj(m_mesh,0.2f);
-  //myRoot2.importAccurateObj(m_mesh2,1.0f);
+#ifndef TESTINGFILL
+  myRoot->importAccurateObj(m_mesh,5.0f);
+#endif
+
+#ifdef TESTINGFILL
+  RootNode myRoot1 = RootNode();
+  myRoot1.importAccurateObj(m_mesh,5.0f);
+#endif
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Import took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
@@ -164,19 +173,21 @@ void NGLScene::initializeGL()
 
 
 
-  std::cout<<"Unioning..\n"<<std::endl;
-  begin = clock();
+//  std::cout<<"Unioning..\n"<<std::endl;
+//  begin = clock();
   //(*myRoot)+=myRoot2;
-  end = clock();
-  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout<<"Unioning took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+//  end = clock();
+//  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+//  std::cout<<"Unioning took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
 
+#ifdef TESTINGFILL
   std::cout<<"Filling..\n"<<std::endl;
   begin = clock();
-  //myRoot->fill(myRoot);
+  myRoot1.fill(myRoot);
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Filling took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+#endif
 
   std::cout<<"Poly Calculating..\n"<<std::endl;
   begin = clock();
@@ -203,6 +214,7 @@ void NGLScene::initializeGL()
    glBindVertexArray(vao);
 
    int amountVertexData = myRoot->getVertexSize();
+   int amountTexData = (int)((float)myRoot->getVertexSize() * (2.0f/3.0f));
 
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getVertexes().data(), GL_STATIC_DRAW);
@@ -211,7 +223,7 @@ void NGLScene::initializeGL()
    glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getNormals().data(), GL_STATIC_DRAW);
 
    glBindBuffer(GL_ARRAY_BUFFER, tbo);
-   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getTextureCoords().data(), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, amountTexData * sizeof(float), myRoot->getTextureCoords().data(), GL_STATIC_DRAW);
 
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
