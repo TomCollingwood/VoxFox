@@ -56,6 +56,19 @@ bool SecondaryNode::addVoxel(glm::vec3 _position, Voxel _voxel, LeafNode ** _lea
   }
 }
 
+bool SecondaryNode::isLeaf(glm::vec3 _position, LeafNode ** _leaf)
+{
+  for (int i =0; i<m_leafChildren.size(); ++i) // access by reference to avoid copying
+  {
+    if(_position[0]<m_leafChildren[i]->getOrigin()[0] || _position[0]>=m_leafChildren[i]->getOrigin()[0]+unitChildLength) continue;
+    if(_position[1]<m_leafChildren[i]->getOrigin()[1] || _position[1]>=m_leafChildren[i]->getOrigin()[1]+unitChildLength) continue;
+    if(_position[2]<m_leafChildren[i]->getOrigin()[2] || _position[2]>=m_leafChildren[i]->getOrigin()[2]+unitChildLength) continue;
+    *_leaf = m_leafChildren[i];
+    return true;
+  }
+  return false;
+}
+
 void SecondaryNode::add(SecondaryNode *_s)
 {
   for(auto & i : m_leafChildren)

@@ -28,7 +28,9 @@ public:
   bool full;
   std::vector<SecondaryNode *> m_secChildren;
   void add(PrimaryNode *_p);
-    int idx, idy, idz;
+  bool isLeaf(glm::vec3 _position, LeafNode ** _leaf);
+  bool isSecondary(glm::vec3 _position, SecondaryNode ** _secondary);
+  int idx, idy, idz;
 private:
   float unitChildLength = 1.25;
   const float m_primUnit = 10.0;

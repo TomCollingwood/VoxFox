@@ -46,6 +46,31 @@ void PrimaryNode::addVoxel(glm::vec3 _position, Voxel _voxel, SecondaryNode ** _
   }
 }
 
+bool PrimaryNode::isLeaf(glm::vec3 _position, LeafNode ** _leaf)
+{
+  for (int i =0 ; i< m_secChildren.size(); ++i) // access by reference to avoid copying
+  {
+    if(_position[0]<m_secChildren[i]->getOrigin()[0] || _position[0]>=m_secChildren[i]->getOrigin()[0]+unitChildLength) continue;
+    if(_position[1]<m_secChildren[i]->getOrigin()[1] || _position[1]>=m_secChildren[i]->getOrigin()[1]+unitChildLength) continue;
+    if(_position[2]<m_secChildren[i]->getOrigin()[2] || _position[2]>=m_secChildren[i]->getOrigin()[2]+unitChildLength) continue;
+    return m_secChildren[i]->isLeaf(_position,_leaf);
+  }
+  return false;
+}
+
+bool PrimaryNode::isSecondary(glm::vec3 _position, SecondaryNode ** _secondary)
+{
+  for (int i =0 ; i< m_secChildren.size(); ++i) // access by reference to avoid copying
+  {
+    if(_position[0]<m_secChildren[i]->getOrigin()[0] || _position[0]>=m_secChildren[i]->getOrigin()[0]+unitChildLength) continue;
+    if(_position[1]<m_secChildren[i]->getOrigin()[1] || _position[1]>=m_secChildren[i]->getOrigin()[1]+unitChildLength) continue;
+    if(_position[2]<m_secChildren[i]->getOrigin()[2] || _position[2]>=m_secChildren[i]->getOrigin()[2]+unitChildLength) continue;
+    *_secondary=m_secChildren[i];
+    return true;
+  }
+  return false;
+}
+
 
 void PrimaryNode::add(PrimaryNode *_p)
 {

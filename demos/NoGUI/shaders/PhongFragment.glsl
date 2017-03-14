@@ -78,5 +78,5 @@ void main() {
     vec3 texColor = texture(ColourTexture,FragmentTexCoord).rgb;
 
     // Set the output color of our current pixel
-    FragColor = vec4(texColor,1.0);
+    FragColor = vec4(1.0,1.0,1.0,1.0);
 }

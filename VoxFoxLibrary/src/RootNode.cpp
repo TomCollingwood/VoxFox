@@ -97,6 +97,43 @@ void RootNode::addVoxel(glm::vec3 const &_position, Voxel const &_data)
   numberOfVoxels++;
 }
 
+bool RootNode::isLeaf(glm::vec3 _position, LeafNode ** _leaf)
+{
+  for (int i =0 ; i<m_primChildren.size(); ++i) // access by reference to avoid copying
+  {
+    if(_position[0]<m_primChildren[i]->getOrigin()[0] || _position[0]>=m_primChildren[i]->getOrigin()[0]+m_primUnit) continue;
+    if(_position[1]<m_primChildren[i]->getOrigin()[1] || _position[1]>=m_primChildren[i]->getOrigin()[1]+m_primUnit) continue;
+    if(_position[2]<m_primChildren[i]->getOrigin()[2] || _position[2]>=m_primChildren[i]->getOrigin()[2]+m_primUnit) continue;
+    return m_primChildren[i]->isLeaf(_position,_leaf);
+  }
+  return false;
+}
+
+bool RootNode::isSecondary(glm::vec3 _position, SecondaryNode ** _secondary)
+{
+  for (int i =0 ; i<m_primChildren.size(); ++i) // access by reference to avoid copying
+  {
+    if(_position[0]<m_primChildren[i]->getOrigin()[0] || _position[0]>=m_primChildren[i]->getOrigin()[0]+m_primUnit) continue;
+    if(_position[1]<m_primChildren[i]->getOrigin()[1] || _position[1]>=m_primChildren[i]->getOrigin()[1]+m_primUnit) continue;
+    if(_position[2]<m_primChildren[i]->getOrigin()[2] || _position[2]>=m_primChildren[i]->getOrigin()[2]+m_primUnit) continue;
+    return m_primChildren[i]->isSecondary(_position,_secondary);
+  }
+  return false;
+}
+
+bool RootNode::isPrimary(glm::vec3 _position, PrimaryNode ** _primary)
+{
+  for (int i =0 ; i<m_primChildren.size(); ++i) // access by reference to avoid copying
+  {
+    if(_position[0]<m_primChildren[i]->getOrigin()[0] || _position[0]>=m_primChildren[i]->getOrigin()[0]+m_primUnit) continue;
+    if(_position[1]<m_primChildren[i]->getOrigin()[1] || _position[1]>=m_primChildren[i]->getOrigin()[1]+m_primUnit) continue;
+    if(_position[2]<m_primChildren[i]->getOrigin()[2] || _position[2]>=m_primChildren[i]->getOrigin()[2]+m_primUnit) continue;
+    *_primary=m_primChildren[i];
+    return true;
+  }
+  return false;
+}
+
 //                glm::vec3 one = glm::vec3(_x,_y,k*incre+_z);
 //                glm::vec3 two = glm::vec3(_x+_u,_y,(n.x*_x + n.y*_y + n.z*(k*_u+_z) - n.x*(_x+_u) - n.z*_y)/n.y); // last ones you are trying to find
 //                glm::vec3 thr = glm::vec3(_x+_u,_y+_u,(n.x*_x + n.y*_y + n.z*(k*_u+_z) - n.x*(_x+_u) - n.z*(_y+_u))/n.y) ;
@@ -761,110 +798,147 @@ void RootNode::fill(RootNode * _r)
   glm::vec3 raydir=glm::vec3(0.0,0.0,1.0);
   for(int i = (int)(min.x/m_voxUnit); i<(int)(max.x/m_voxUnit); ++i)
   {
-//    for(int j = (int)(min.y/m_voxUnit); j<(int)(max.y/m_voxUnit); ++j)
+    for(int j = (int)(min.y/m_voxUnit);j<(int)(max.y/m_voxUnit); ++j)
+    {
+      inside = false;
+      inVoxels = false;
+      int numInstersections=0;
+      glm::vec3 currentPos = glm::vec3(i*m_voxUnit,j*m_voxUnit,min.z);
+
+      //-------------------------------------------------
+      PrimaryNode * tmpPrim;
+      int primJUMP = 0;
+      glm::vec3 currentPosPrim = currentPos;
+      while(primJUMP<(max.z-min.z)/m_primUnit)
+      {
+        if(isPrimary(currentPosPrim,&tmpPrim))
+        {
+          //-------------------------------------------------
+          SecondaryNode * tmpSec;
+          int secJUMP = 0;
+          glm::vec3 currentPosSec = currentPosPrim;
+          while(secJUMP<8)
+          {
+            if(tmpPrim->isSecondary(currentPosSec,&tmpSec))
+            {
+              //-------------------------------------------------
+              LeafNode * tmpLeaf;
+              int leafJUMP = 0;
+              glm::vec3 currentPosLeaf = currentPosSec;
+              while(leafJUMP<8)
+              {
+                if(tmpSec->isLeaf(currentPosSec,&tmpLeaf))
+                {
+                  //-------------------------------------------------
+                  glm::vec3 currentPosVox = currentPosLeaf;
+                  currentPosVox+=glm::vec3(0,0,m_voxUnit);
+                  int x = (currentPos[0]-(currentPos[0]/m_leafUnit)*m_leafUnit)/m_voxUnit;
+                  int y = (currentPos[1]-(currentPos[1]/m_leafUnit)*m_leafUnit)/m_voxUnit;
+
+                  for(int k=0; k<8; ++k)
+                  {
+                    if(!inVoxels && (tmpLeaf->m_VoxelMap[x*8 + y] & 1<<k))
+                    {
+                       numInstersections++;
+                       inVoxels=true;
+                       if(inside==true)
+                       {
+                         inside=false;
+                         beginEndStrips.push_back(currentPos-glm::vec3(0,0,m_voxUnit));
+                       }
+                    }
+                    else if(inVoxels && !(tmpLeaf->m_VoxelMap[x*8 + y] & 1<<k))
+                    {
+                      inVoxels=false;
+                      if(numInstersections%2==0)
+                      {
+                        inside=true;
+                        beginEndStrips.push_back(currentPos);
+                      }
+                    }
+                    if(inside)
+                    {
+                        _r->addVoxel(currentPos,Voxel());
+                    }
+                    currentPosVox+=glm::vec3(0,0,m_voxUnit);
+                  }
+                  //-------------------------------------------------
+
+                }
+                currentPosSec+=glm::vec3(0,0,m_leafUnit);
+                ++leafJUMP;
+              }
+              //-------------------------------------------------
+
+            }
+            currentPosSec+=glm::vec3(0,0,m_secUnit);
+            ++secJUMP;
+          }
+          //-------------------------------------------------
+        }
+        currentPosPrim+=glm::vec3(0,0,m_primUnit);
+        ++primJUMP;
+      }
+      //-------------------------------------------------
+
+
+    }
+  }
+//  for(int i=1; i<beginEndStrips.size(); i+=2)
+//  {
+//    glm::vec3 currentPos = beginEndStrips[i-1];
+//    glm::vec3 endPos = beginEndStrips[i];
+//    if(currentPos[2]>endPos[2]) ++i;
+//    else{ // maybe get rid of this if branch
+//    while(currentPos[2]<=endPos[2])
 //    {
-//      inside = false;
-//      inVoxels = false;
-//      int numInstersections=0;
-
-//      // create function called isLeaf call that and get the leaf if there is a leaf. If (isLeaf) getLeaf ....
-//      // Boom shakalaka
-
-//                  //foreachleaf
-//                  glm::vec3 currentpos = glm::vec3(i*m_voxUnit,j*m_voxUnit,0);
-//                  for(int k=0; k<8; ++k)
-//                  {
-//                    if(!inVoxels && isVoxel(currentpos))
-//                    {
-//                       numInstersections++;
-//                       inVoxels=true;
-//                       if(inside==true)
-//                       {
-//                         inside=false;
-//                         beginEndStrips.push_back(currentpos-glm::vec3(0,0,m_voxUnit));
-//                       }
-//                    }
-//                    else if(inVoxels && !isVoxel(currentpos))
-//                    {
-//                      inVoxels=false;
-//                      if(numInstersections%2==0)
-//                      {
-//                        inside=true;
-//                        beginEndStrips.push_back(currentpos);
-//                      }
-//                    }
-//                    currentpos+=glm::vec3(0,0,m_voxUnit);
-//                  }
-
-
-
-
+//      _r->addVoxel(currentPos,Voxel());
+//      currentPos+=glm::vec3(0,0,m_voxUnit);
+//      //++voxelsadded;
 //    }
-  }
-
-  // Time to gut the unneeded stuff
-  RootNode temp = RootNode();
-  for(int i=1; i<beginEndStrips.size(); i+=2)
-  {
-    glm::vec3 currentPos = beginEndStrips[i-1];
-    while(currentPos[2]<=beginEndStrips[i][2])
-    {
-      temp.addVoxel(currentPos,Voxel());
-      currentPos+=glm::vec3(0,0,m_voxUnit);
-    }
-  }
-
- printf("\nTHIS MANY1: %d\n",(int)beginEndStrips.size());
-
-  for(int i=1; i<beginEndStrips.size(); i+=2)
-  {
-    glm::vec3 beginPos = beginEndStrips[i-1];
-    glm::vec3 endPos = beginEndStrips[i];
-    glm::vec3 currentPos = beginPos;
-    bool kill = false;
-    while(currentPos[2] < endPos[2] && !kill)
-    {
-      currentPos+=glm::vec3(0,0,m_voxUnit);
-      if(!(temp.isVoxel(currentPos+glm::vec3(m_voxUnit,0,0)) || isVoxel(currentPos+glm::vec3(m_voxUnit,0,0)))) kill=true;
-      else if(!(temp.isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0)) || isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0)))) kill=true;
-      else if(!(temp.isVoxel(currentPos+glm::vec3(0,m_voxUnit,0)) || isVoxel(currentPos+glm::vec3(0,m_voxUnit,0)))) kill=true;
-      else if(!(temp.isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0)) || isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0)))) kill=true;
-      else if(!(temp.isVoxel(currentPos+glm::vec3(0,0,m_voxUnit)) || isVoxel(currentPos+glm::vec3(0,0,m_voxUnit)))) kill=true;
-      else if(!(temp.isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit)) || isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit)))) kill=true;
-    }
-    if(kill)
-    {
-      beginEndStrips.erase(beginEndStrips.begin() + i);
-      beginEndStrips.erase(beginEndStrips.begin() + i - 1);
-      i-=2;
-    }
-  }
-
-
-  printf("\nTHIS MANY2: %d\n",(int)beginEndStrips.size());
-  int voxelsadded=0;
-
-
-  for(int i=1; i<beginEndStrips.size(); i+=2)
-  {
-    glm::vec3 currentPos = beginEndStrips[i-1];
-    glm::vec3 endPos = beginEndStrips[i];
-    if(currentPos[2]>endPos[2]) ++i;
-    else{
-    while(currentPos[2]<=endPos[2])
-    {
-      _r->addVoxel(currentPos,Voxel());
-      currentPos+=glm::vec3(0,0,m_voxUnit);
-      ++voxelsadded;
-    }
-    }
-  }
-
-  printf("\nTHIS MANY3: %d\n",voxelsadded);
-
-
-
+//    }
+//  }
 }
+
+//  // Time to gut the unneeded stuff
+//  RootNode temp = RootNode();
+//  for(int i=1; i<beginEndStrips.size(); i+=2)
+//  {
+//    glm::vec3 currentPos = beginEndStrips[i-1];
+//    while(currentPos[2]<=beginEndStrips[i][2])
+//    {
+//      temp.addVoxel(currentPos,Voxel());
+//      currentPos+=glm::vec3(0,0,m_voxUnit);
+//    }
+//  }
+
+// printf("\nTHIS MANY1: %d\n",(int)beginEndStrips.size());
+
+//  for(int i=1; i<beginEndStrips.size(); i+=2)
+//  {
+//    glm::vec3 beginPos = beginEndStrips[i-1];
+//    glm::vec3 endPos = beginEndStrips[i];
+//    glm::vec3 currentPos = beginPos;
+//    bool kill = false;
+//    while(currentPos[2] < endPos[2] && !kill)
+//    {
+//      currentPos+=glm::vec3(0,0,m_voxUnit);
+//      if(!(temp.isVoxel(currentPos+glm::vec3(m_voxUnit,0,0)) || isVoxel(currentPos+glm::vec3(m_voxUnit,0,0)))) kill=true;
+//      else if(!(temp.isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0)) || isVoxel(currentPos+glm::vec3(-m_voxUnit,0,0)))) kill=true;
+//      else if(!(temp.isVoxel(currentPos+glm::vec3(0,m_voxUnit,0)) || isVoxel(currentPos+glm::vec3(0,m_voxUnit,0)))) kill=true;
+//      else if(!(temp.isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0)) || isVoxel(currentPos+glm::vec3(0,-m_voxUnit,0)))) kill=true;
+//      else if(!(temp.isVoxel(currentPos+glm::vec3(0,0,m_voxUnit)) || isVoxel(currentPos+glm::vec3(0,0,m_voxUnit)))) kill=true;
+//      else if(!(temp.isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit)) || isVoxel(currentPos+glm::vec3(0,0,-m_voxUnit)))) kill=true;
+//    }
+//    if(kill)
+//    {
+//      beginEndStrips.erase(beginEndStrips.begin() + i);
+//      beginEndStrips.erase(beginEndStrips.begin() + i - 1);
+//      i-=2;
+//    }
+//  }
+
+
 
 void RootNode::addVoxelLine(ngl::Vec3 p0, ngl::Vec3 p1, ngl::Vec3 n0, ngl::Vec3 n1, Voxel _voxel) {
     std::vector<glm::vec3> visited = std::vector<glm::vec3>(0);

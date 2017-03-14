@@ -11,7 +11,7 @@
 #include <ngl/VAOPrimitives.h>
 #include <ctime>
 
-//#define TESTINGFILL
+#define TESTINGFILL
 
 
 
@@ -60,7 +60,7 @@ void NGLScene::initTexture(const GLuint& texUnit, GLuint &texId, const char *fil
                 GL_UNSIGNED_BYTE, // Data type of pixel data
                 img.getPixels()); // Pointer to image data in memory
 
-    // Set up parameters for our texture
+    // Set up parameters for our texturedeertexture
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -159,12 +159,12 @@ void NGLScene::initializeGL()
   std::cout<<"Importing..\n"<<std::endl;
   clock_t begin = clock();
 #ifndef TESTINGFILL
-  myRoot->importAccurateObj(m_mesh,5.0f);
+  myRoot->importAccurateObj(m_mesh,10.0f);
 #endif
 
 #ifdef TESTINGFILL
   RootNode myRoot1 = RootNode();
-  myRoot1.importAccurateObj(m_mesh,5.0f);
+  myRoot1.importAccurateObj(m_mesh,10.0f);
 #endif
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;

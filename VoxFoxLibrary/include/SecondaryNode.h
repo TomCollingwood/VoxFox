@@ -57,6 +57,8 @@ public:
   /// \param[in] _s The SecondaryNode to union to
   //----------------------------------------------------------------------------------------------------------------------
   void add(SecondaryNode *_s);
+  bool isLeaf(glm::vec3 _position, LeafNode ** _leaf);
+
   int idx, idy, idz;
 private:
   glm::vec3 m_origin;

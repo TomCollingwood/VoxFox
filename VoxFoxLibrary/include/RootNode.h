@@ -100,6 +100,9 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   void importAccurateObj(ngl::Obj * _mesh, float const &scale);
 
+  bool isLeaf(glm::vec3 _position, LeafNode ** _leaf);
+  bool isSecondary(glm::vec3 _position, SecondaryNode ** _secondary);
+  bool isPrimary(glm::vec3 _position, PrimaryNode ** _primary);
 
   bool intersectBox(glm::vec3 _ray, glm::vec3 _origin, glm::vec3 _min, glm::vec3 _max);
 
