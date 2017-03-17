@@ -20,17 +20,21 @@ class SecondaryNode
 {
 public:
   SecondaryNode();
+  ~SecondaryNode();
   SecondaryNode(glm::vec3 _origin);
+  SecondaryNode(SecondaryNode const &s);
+
+  SecondaryNode operator +(SecondaryNode const &_s) const;
 
   //----------------------------------------------------------------------------------------------------------------------
-  /// \brief addVoxel             tries to add voxel to the SecondaryNode
-  /// \param[in] _position        position in worldspace of the voxel
-  /// \param[in] _voxel           the information of the voxel to be added
-  /// \param[inout] _leafAccessor the leaf accessor to change (last accessed LeafNode)
-  /// \return                     if _position is within the SecondaryNode and is added
-  ///                             (used for accessors in Root::addVoxel(..))
+  /// \brief addVoxel               tries to add voxel to the SecondaryNode
+  /// \param[in] _position          position in worldspace of the voxel
+  /// \param[in] _voxel             the information of the voxel to be added
+  /// \param[inout] io_leafAccessor the leaf accessor to change (last accessed LeafNode)
+  /// \return                       if _position is within the SecondaryNode and is added
+  ///                               (used for accessors in Root::addVoxel(..))
   //----------------------------------------------------------------------------------------------------------------------
-  bool addVoxel(glm::vec3 _position, Voxel _voxel, LeafNode ** _leafAccessor);
+  bool addVoxel(glm::vec3 _position, Voxel _voxel, LeafNode ** o_leafAccessor);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief isVoxel              checks if a Voxel is present within the SecondaryNode at _position
@@ -47,23 +51,26 @@ public:
   glm::vec3 getOrigin() const {return m_origin; }
 
   //----------------------------------------------------------------------------------------------------------------------
+  /// \brief isLeaf         Checks to see if the leaf at the _position is within m_leafChildren of the SecondaryNode
+  /// \param[in] _position  The position which the LeafNode searched for occupies
+  /// \param[out] o_leaf    If there is a leaf, the leaf is deposited in this double pointer (as a pointer).
+  /// \return               True if leaf is present at _position
+  //----------------------------------------------------------------------------------------------------------------------
+  bool isLeaf(glm::vec3 _position, LeafNode ** o_leaf);
+
+  void shiftOrigin(int _x, int _y, int _z);
+
+
+  //----------------------------------------------------------------------------------------------------------------------
   /// \brief m_leafChildren vector of pointers to the LeafNode children
   //----------------------------------------------------------------------------------------------------------------------
   std::vector<LeafNode *> m_leafChildren;
 
-  //----------------------------------------------------------------------------------------------------------------------
-  /// \brief add    Adds another SecondaryNode to current node
-  ///               It will add the new voxels to the LeafNodes by calling LeafNode::add(..)
-  /// \param[in] _s The SecondaryNode to union to
-  //----------------------------------------------------------------------------------------------------------------------
-  void add(SecondaryNode *_s);
-  bool isLeaf(glm::vec3 _position, LeafNode ** _leaf);
-
+  /// These ids taken together are unique for each SecondaryNode. Used when taking union of two nodes.
   int idx, idy, idz;
+
 private:
   glm::vec3 m_origin;
-  float unitSecondaryLength = 1.25;
-  float unitChildLength = 0.15625;
   const float m_primUnit = 10.0;
   const float m_secUnit = 1.25;
   const float m_leafUnit = 0.15625;

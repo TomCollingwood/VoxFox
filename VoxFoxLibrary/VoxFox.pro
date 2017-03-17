@@ -33,20 +33,7 @@ INCLUDEPATH +=./include \
               $$PWD/lib
 # note each command you add needs a ; as it will be run as a single line
 # first check if we are shadow building or not easiest way is to check out against current
-!equals(PWD, $${OUT_PWD}){
-	copydata.commands = echo "creating destination dirs" ;
-	# now make a dir
-	copydata.commands += mkdir -p $$OUT_PWD/shaders ;
-	copydata.commands += echo "copying files" ;
-	# then copy the files
-	copydata.commands += $(COPY_DIR) $$PWD/shaders/* $$OUT_PWD/shaders/ ;
-	# now make sure the first target is built before copy
-	first.depends = $(first) copydata
-	export(first.depends)
-	export(copydata.commands)
-	# now add it as an extra target
-	QMAKE_EXTRA_TARGETS += first copydata
-}
+
   INCLUDEPATH += /usr/local/include
   INCLUDEPATH += /usr/local/Cellar
   INCLUDEPATH += /usr/local/lib

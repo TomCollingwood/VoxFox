@@ -12,12 +12,14 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 #include "glm/glm.hpp"
 #include <ngl/Vec3.h>
 #include <ngl/Vec4.h>
 #include <ngl/BBox.h>
 #include <ngl/Obj.h>
 #include <ngl/ShaderLib.h>
+#include <ngl/BBox.h>
 #include <cmath>
 
 #include "LeafNode.h"
@@ -27,9 +29,12 @@ class RootNode
 {
 public:
   RootNode();
+  ~RootNode();
+  RootNode(const RootNode & _r);
+  RootNode operator+(RootNode const& r) const;
 
 
-  void operator+=(RootNode const& r);
+  void translate(glm::vec3 const &_translation);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief addVoxel   adds Voxel at specified _position to RootNode
@@ -60,6 +65,7 @@ public:
   std::vector<float> getVertexes();
   std::vector<float> getNormals();
   std::vector<float> getTextureCoords();
+  std::vector<float> getColors();
   std::vector<PrimaryNode *> * getChildren() {return &m_primChildren;}
 
   // SHAPES
@@ -86,11 +92,13 @@ public:
 
   // OBJ
   //----------------------------------------------------------------------------------------------------------------------
-  /// \brief importQuickObj Quickly imports an polygonal .obj file to the RootNode as voxel data
+  /// \brief importQuickObj    Quickly imports an polygonal .obj file to the RootNode as voxel data
   ///                       It is done by simply drawing in the bounding boxes of the polygons
   /// \param[in] _mesh      The ngl::Obj object of the mesh
   //----------------------------------------------------------------------------------------------------------------------
-  void importQuickObj(ngl::Obj * _mesh, float const &_scale);
+  void importQuickObj(ngl::Obj * _mesh, float const &_size);
+
+  void importObjRGB(ngl::Obj * _mesh, ngl::Image * _textures,float const &_size);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief importAccurateObj  Slowly imports a polygonal .obj file to the RootNode as voxel data
@@ -98,20 +106,26 @@ public:
   /// \param[in] _mesh          The ngl::Obj object of the mesh
   /// \param[in] scale          If you would like to scale the resulting voxels if the mesh is too small
   //----------------------------------------------------------------------------------------------------------------------
-  void importAccurateObj(ngl::Obj * _mesh, float const &scale);
+  void importObjUV(ngl::Obj * _mesh, float const &size);
 
-  bool isLeaf(glm::vec3 _position, LeafNode ** _leaf);
-  bool isSecondary(glm::vec3 _position, SecondaryNode ** _secondary);
-  bool isPrimary(glm::vec3 _position, PrimaryNode ** _primary);
+  // As the functions below also set the accessors we can use these as getters also by using accessors after calling them.
+  bool isLeaf(glm::vec3 _position);
+  bool isSecondary(glm::vec3 _position);
+  bool isPrimary(glm::vec3 _position);
+
+  // only adds if not present
+  void addLeaf(LeafNode newLeaf);
+  void addSecondary(SecondaryNode newSecondary);
+
+  LeafNode * getLeaf(glm::vec3 _position);
+  SecondaryNode * getSecondary(glm::vec3 _position);
+  PrimaryNode * getPrimary(glm::vec3 _position);
 
   bool intersectBox(glm::vec3 _ray, glm::vec3 _origin, glm::vec3 _min, glm::vec3 _max);
 
+  // doesn't work :-(
+  void fill(RootNode *_r);
 
-  void fill(RootNode * _r);
-
-
-  bool full;
-  bool empty = true;
 
   void addVoxelLine(ngl::Vec3 p0, ngl::Vec3 p1, ngl::Vec3 n0, ngl::Vec3 n1, Voxel _voxel);
 
@@ -122,6 +136,8 @@ public:
   std::vector<PrimaryNode *> m_primChildren;
 
 private:
+
+
   glm::vec3 min, max;
 
   const int depth = 3;
@@ -134,6 +150,7 @@ private:
   std::vector<float> m_vertexes;
   std::vector<float> m_normals;
   std::vector<float> m_textureCoords;
+  std::vector<float> m_colors;
 };
 
 #endif // ROOTNODE_H

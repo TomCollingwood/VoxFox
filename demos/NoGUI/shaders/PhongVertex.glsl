@@ -21,9 +21,13 @@ layout (location=1) in vec2 TexCoord;
 // The vertex normal attribute
 layout (location=2) in vec3 VertexNormal;
 
+// The vertex color attribute
+layout (location=3) in vec3 VertexColor;
+
 out vec3 FragmentPosition;
 out vec3 FragmentNormal;
 out vec2 FragmentTexCoord;
+out vec3 FragmentColor;
 
 out mat4 _MV;
 
@@ -35,6 +39,7 @@ void main() {
     FragmentPosition = vec3(MV * vec4(VertexPosition,1.0));
     FragmentNormal = N * VertexNormal;
     FragmentTexCoord = TexCoord;
+    FragmentColor = VertexColor;
     _MV = MV;
 }
 

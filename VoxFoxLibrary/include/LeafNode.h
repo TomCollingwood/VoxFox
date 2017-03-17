@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <vector>
+#include <array>
 #include <cstring>
 #include <ngl/Camera.h>
 #include <ngl/Colour.h>
@@ -27,29 +28,31 @@ class LeafNode
 public:
   LeafNode();
   LeafNode(glm::vec3 _origin);
-  ~LeafNode();
+  LeafNode(LeafNode const &l);
+
+  LeafNode operator+(LeafNode const &_l) const;
+
+  void moveX(int const &_shift);
+  void moveY(int const &_shift);
+  void moveZ(int const &_shift);
+
   bool addVoxel(glm::vec3 _position, Voxel _voxel);
   bool isVoxel(glm::vec3 _position);
-  glm::vec3 getOrigin() {return m_origin; }
-//  /void draw(std::vector<float> * _vertexes, glm::vec3 _DOF);
-  bool full;
-  SecondaryNode * m_parent;
-  RootNode * m_root;
-  glm::vec3 m_origin;
-  char * m_VoxelMap;
-  std::vector<Voxel> m_VoxelData;
-  void add(LeafNode *_l);
-  int idx, idy, idz;
-private:
-  int m_voxNumber;
+  glm::vec3 getOrigin() const {return m_origin; }
+  void shiftOrigin(int _x, int _y, int _z);
 
+  std::array<char,64> m_VoxelMap;
+  std::vector<Voxel> m_VoxelData;
+  int idx, idy, idz;
+
+private:
+  glm::vec3 m_origin;
   float unitVoxelLength = 0.01953125;
   float unitLeafLength = 0.15625;
   const float m_primUnit = 10.0;
   const float m_secUnit = 1.25;
   const float m_leafUnit = 0.15625;
   const float m_voxUnit = 0.01953125;
-
 };
 
 #endif // LEAFNODE_H

@@ -506,11 +506,6 @@ distclean: clean
 
 ####### Sub-libraries
 
-first: $(first) copydata
-
-copydata:
-	echo creating destination dirs ; mkdir -p /Users/Tom/Documents/GitHubStuff/VoxFox/shaders ; echo copying files ; $(COPY_DIR) /Users/Tom/Documents/GitHubStuff/VoxFox/VoxFoxLibrary/shaders/* /Users/Tom/Documents/GitHubStuff/VoxFox/shaders/ ;
-
 mocclean: compiler_moc_header_clean compiler_moc_source_clean
 
 mocables: compiler_moc_header_make_all compiler_moc_source_make_all

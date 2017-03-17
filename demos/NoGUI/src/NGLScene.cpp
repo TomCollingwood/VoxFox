@@ -11,7 +11,7 @@
 #include <ngl/VAOPrimitives.h>
 #include <ctime>
 
-#define TESTINGFILL
+//#define TESTINGFILL
 
 
 
@@ -113,7 +113,7 @@ void NGLScene::initializeGL()
   // TEXTURE
 
   GLuint m_colourTex;
-  initTexture(0, m_colourTex, "images/dwarf_2_1K_color.jpg");
+  initTexture(0, m_colourTex, "images/texture.jpg");
   GLuint pid = shader->getProgramID("Phong");
   glUniform1i(glGetUniformLocation(pid,"ColourTexture"),0);
 
@@ -145,50 +145,44 @@ void NGLScene::initializeGL()
 
   glEnable(GL_CULL_FACE);
 
-  myRoot = new RootNode();
-
-  //RootNode myRoot2 = RootNode();
+  //------------------------LIBRARY DEMO BEGIN----------------------------
 
   //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
   //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
   //myRoot->createSphere(glm::vec3(0,0,0),50);
 
-  ngl::Obj * m_mesh = new ngl::Obj("models/Dwarf_2_Low.obj");
-  ngl::Obj * m_mesh2 = new ngl::Obj("models/Helix.obj");
+  ngl::Obj * m_meshdwarf = new ngl::Obj("models/Dwarf_2_Low.obj");
+  ngl::Obj * m_meshdeer = new ngl::Obj("models/deer-obj.obj");
 
+  ngl::Image * mytexturedwarf = new ngl::Image("images/dwarf_2_1K_color.jpg");
+  ngl::Image * mytexturedeer = new ngl::Image("images/deertexture.jpg");
+
+  RootNode myRoot1 = RootNode();
+  RootNode myRoot2 = RootNode();
+
+  //-----------------------IMPORTING OBJ------------------------------
   std::cout<<"Importing..\n"<<std::endl;
   clock_t begin = clock();
-#ifndef TESTINGFILL
-  myRoot->importAccurateObj(m_mesh,10.0f);
-#endif
-
-#ifdef TESTINGFILL
-  RootNode myRoot1 = RootNode();
-  myRoot1.importAccurateObj(m_mesh,10.0f);
-#endif
+  myRoot1.importObjRGB(m_meshdeer,mytexturedeer,0.5f);
+  myRoot2.importObjRGB(m_meshdwarf,mytexturedwarf,0.5f);
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Import took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
-
-
-
-
-//  std::cout<<"Unioning..\n"<<std::endl;
-//  begin = clock();
-  //(*myRoot)+=myRoot2;
-//  end = clock();
-//  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-//  std::cout<<"Unioning took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
-
-#ifdef TESTINGFILL
-  std::cout<<"Filling..\n"<<std::endl;
+  //--------------------------TRANSLATION------------------------------
+  std::cout<<"Translating..\n"<<std::endl;
   begin = clock();
-  myRoot1.fill(myRoot);
+  myRoot1.translate(glm::vec3(0.01f,0.05f,0.0f));
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout<<"Filling took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
-#endif
-
+  std::cout<<"Translating took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+  //-----------------------------UNION---------------------------------
+  std::cout<<"Unioning..\n"<<std::endl;
+  begin = clock();
+  myRoot=new RootNode(myRoot1+myRoot2);
+  end = clock();
+  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+  std::cout<<"Unioning took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+  //-----------------------POLYGON GENERATION--------------------------
   std::cout<<"Poly Calculating..\n"<<std::endl;
   begin = clock();
   myRoot->calculatePolys();
@@ -210,6 +204,9 @@ void NGLScene::initializeGL()
    GLuint tbo;
    glGenBuffers(1, &tbo);
 
+   GLuint cbo;
+   glGenBuffers(1, &cbo);
+
    // BINDING AND CALCULATE
    glBindVertexArray(vao);
 
@@ -225,6 +222,9 @@ void NGLScene::initializeGL()
    glBindBuffer(GL_ARRAY_BUFFER, tbo);
    glBufferData(GL_ARRAY_BUFFER, amountTexData * sizeof(float), myRoot->getTextureCoords().data(), GL_STATIC_DRAW);
 
+   glBindBuffer(GL_ARRAY_BUFFER, cbo);
+   glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getColors().data(), GL_STATIC_DRAW);
+
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    GLint pos = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexPosition");
    glEnableVertexAttribArray(pos);
@@ -239,6 +239,11 @@ void NGLScene::initializeGL()
    GLint t = glGetAttribLocation(shader->getProgramID(shaderProgram), "TexCoord");
    glEnableVertexAttribArray(t);
    glVertexAttribPointer(t,2,GL_FLOAT,GL_FALSE,0, 0);
+
+   glBindBuffer(GL_ARRAY_BUFFER, cbo);
+   GLint c = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexColor");
+   glEnableVertexAttribArray(c);
+   glVertexAttribPointer(c,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
 }
 
 

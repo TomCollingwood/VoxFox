@@ -10,6 +10,7 @@ uniform sampler2D ColourTexture;
 in vec3 FragmentPosition;
 in vec3 FragmentNormal;
 in vec2 FragmentTexCoord;
+in vec3 FragmentColor;
 in mat4 _MV;
 
 // This is no longer a built-in variable
@@ -78,5 +79,5 @@ void main() {
     vec3 texColor = texture(ColourTexture,FragmentTexCoord).rgb;
 
     // Set the output color of our current pixel
-    FragColor = vec4(1.0,1.0,1.0,1.0);
+    FragColor = vec4(FragmentColor,1.0);
 }
