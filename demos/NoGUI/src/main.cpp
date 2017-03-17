@@ -4,7 +4,7 @@ basic OpenGL demo modified from http://qt-project.org/doc/qt-5.0/qtgui/openglwin
 #include "include/NGLScene.h"
 #include <QtGui/QGuiApplication>
 #include <iostream>
-#include "RootNode.h"
+#include "VoxFoxTree.h"
 
 
 int main(int argc, char** argv)

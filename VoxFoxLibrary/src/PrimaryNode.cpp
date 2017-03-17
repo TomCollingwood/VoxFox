@@ -33,6 +33,30 @@ PrimaryNode::PrimaryNode(const PrimaryNode &p)
   m_origin = p.getOrigin();
 }
 
+PrimaryNode & PrimaryNode::operator=(PrimaryNode const &p)
+{
+  if(this!=&p)
+  {
+    // DELETE OLD DATA
+    for(auto & s : m_secChildren)
+    {
+      delete s;
+    }
+    m_secChildren.clear();
+    // ASSIGN NEW DATA
+
+    for(auto &i : p.m_secChildren)
+    {
+      m_secChildren.push_back(new SecondaryNode(*i));
+    }
+    idx = p.idx;
+    idy = p.idy;
+    idz = p.idz;
+    m_origin = p.getOrigin();
+  }
+  return *this;
+}
+
 
 
 bool PrimaryNode::isVoxel(glm::vec3 _position, SecondaryNode ** _secAccessor, LeafNode ** _leafAccessor)
@@ -96,15 +120,7 @@ bool PrimaryNode::isSecondary(glm::vec3 _position, SecondaryNode ** _secondary)
   return false;
 }
 
-void PrimaryNode::shiftOrigin(int _x, int _y, int _z)
-{
-  idx+=_x;
-  idy+=_y;
-  idz+=_z;
-  m_origin+=glm::vec3(_x,_y,_z)*m_primUnit;
-}
-
-PrimaryNode PrimaryNode::operator +(PrimaryNode const &_p) const
+PrimaryNode PrimaryNode::operator +(PrimaryNode _p)
 {
   PrimaryNode retPrim = PrimaryNode(m_origin);
   std::vector<bool> jfound;

@@ -16,18 +16,15 @@ isEqual(QT_MAJOR_VERSION, 5) {
 MOC_DIR=moc
 # Auto include all .cpp files in the project src directory (can specifiy individually if required)
 SOURCES+=   $$PWD/src/LeafNode.cpp \
-            $$PWD/src/RootNode.cpp \
+            $$PWD/src/VoxFoxTree.cpp \
             $$PWD/src/SecondaryNode.cpp \
-            $$PWD/src/PrimaryNode.cpp \
-            $$PWD/src/PolyToVoxel.cpp
+            $$PWD/src/PrimaryNode.cpp
 # same for the .h files
-HEADERS+=   $$PWD/include/RootNode.h \
+HEADERS+=   $$PWD/include/VoxFoxTree.h \
             $$PWD/include/LeafNode.h \
             $$PWD/include/SecondaryNode.h \
             $$PWD/include/PrimaryNode.h \
-            $$PWD/include/PolyToVoxel.h \
-            $$PWD/include/DataStructs.h
-    include/DataStructs.h
+            $$PWD/include/Voxel.h
 # and add the include dir into the search path for Qt and make
 INCLUDEPATH +=./include \
               $$PWD/lib

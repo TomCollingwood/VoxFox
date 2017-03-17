@@ -147,42 +147,53 @@ void NGLScene::initializeGL()
 
   //------------------------LIBRARY DEMO BEGIN----------------------------
 
-  //myRoot->drawBox(ngl::Vec3(0,0,0),ngl::Vec3(0.05,0.05,0.05));
-  //myRoot->createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
-  //myRoot->createSphere(glm::vec3(0,0,0),50);
+  ngl::Obj * m_meshdwarf = new ngl::Obj("../../models/dwarf.obj");
+  ngl::Obj * m_meshdeer = new ngl::Obj("../../models/deer.obj");
 
-  ngl::Obj * m_meshdwarf = new ngl::Obj("models/Dwarf_2_Low.obj");
-  ngl::Obj * m_meshdeer = new ngl::Obj("models/deer-obj.obj");
+  ngl::Image * mytexturedwarf = new ngl::Image("../../images/dwarf.jpg");
+  ngl::Image * mytexturedeer = new ngl::Image("../../images/deer.jpg");
 
-  ngl::Image * mytexturedwarf = new ngl::Image("images/dwarf_2_1K_color.jpg");
-  ngl::Image * mytexturedeer = new ngl::Image("images/deertexture.jpg");
+  VoxFoxTree myDeer, myDwarf, mySphere, myTorus;
+  myRoot = new VoxFoxTree();
 
-  RootNode myRoot1 = RootNode();
-  RootNode myRoot2 = RootNode();
+  //-----------------------DRAWING SHAPES----------------------------
+
+  mySphere.createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
+  myTorus.createSphere(glm::vec3(0,0,0),10);
 
   //-----------------------IMPORTING OBJ------------------------------
+
   std::cout<<"Importing..\n"<<std::endl;
   clock_t begin = clock();
-  myRoot1.importObjRGB(m_meshdeer,mytexturedeer,0.5f);
-  myRoot2.importObjRGB(m_meshdwarf,mytexturedwarf,0.5f);
+  myDeer.importObjRGB(m_meshdeer,mytexturedeer,0.5f);
+  myDwarf.importObjRGB(m_meshdwarf,mytexturedwarf,0.5f);
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Import took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+
   //--------------------------TRANSLATION------------------------------
+
   std::cout<<"Translating..\n"<<std::endl;
   begin = clock();
-  myRoot1.translate(glm::vec3(0.01f,0.05f,0.0f));
+  myDeer.translate(glm::vec3(0.5f,0.0f,0.0f));
+  mySphere.translate(glm::vec3(1.0f,0.0f,0.0f));
+  myTorus.translate(glm::vec3(0.0f,-1.0f,0.0f));
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Translating took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+
   //-----------------------------UNION---------------------------------
+
   std::cout<<"Unioning..\n"<<std::endl;
   begin = clock();
-  myRoot=new RootNode(myRoot1+myRoot2);
+  myDeer= myDeer + myDwarf;
+  myRoot=new VoxFoxTree(myDeer+mySphere+myTorus);
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Unioning took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+
   //-----------------------POLYGON GENERATION--------------------------
+
   std::cout<<"Poly Calculating..\n"<<std::endl;
   begin = clock();
   myRoot->calculatePolys();
@@ -280,14 +291,24 @@ void NGLScene::paintGL()
   ngl::Mat4 rotX;
   ngl::Mat4 rotY;
   // create the rotation matrices
-  rotX.rotateX( m_win.spinXFace );
+
+  ngl::Mat4 translate1, translate2;
+
+  translate1.translate(-m_modelPos.m_x,-m_modelPos.m_y,-m_modelPos.m_z);
+  translate2.translate(m_modelPos.m_x,m_modelPos.m_y,m_modelPos.m_z);
+
+  rotX.rotateX( m_win.spinXFace);
   rotY.rotateY( m_win.spinYFace );
+
+
   // multiply the rotations
-  m_mouseGlobalTX = rotY * rotX;
+  m_mouseGlobalTX = translate1 * rotY * rotX  * translate2;
+
   // add the translations
-  m_mouseGlobalTX.m_m[ 3 ][ 0 ] = m_modelPos.m_x;
-  m_mouseGlobalTX.m_m[ 3 ][ 1 ] = m_modelPos.m_y;
-  m_mouseGlobalTX.m_m[ 3 ][ 2 ] = m_modelPos.m_z;
+//  m_mouseGlobalTX.m_m[ 3 ][ 0 ] = m_modelPos.m_x;
+//  m_mouseGlobalTX.m_m[ 3 ][ 1 ] = m_modelPos.m_y;
+//  m_mouseGlobalTX.m_m[ 3 ][ 2 ] = m_modelPos.m_z;
+
 
   // get the VBO instance and draw the built in teapot
   //ngl::VAOPrimitives* prim = ngl::VAOPrimitives::instance();

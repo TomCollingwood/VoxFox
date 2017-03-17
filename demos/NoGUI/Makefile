@@ -519,7 +519,7 @@ moc/moc_NGLScene.cpp: include/WindowParams.h \
 		/Users/Tom/NGL/include/ngl/NGLassert.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QOpenGLWindow \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qopenglwindow.h \
-		../../VoxFoxLibrary/include/RootNode.h \
+		../../VoxFoxLibrary/include/VoxFoxTree.h \
 		/Users/Tom/NGL/include/ngl/ShaderLib.h \
 		/Users/Tom/NGL/include/ngl/Shader.h \
 		/Users/Tom/NGL/include/ngl/ShaderProgram.h \
@@ -527,7 +527,7 @@ moc/moc_NGLScene.cpp: include/WindowParams.h \
 		/Users/Tom/NGL/include/ngl/Singleton.h \
 		/Users/Tom/NGL/include/ngl/Mat3.h \
 		../../VoxFoxLibrary/include/LeafNode.h \
-		../../VoxFoxLibrary/include/DataStructs.h \
+		../../VoxFoxLibrary/include/Voxel.h \
 		../../VoxFoxLibrary/include/PrimaryNode.h \
 		../../VoxFoxLibrary/include/SecondaryNode.h \
 		include/NGLScene.h \
@@ -581,7 +581,7 @@ obj/NGLScene.o: src/NGLScene.cpp include/NGLScene.h \
 		/Users/Tom/NGL/include/ngl/NGLassert.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QOpenGLWindow \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qopenglwindow.h \
-		../../VoxFoxLibrary/include/RootNode.h \
+		../../VoxFoxLibrary/include/VoxFoxTree.h \
 		/Users/Tom/NGL/include/ngl/ShaderLib.h \
 		/Users/Tom/NGL/include/ngl/Shader.h \
 		/Users/Tom/NGL/include/ngl/ShaderProgram.h \
@@ -589,7 +589,7 @@ obj/NGLScene.o: src/NGLScene.cpp include/NGLScene.h \
 		/Users/Tom/NGL/include/ngl/Singleton.h \
 		/Users/Tom/NGL/include/ngl/Mat3.h \
 		../../VoxFoxLibrary/include/LeafNode.h \
-		../../VoxFoxLibrary/include/DataStructs.h \
+		../../VoxFoxLibrary/include/Voxel.h \
 		../../VoxFoxLibrary/include/PrimaryNode.h \
 		../../VoxFoxLibrary/include/SecondaryNode.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QGuiApplication \
@@ -632,7 +632,7 @@ obj/NGLSceneMouseControls.o: src/NGLSceneMouseControls.cpp include/NGLScene.h \
 		/Users/Tom/NGL/include/ngl/NGLassert.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QOpenGLWindow \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qopenglwindow.h \
-		../../VoxFoxLibrary/include/RootNode.h \
+		../../VoxFoxLibrary/include/VoxFoxTree.h \
 		/Users/Tom/NGL/include/ngl/ShaderLib.h \
 		/Users/Tom/NGL/include/ngl/Shader.h \
 		/Users/Tom/NGL/include/ngl/ShaderProgram.h \
@@ -640,7 +640,7 @@ obj/NGLSceneMouseControls.o: src/NGLSceneMouseControls.cpp include/NGLScene.h \
 		/Users/Tom/NGL/include/ngl/Singleton.h \
 		/Users/Tom/NGL/include/ngl/Mat3.h \
 		../../VoxFoxLibrary/include/LeafNode.h \
-		../../VoxFoxLibrary/include/DataStructs.h \
+		../../VoxFoxLibrary/include/Voxel.h \
 		../../VoxFoxLibrary/include/PrimaryNode.h \
 		../../VoxFoxLibrary/include/SecondaryNode.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
@@ -677,7 +677,7 @@ obj/main.o: src/main.cpp include/NGLScene.h \
 		/Users/Tom/NGL/include/ngl/NGLassert.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QOpenGLWindow \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qopenglwindow.h \
-		../../VoxFoxLibrary/include/RootNode.h \
+		../../VoxFoxLibrary/include/VoxFoxTree.h \
 		/Users/Tom/NGL/include/ngl/ShaderLib.h \
 		/Users/Tom/NGL/include/ngl/Shader.h \
 		/Users/Tom/NGL/include/ngl/ShaderProgram.h \
@@ -685,7 +685,7 @@ obj/main.o: src/main.cpp include/NGLScene.h \
 		/Users/Tom/NGL/include/ngl/Singleton.h \
 		/Users/Tom/NGL/include/ngl/Mat3.h \
 		../../VoxFoxLibrary/include/LeafNode.h \
-		../../VoxFoxLibrary/include/DataStructs.h \
+		../../VoxFoxLibrary/include/Voxel.h \
 		../../VoxFoxLibrary/include/PrimaryNode.h \
 		../../VoxFoxLibrary/include/SecondaryNode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/main.o src/main.cpp

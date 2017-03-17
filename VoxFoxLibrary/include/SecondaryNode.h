@@ -13,7 +13,7 @@
 
 #include "LeafNode.h"
 
-class RootNode;
+class VoxFoxTree;
 class PrimaryNode;
 
 class SecondaryNode
@@ -24,7 +24,16 @@ public:
   SecondaryNode(glm::vec3 _origin);
   SecondaryNode(SecondaryNode const &s);
 
-  SecondaryNode operator +(SecondaryNode const &_s) const;
+  SecondaryNode & operator=(SecondaryNode const &s);
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief operator +   Union operator that takes two SecondaryNodes and gives SecondaryNode of union of both of them
+  /// \param[in] _s       RHS of operator
+  /// \return             Union of RHS and LHS SecondaryNode
+  //----------------------------------------------------------------------------------------------------------------------
+  SecondaryNode operator +(SecondaryNode _s) ;
+  SecondaryNode operator |(SecondaryNode _s) ;
+  SecondaryNode operator -(SecondaryNode _s) ;
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief addVoxel               tries to add voxel to the SecondaryNode
@@ -58,9 +67,6 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   bool isLeaf(glm::vec3 _position, LeafNode ** o_leaf);
 
-  void shiftOrigin(int _x, int _y, int _z);
-
-
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief m_leafChildren vector of pointers to the LeafNode children
   //----------------------------------------------------------------------------------------------------------------------
@@ -71,10 +77,10 @@ public:
 
 private:
   glm::vec3 m_origin;
-  const float m_primUnit = 10.0;
-  const float m_secUnit = 1.25;
-  const float m_leafUnit = 0.15625;
-  const float m_voxUnit = 0.01953125;
+  float m_primUnit = 10.0;
+  float m_secUnit = 1.25;
+  float m_leafUnit = 0.15625;
+  float m_voxUnit = 0.01953125;
 
 };
 

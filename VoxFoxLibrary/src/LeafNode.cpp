@@ -22,6 +22,21 @@ LeafNode::LeafNode(LeafNode const &l)
   m_origin=l.getOrigin();
 }
 
+LeafNode & LeafNode::operator=(LeafNode const &_l)
+{
+  if(this!=&_l)
+  {
+    m_VoxelMap=_l.m_VoxelMap;
+    m_VoxelData=_l.m_VoxelData;
+    idx=_l.idx;
+    idy=_l.idy;
+    idz=_l.idz;
+    m_origin=_l.getOrigin();
+    return *this;
+  }
+}
+
+
 bool LeafNode::isVoxel(glm::vec3 _position)
 {
   glm::vec3 xyz = _position-m_origin;
@@ -116,7 +131,7 @@ void LeafNode::moveZ(const int &_shift)
   }
 }
 
-LeafNode LeafNode::operator+(LeafNode const &_l) const
+LeafNode LeafNode::operator+(LeafNode _l)
 {
   LeafNode retLeaf = LeafNode(m_origin);
   for(int i = 0; i<64; ++i)

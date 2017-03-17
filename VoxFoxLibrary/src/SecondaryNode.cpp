@@ -33,12 +33,28 @@ SecondaryNode::SecondaryNode(const SecondaryNode &s)
   idz = s.idz;
 }
 
-void SecondaryNode::shiftOrigin(int _x, int _y, int _z)
+SecondaryNode & SecondaryNode::operator=(SecondaryNode const &s)
 {
-  idx+=_x;
-  idy+=_y;
-  idz+=_z;
-  m_origin+=glm::vec3(_x,_y,_z)*m_secUnit;
+  if(this!=&s)
+  {
+    // DELETE OLD DATA
+    for(auto & l : m_leafChildren)
+    {
+      delete l;
+    }
+    m_leafChildren.clear();
+
+    // ASSIGN NEW DATA
+    for(auto & i : s.m_leafChildren)
+    {
+      m_leafChildren.push_back(new LeafNode(*i));
+    }
+    m_origin=s.getOrigin();
+    idx = s.idx;
+    idy = s.idy;
+    idz = s.idz;
+  }
+  return *this;
 }
 
 bool SecondaryNode::isVoxel(glm::vec3 const &_position, LeafNode ** _leafAccessor)
@@ -100,7 +116,7 @@ bool SecondaryNode::isLeaf(glm::vec3 _position, LeafNode ** o_leaf)
   return false;
 }
 
-SecondaryNode SecondaryNode::operator +(SecondaryNode const &_s) const
+SecondaryNode SecondaryNode::operator +(SecondaryNode _s)
 {
   SecondaryNode retSec = SecondaryNode(m_origin);
   std::vector<bool> jfound;

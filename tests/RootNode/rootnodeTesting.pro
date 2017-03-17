@@ -1,5 +1,5 @@
 # This specifies the exe name
-TARGET=rootnodeTesting
+TARGET=voxFoxTreeTesting
 # where to put the .o files
 OBJECTS_DIR=obj
 # core Qt Libs to use add more here if needed.
@@ -16,7 +16,7 @@ MOC_DIR=moc
 # on a mac we don't create a .app bundle file ( for ease of multiplatform use)
 CONFIG-=app_bundle
 # Auto include all .cpp files in the project src directory (can specifiy individually if required)
-SOURCES+= $$PWD/rootnodeTesting.cpp
+SOURCES+= $$PWD/voxFoxTreeTesting.cpp
 
 INCLUDEPATH+=../../VoxFoxLibrary/include
 DEPENDPATH+=../../VoxFoxLibrary/include

@@ -49,26 +49,22 @@ OBJECTS_DIR   = obj/
 ####### Files
 
 SOURCES       = src/LeafNode.cpp \
-		src/RootNode.cpp \
+		src/VoxFoxTree.cpp \
 		src/SecondaryNode.cpp \
-		src/PrimaryNode.cpp \
-		src/PolyToVoxel.cpp 
+		src/PrimaryNode.cpp 
 OBJECTS       = obj/LeafNode.o \
-		obj/RootNode.o \
+		obj/VoxFoxTree.o \
 		obj/SecondaryNode.o \
-		obj/PrimaryNode.o \
-		obj/PolyToVoxel.o
+		obj/PrimaryNode.o
 DIST          = ../.qmake.stash \
-		VoxFox.pro include/RootNode.h \
+		VoxFox.pro include/VoxFoxTree.h \
 		include/LeafNode.h \
 		include/SecondaryNode.h \
 		include/PrimaryNode.h \
-		include/PolyToVoxel.h \
-		include/DataStructs.h src/LeafNode.cpp \
-		src/RootNode.cpp \
+		include/Voxel.h src/LeafNode.cpp \
+		src/VoxFoxTree.cpp \
 		src/SecondaryNode.cpp \
-		src/PrimaryNode.cpp \
-		src/PolyToVoxel.cpp
+		src/PrimaryNode.cpp
 QMAKE_TARGET  = VoxFox
 DESTDIR       = lib/
 TARGET        = libVoxFox.1.0.0.dylib
@@ -489,8 +485,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /Users/Tom/Qt2/5.8/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents include/RootNode.h include/LeafNode.h include/SecondaryNode.h include/PrimaryNode.h include/PolyToVoxel.h include/DataStructs.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/LeafNode.cpp src/RootNode.cpp src/SecondaryNode.cpp src/PrimaryNode.cpp src/PolyToVoxel.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents include/VoxFoxTree.h include/LeafNode.h include/SecondaryNode.h include/PrimaryNode.h include/Voxel.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/LeafNode.cpp src/VoxFoxTree.cpp src/SecondaryNode.cpp src/PrimaryNode.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -562,10 +558,10 @@ obj/LeafNode.o: src/LeafNode.cpp include/LeafNode.h \
 		/Users/Tom/NGL/include/ngl/SimpleVAO.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QFont \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qfont.h \
-		include/DataStructs.h
+		include/Voxel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/LeafNode.o src/LeafNode.cpp
 
-obj/RootNode.o: src/RootNode.cpp include/RootNode.h \
+obj/VoxFoxTree.o: src/VoxFoxTree.cpp include/VoxFoxTree.h \
 		/Users/Tom/NGL/include/ngl/Vec3.h \
 		/Users/Tom/NGL/include/ngl/Types.h \
 		/Users/Tom/NGL/include/ngl/glew.h \
@@ -599,10 +595,10 @@ obj/RootNode.o: src/RootNode.cpp include/RootNode.h \
 		/Users/Tom/NGL/include/ngl/SimpleVAO.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QFont \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qfont.h \
-		include/DataStructs.h \
+		include/Voxel.h \
 		include/PrimaryNode.h \
 		include/SecondaryNode.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/RootNode.o src/RootNode.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/VoxFoxTree.o src/VoxFoxTree.cpp
 
 obj/SecondaryNode.o: src/SecondaryNode.cpp include/SecondaryNode.h \
 		include/LeafNode.h \
@@ -627,7 +623,7 @@ obj/SecondaryNode.o: src/SecondaryNode.cpp include/SecondaryNode.h \
 		/Users/Tom/NGL/include/ngl/SimpleVAO.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QFont \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qfont.h \
-		include/DataStructs.h
+		include/Voxel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/SecondaryNode.o src/SecondaryNode.cpp
 
 obj/PrimaryNode.o: src/PrimaryNode.cpp include/PrimaryNode.h \
@@ -653,12 +649,9 @@ obj/PrimaryNode.o: src/PrimaryNode.cpp include/PrimaryNode.h \
 		/Users/Tom/NGL/include/ngl/SimpleVAO.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QFont \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qfont.h \
-		include/DataStructs.h \
+		include/Voxel.h \
 		include/SecondaryNode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/PrimaryNode.o src/PrimaryNode.cpp
-
-obj/PolyToVoxel.o: src/PolyToVoxel.cpp include/PolyToVoxel.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/PolyToVoxel.o src/PolyToVoxel.cpp
 
 ####### Install
 

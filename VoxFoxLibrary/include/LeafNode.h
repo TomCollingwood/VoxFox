@@ -18,10 +18,10 @@
 #include <ngl/Text.h>
 
 #include "glm/glm.hpp"
-#include "DataStructs.h"
+#include "Voxel.h"
 
 class SecondaryNode;
-class RootNode;
+class VoxFoxTree;
 
 class LeafNode
 {
@@ -30,7 +30,12 @@ public:
   LeafNode(glm::vec3 _origin);
   LeafNode(LeafNode const &l);
 
-  LeafNode operator+(LeafNode const &_l) const;
+  LeafNode & operator=(LeafNode const &_l) ;
+
+  LeafNode operator+(LeafNode _l) ;
+  LeafNode operator|(LeafNode _l) ;
+  LeafNode operator-(LeafNode _l) ;
+
 
   void moveX(int const &_shift);
   void moveY(int const &_shift);
@@ -49,10 +54,10 @@ private:
   glm::vec3 m_origin;
   float unitVoxelLength = 0.01953125;
   float unitLeafLength = 0.15625;
-  const float m_primUnit = 10.0;
-  const float m_secUnit = 1.25;
-  const float m_leafUnit = 0.15625;
-  const float m_voxUnit = 0.01953125;
+  float m_primUnit = 10.0;
+  float m_secUnit = 1.25;
+  float m_leafUnit = 0.15625;
+  float m_voxUnit = 0.01953125;
 };
 
 #endif // LEAFNODE_H
