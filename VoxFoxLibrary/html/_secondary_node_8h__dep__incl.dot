@@ -1,0 +1,16 @@
+digraph "SecondaryNode.h"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  Node1 [label="SecondaryNode.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="PrimaryNode.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_primary_node_8h.html",tooltip="PrimaryNode.h The highest node level that VoxFoxTree has. PrimaryNode contains the SecondaryNodes (up..."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="PrimaryNode.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_primary_node_8cpp.html"];
+  Node2 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="VoxFoxTree.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_vox_fox_tree_8h.html",tooltip="VoxFoxTree.h Essentially the rootnode of the tree with all tree functions. "];
+  Node4 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="VoxFoxTree.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_vox_fox_tree_8cpp.html"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="SecondaryNode.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_secondary_node_8cpp.html"];
+}

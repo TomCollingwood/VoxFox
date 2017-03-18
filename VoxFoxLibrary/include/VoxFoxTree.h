@@ -1,10 +1,10 @@
 /// \file VoxFoxTree.h
-/// \brief VoxFoxTree.h  Essentially the overarching class for the voxel data structure.
-///                    There is only one VoxFoxTree for the tree and the VoxFoxTree is the tree.
+/// \brief VoxFoxTree.h  Essentially the rootnode of the tree with all tree functions.
 /// \author Thomas Collingwood
 /// \version 1.0
 /// \date 13/3/17 Updated to NCCA Coding standard
 /// Revision History : See https://github.com/TomCollingwood/VoxFox
+
 
 
 #ifndef VoxFoxTree_H
@@ -34,34 +34,48 @@ public:
   VoxFoxTree & operator=(const VoxFoxTree & _r);
 
   //----------------------------------------------------------------------------------------------------------------------
-  /// \brief operator +   Union operator that takes two VoxFoxTrees and gives VoxFoxTree of union of both of them
+  /// \brief operator |   Union operator that takes two VoxFoxTrees and gives VoxFoxTree of union of both of them
   /// \param[in] _r       RHS of operator
   /// \return             Union of RHS and LHS VoxFoxTree
   //----------------------------------------------------------------------------------------------------------------------
-  VoxFoxTree operator|(VoxFoxTree const &_r) ;
-  VoxFoxTree operator-(VoxFoxTree const &_r) ;
+  VoxFoxTree operator|(VoxFoxTree const &_r);
+  void operator|=(VoxFoxTree const &_r);
 
-  VoxFoxTree operator+(VoxFoxTree const &_r);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief operator - Subtract set operator
+  /// \param[in] _r     Tree to subtract
+  /// \return           Subtracted tree
+  //----------------------------------------------------------------------------------------------------------------------
+  VoxFoxTree operator-(VoxFoxTree const &_r) const;
+  void operator-=(VoxFoxTree const &_r);
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief operator + Intersection set operator (retains LHS data)
+  /// \param[in] _r     The other tree to intersect with.
+  /// \return           Intersected tree that retains the LHS voxel data
+  //----------------------------------------------------------------------------------------------------------------------
+  VoxFoxTree operator+(VoxFoxTree const &_r) const;
+  void operator+=(VoxFoxTree const &_r);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief translate          Translates all voxels in the VoxFoxTree by the worldspace input
   /// \param[in] _translation   amount to translate the VoxFoxTree
   //----------------------------------------------------------------------------------------------------------------------
-  void translate(glm::vec3 const &_translation);
+  void translate(glm::vec3 _translation);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief addVoxel       adds Voxel at specified _position to VoxFoxTree
   /// \param[in] _position  position in worldspace of the voxel
   /// \param[in] _data      the information of the voxel to be added (see DataStructs.h)
   //----------------------------------------------------------------------------------------------------------------------
-  void addVoxel(glm::vec3 const &_position, Voxel const &_data);
+  void addVoxel(glm::vec3 _position, Voxel _data);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief isVoxel        checks if a Voxel is present within the VoxFoxTree at _position
   /// \param[in] _position  position in worldspace of the voxel
   /// \return               if Voxel is present at _position
   //----------------------------------------------------------------------------------------------------------------------
-  bool isVoxel(glm::vec3 const &_position) ;
+  bool isVoxel(glm::vec3 _position);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief calculatePolys This function calculates m_vertexes, m_normals and m_texturecoords for OpenGL use from VoxelData.
@@ -74,103 +88,138 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   int getVertexSize();
 
-  // Accessors
+  int updateVoxCount();
+
+  // ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸ACCESSORS,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø,¸
   std::vector<float> getVertexes();
   std::vector<float> getNormals();
   std::vector<float> getTextureCoords();
   std::vector<float> getColors();
   std::vector<PrimaryNode *> * getChildren() {return &m_primChildren;}
 
-  // SIGNED DISTANCE SHAPESSS
-  ///
-
-  ///
-  /// \brief createSphere
-  /// \param _position
-  /// \param _radius
-  /// \param color
-  ///
-  void createSphere(glm::vec3 const &_position, float const &_radius, glm::vec3 color);
+  // ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸SHAPES,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø,¸
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief createSphere   Creates a sphere in the tree
+  /// \param[in] _position  Centre of sphere
+  /// \param[in] _radius    Radius of sphere (worldspace)
+  /// \param[in] _color     RGB color of sphere (0.0f-1.0f)
+  //----------------------------------------------------------------------------------------------------------------------
+  void createSphere(glm::vec3 _position, float _radius, glm::vec3 _color);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief createTorus    Creates a torus / ring of variable radii
   /// \param[in] _position  Centre point of the torus to create
   /// \param[in] _t         The two radius (inner and outter) of the torus
   //----------------------------------------------------------------------------------------------------------------------
-  void createTorus(glm::vec3 const &_position, glm::vec2 const &_t);
+  void createTorus(glm::vec3 _position, glm::vec2 _t);
 
-  void createCylinder(glm::vec3 position, glm::vec3 axis, float radius, float height, glm::vec3 color);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief createCylinder Creates a cylinder in x y or z direction of variable height
+  /// \param[in] _position  Centre of cylinder
+  /// \param[in] _axis      Direction to create cylinder
+  /// \param[in] _radius    Radius of cylinder in worldspace
+  /// \param[in] _height    Height of cylinder
+  /// \param[in] _color     Color of cylinder (0.0f-1.0f)
+  //----------------------------------------------------------------------------------------------------------------------
+  void createCylinder(glm::vec3 _position, glm::vec3 _axis, float _radius, float _height, glm::vec3 _color);
 
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief createBox  Creates a box
+  /// \param[in] _min   Minimum vertex of box
+  /// \param[in] _max   Maximum vertex of box
+  /// \param[in] _color Colour of box
+  //----------------------------------------------------------------------------------------------------------------------
+  void createBox(glm::vec3 _min, glm::vec3 _max, glm::vec3 _color);
 
-  ///
-  ///  /// \brief createBox
-  ///  /// \param _min
-  ///  /// \param _max
-  ///  /// \param _color
-  ///
-  void createBox(glm::vec3 const &_min, glm::vec3 const &_max, glm::vec3 const &_color);
-
+  // ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸OBJ and TEXTURE IMPORT,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø,¸
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief importQuickObj Quickly imports an polygonal .obj file to the VoxFoxTree as voxel data
   ///                       It is done by simply drawing in the bounding boxes of the polygons
   /// \param[in] _mesh      The ngl::Obj object of the mesh
-  /// \param[in] _size
+  /// \param[in] _size      Height of the object in the worldspace
   //----------------------------------------------------------------------------------------------------------------------
-  void importQuickObj(ngl::Obj * _mesh, float const &_size);
-
+  void importQuickObj(ngl::Obj * _mesh, float _size);
 
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief importObj          Imports a polygonal .obj file to the VoxFoxTree as voxel data.
   /// \param[in] _mesh          The ngl::Obj object of the mesh
-  /// \param[in] _texture       The ngl::Texture for the mesh and to grab rgb values
+  /// \param[in] _color         The color of the object
   /// \param[in] _normals       This tells us we want normals used in shader and calculated
   /// \param[in] _interpnormals This tells us to interpolate the normals in fragments between vertexes
-  /// \param[in] _noCol         This tells the shader to not use texture
-  /// \param[in] _shader        This tells us to use the UV coordinates to tell the shader how to shade
-  ///                           and not as actual UV texture coordinates.
   //----------------------------------------------------------------------------------------------------------------------
-  void importObj(ngl::Obj * _mesh, ngl::Image * _texture,float const &_size, bool const &_normals=false, bool const &_interpnormals=false, bool const &_noCol=false,bool const &_shader=true);
+  void importObj(ngl::Obj * _mesh, glm::vec3 _color,float _size, bool _normals =true, bool _interpnormals =true);
 
-  // As the functions below also set the accessors we can use these as getters also by using accessors after calling them.
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief importObj          Imports a polygonal .obj file to the VoxFoxTree as voxel data.
+  /// \param[in] _mesh          The ngl::Obj object of the mesh
+  /// \param[in] _texture       The texture of the object
+  /// \param[in] _normals       This tells us we want normals used in shader and calculated
+  /// \param[in] _interpnormals This tells us to interpolate the normals in fragments between vertexes
+  //----------------------------------------------------------------------------------------------------------------------
+  void importTexturedObj(ngl::Obj * _mesh, ngl::Image * _texture,float _size, bool _normals =true, bool _interpnormals=true);
+
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief drawFlatImage  Draws a flat 1 voxel thick square with a textured image on
+  /// \param _position      Centre of image plane
+  /// \param _texture       texture to use
+  /// \param _height        The height of the square
+  //----------------------------------------------------------------------------------------------------------------------
+  void drawFlatImage(glm::vec3 _position, ngl::Image *_texture, float _height);
+
+  // This increases after every set operation.
+  int numberOfObjects=0;
+
+
   bool isLeaf(glm::vec3 _position);
   bool isSecondary(glm::vec3 _position);
   bool isPrimary(glm::vec3 _position);
-
-  void drawFlatImage(glm::vec3 _position, ngl::Image *_texture, float height);
-
-
-  // only adds if not present
-  void addLeaf(LeafNode newLeaf);
-  void addSecondary(SecondaryNode newSecondary);
-
-  LeafNode * getLeaf(glm::vec3 _position);
-  SecondaryNode * getSecondary(glm::vec3 _position);
-  PrimaryNode * getPrimary(glm::vec3 _position);
-
-  bool intersectBox(glm::vec3 _ray, glm::vec3 _origin, glm::vec3 _min, glm::vec3 _max);
-
-  // never got working  :-(
-  //void fill(VoxFoxTree *_r);
-
-  void addVoxelLine(ngl::Vec3 p0, ngl::Vec3 p1, ngl::Vec3 n0, ngl::Vec3 n1, Voxel _voxel);
 
   float m_primUnit = 10.0;
   float m_secUnit = 1.25;
   float m_leafUnit = 0.15625;
   float m_voxUnit = 0.01953125;
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief m_primChildren The vector of PrimaryNode children.
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<PrimaryNode *> m_primChildren;
 
 private:
   glm::vec3 min, max;
-  // The accessors speed up addVoxel by up to four times on larger imports
+  // The accessors speed up importing larger obj by up to four times
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief m_leafAccessor The last accessed LeafNode. Is updated in addVoxel and isVoxel
+  //----------------------------------------------------------------------------------------------------------------------
   LeafNode * m_leafAccessor =nullptr;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief m_secAccessor  The last accessed SecondaryNode. Is updated in addVoxel and isVoxel
+  //----------------------------------------------------------------------------------------------------------------------
   SecondaryNode * m_secAccessor =nullptr;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief m_primAccessor The last accessed PrimaryNode. Is updated in addVoxel and isVoxel
+  //----------------------------------------------------------------------------------------------------------------------
   PrimaryNode * m_primAccessor =nullptr;
+
   int numberOfVoxels=0;
+
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief m_vertexes Vector of floats that are the x y z coordinates of the vertexes. Calculated in calculatePolygons()
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<float> m_vertexes;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief m_normals  Vector of floats that are x y z normals of vertexes. Made in calculatePolygons from Voxel data
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<float> m_normals;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief m_textureCoords  Vector of floats that are u v coordinates of vertexes. Calculated in calculatePolygons()
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<float> m_textureCoords;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// \brief m_colors Vector of floats that are r g b colour values of vertexes. Made in calculatePolygons from voxel data
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<float> m_colors;
 };
 

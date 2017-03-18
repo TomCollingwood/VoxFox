@@ -58,15 +58,18 @@ VoxFoxTree & VoxFoxTree::operator =(const VoxFoxTree & _r)
   return *this;
 }
 
-VoxFoxTree VoxFoxTree::operator|(VoxFoxTree const &r)
+VoxFoxTree VoxFoxTree::operator|(VoxFoxTree const &_r)
 {
+
+
   VoxFoxTree retRoot;
+
   std::vector<bool> jfound;
   for(int i =0 ; i<m_primChildren.size(); ++i)
   {
     jfound.push_back(false);
   }
-  for(auto & i : r.m_primChildren)
+  for(auto & i : _r.m_primChildren)
   {
     bool found = false;
     for(int j =0; j<m_primChildren.size(); ++j)
@@ -88,10 +91,17 @@ VoxFoxTree VoxFoxTree::operator|(VoxFoxTree const &r)
   {
     if(!jfound[i]) retRoot.m_primChildren.push_back(new PrimaryNode(*m_primChildren[i]));
   }
+  retRoot.numberOfObjects=_r.numberOfObjects + numberOfObjects;
   return retRoot;
 }
 
-VoxFoxTree VoxFoxTree::operator-(VoxFoxTree const &_r)
+void VoxFoxTree::operator|=(VoxFoxTree const &_r)
+{
+  (*this) = (*this) | (_r);
+  (*this).numberOfObjects+=(_r).numberOfObjects;
+}
+
+VoxFoxTree VoxFoxTree::operator-(VoxFoxTree const &_r) const
 {
   VoxFoxTree retRoot;
   for(auto & i : m_primChildren)
@@ -114,7 +124,12 @@ VoxFoxTree VoxFoxTree::operator-(VoxFoxTree const &_r)
   return retRoot;
 }
 
-VoxFoxTree VoxFoxTree::operator +(VoxFoxTree const & _v)
+void VoxFoxTree::operator-=(VoxFoxTree const &_r)
+{
+  (*this) = (*this) - (_r);
+}
+
+VoxFoxTree VoxFoxTree::operator +(VoxFoxTree const & _v) const
 {
   VoxFoxTree retRoot;
   for(auto & i : m_primChildren)
@@ -128,6 +143,11 @@ VoxFoxTree VoxFoxTree::operator +(VoxFoxTree const & _v)
     }
   }
   return retRoot;
+}
+
+void VoxFoxTree::operator+=(VoxFoxTree const &_r)
+{
+  (*this) = (*this) + (_r);
 }
 
 std::vector<float> VoxFoxTree::getVertexes()
@@ -156,14 +176,16 @@ int VoxFoxTree::getVertexSize()
   return m_vertexes.size();
 }
 
-void VoxFoxTree::drawFlatImage(glm::vec3 _position, ngl::Image* _texture, float height)
+void VoxFoxTree::drawFlatImage(glm::vec3 _position, ngl::Image* _texture, float _height)
 {
-  int steps = glm::floor(height/m_voxUnit);
-  glm::vec3 currentPos = _position + glm::vec3(-height/2.0f,-height/2.0f,0.0f);
+  numberOfObjects++;
+
+  int steps = glm::floor(_height/m_voxUnit);
+  glm::vec3 currentPos = _position + glm::vec3(-_height/2.0f,-_height/2.0f,0.0f);
   for(int i =0; i<steps; ++i)
   {
     currentPos+=glm::vec3(m_voxUnit,0.0f,0.0f);
-    currentPos[1]=-height/2.0f + _position[1];
+    currentPos[1]=-_height/2.0f + _position[1];
     for(int j=0; j<steps; ++j)
     {
       currentPos+=glm::vec3(0.0f,m_voxUnit,0.0f);
@@ -172,6 +194,7 @@ void VoxFoxTree::drawFlatImage(glm::vec3 _position, ngl::Image* _texture, float 
       toBeInserted.r = voxCol.m_r/255.0f;
       toBeInserted.g = voxCol.m_g/255.0f;
       toBeInserted.b = voxCol.m_b/255.0f;
+      toBeInserted.nx = 2.0f;
       if((int)voxCol.m_a>254)
       {
         addVoxel(currentPos,toBeInserted);
@@ -180,25 +203,23 @@ void VoxFoxTree::drawFlatImage(glm::vec3 _position, ngl::Image* _texture, float 
   }
 }
 
-bool VoxFoxTree::isVoxel(glm::vec3 const &_position)
+bool VoxFoxTree::isVoxel(glm::vec3 _position)
 {
   if(m_leafAccessor!=nullptr && m_leafAccessor->isVoxel(_position)) return true;
   else if ( m_secAccessor!=nullptr && m_secAccessor->isVoxel(_position,&m_leafAccessor)) return true;
-//  else
-//  {
-    for (auto &prim : m_primChildren) // access by reference to avoid copying
-        {
-          if(_position[0]<prim->getOrigin()[0] || _position[0]>=prim->getOrigin()[0]+m_primUnit) continue;
-          if(_position[1]<prim->getOrigin()[1] || _position[1]>=prim->getOrigin()[1]+m_primUnit) continue;
-          if(_position[2]<prim->getOrigin()[2] || _position[2]>=prim->getOrigin()[2]+m_primUnit) continue;
-          m_primAccessor=prim;
-          return prim->isVoxel(_position,&m_secAccessor,&m_leafAccessor);
-        }
-    return false;
-//  }
+
+  for (auto &prim : m_primChildren) // access by reference to avoid copying
+      {
+        if(_position[0]<prim->getOrigin()[0] || _position[0]>=prim->getOrigin()[0]+m_primUnit) continue;
+        if(_position[1]<prim->getOrigin()[1] || _position[1]>=prim->getOrigin()[1]+m_primUnit) continue;
+        if(_position[2]<prim->getOrigin()[2] || _position[2]>=prim->getOrigin()[2]+m_primUnit) continue;
+        m_primAccessor=prim;
+        return prim->isVoxel(_position,&m_secAccessor,&m_leafAccessor);
+      }
+  return false;
 }
 
-void VoxFoxTree::addVoxel(glm::vec3 const &_position, Voxel const &_data)
+void VoxFoxTree::addVoxel(glm::vec3 _position, Voxel _data)
 {
   if((m_leafAccessor==nullptr && m_secAccessor==nullptr) ||
      (m_leafAccessor!=nullptr && !m_leafAccessor->addVoxel(_position, _data) &&
@@ -225,7 +246,6 @@ void VoxFoxTree::addVoxel(glm::vec3 const &_position, Voxel const &_data)
     }
 
 }
-  numberOfVoxels++;
 }
 
 bool VoxFoxTree::isLeaf(glm::vec3 _position)
@@ -265,7 +285,7 @@ bool VoxFoxTree::isPrimary(glm::vec3 _position)
   return false;
 }
 
-void VoxFoxTree::translate(const glm::vec3 &_translation)
+void VoxFoxTree::translate(glm::vec3 _translation)
 {
   std::vector<glm::vec3> ourTranslatedPositions;
   std::vector<Voxel> ourTranslatedVoxels;
@@ -303,11 +323,13 @@ void VoxFoxTree::translate(const glm::vec3 &_translation)
   }
 }
 // loosely based on http://iquilezles.org/www/articles/distfunctions/distfunctions.htm
-void VoxFoxTree::createCylinder(glm::vec3 position, glm::vec3 axis, float radius, float height, glm::vec3 color)
+void VoxFoxTree::createCylinder(glm::vec3 _position, glm::vec3 _axis, float _radius, float _height, glm::vec3 _color)
 {
-  int heightvox = (int)(height/m_voxUnit);
-  int diameter = (int)((radius*2.0f)/m_voxUnit);
-  glm::vec2 h = glm::vec2(radius,height);
+  numberOfObjects++;
+
+  int heightvox = (int)(_height/m_voxUnit);
+  int diameter = (int)((_radius*2.0f)/m_voxUnit);
+  glm::vec2 h = glm::vec2(_radius,_height);
 
     for(int x=-diameter/2; x<diameter/2; ++x)
     {
@@ -319,10 +341,10 @@ void VoxFoxTree::createCylinder(glm::vec3 position, glm::vec3 axis, float radius
           glm::vec2 d = glm::abs(glm::vec2(glm::length(glm::vec2(p.x,p.z)),p.y)) - h;
           if(glm::min(glm::max(d.x,d.y),0.0f) + glm::length(glm::max(d,0.0f))<0.0f)
           {
-            Voxel toBeInserted = Voxel(color[0],color[1],color[2]);
-            if(axis[1]>0.0f) addVoxel(p+position,toBeInserted);
-            else if(axis[0]>0.0f) addVoxel(glm::vec3(p.y,p.z,p.x)+position,toBeInserted);
-            else if(axis[2]>0.0f) addVoxel(glm::vec3(p.z,p.x,p.y)+position,toBeInserted);
+            Voxel toBeInserted = Voxel(_color[0],_color[1],_color[2]);
+            if(_axis[1]>0.0f) addVoxel(p+_position,toBeInserted);
+            else if(_axis[0]>0.0f) addVoxel(glm::vec3(p.y,p.z,p.x)+_position,toBeInserted);
+            else if(_axis[2]>0.0f) addVoxel(glm::vec3(p.z,p.x,p.y)+_position,toBeInserted);
           }
         }
       }
@@ -625,8 +647,10 @@ void VoxFoxTree::calculatePolys()
       }
 }
 }
-void VoxFoxTree::createSphere(glm::vec3 const &_position, float const &_radius, glm::vec3 color)
+void VoxFoxTree::createSphere(glm::vec3 _position, float _radius, glm::vec3 _color)
 {
+  numberOfObjects++;
+
   int voxRadius = (int)(_radius/m_voxUnit);
   for(int x = -voxRadius; x<voxRadius; ++x)
   {
@@ -637,15 +661,20 @@ void VoxFoxTree::createSphere(glm::vec3 const &_position, float const &_radius, 
           glm::vec3 pos = glm::vec3(x,y,z)*m_voxUnit;
           if(glm::length(pos) < _radius)
           {
-            addVoxel(pos+_position,Voxel(color[0],color[1],color[2]));
+            Voxel toBe = Voxel(_color[0],_color[1],_color[2]);
+            toBe.nx = 2.0f;
+            toBe.u = -2.0f;
+            addVoxel(pos+_position,toBe);
           }
         }
       }
   }
 }
 
-void VoxFoxTree::createTorus(glm::vec3 const &_position, glm::vec2 const &_t)
+void VoxFoxTree::createTorus(glm::vec3 _position, glm::vec2 _t)
 {
+  numberOfObjects++;
+
   int _radius = (_t.y / m_voxUnit) + 1;
   for(int x = -_radius; x<_radius; ++x)
   {
@@ -666,8 +695,10 @@ void VoxFoxTree::createTorus(glm::vec3 const &_position, glm::vec2 const &_t)
   }
 }
 
-void VoxFoxTree::createBox(glm::vec3 const &_min, glm::vec3 const &_max, glm::vec3 const &_color)
+void VoxFoxTree::createBox(glm::vec3 _min, glm::vec3 _max, glm::vec3 _color)
 {
+  numberOfObjects++;
+
   glm::vec3 diff = _max-_min;
   diff/=m_voxUnit;
   glm::abs(diff);
@@ -680,13 +711,15 @@ void VoxFoxTree::createBox(glm::vec3 const &_min, glm::vec3 const &_max, glm::ve
       {
         glm::vec3 pos = _min + (glm::vec3(x,y,z)*m_voxUnit);
         Voxel toBeInserted = Voxel(_color[0],_color[1],_color[2]);
+        toBeInserted.nx = 2.0f;
+        toBeInserted.u = -2.0f;
         addVoxel(pos,toBeInserted);
       }
     }
   }
 }
 
-void VoxFoxTree::importQuickObj(ngl::Obj * _mesh, float const &_size)
+void VoxFoxTree::importQuickObj(ngl::Obj * _mesh, float _size)
 {
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
@@ -718,8 +751,141 @@ void VoxFoxTree::importQuickObj(ngl::Obj * _mesh, float const &_size)
     }
 }
 
-void VoxFoxTree::importObj(ngl::Obj * _mesh, ngl::Image * _texture,float const &_size, bool const &_normals, bool const &_interpnormals, bool const &_noCol,bool const &_shader)
+void VoxFoxTree::importObj(ngl::Obj * _mesh, glm::vec3 _color,float _size, bool _normals, bool _interpnormals)
 {
+  numberOfObjects++;
+  std::vector<ngl::Vec3> verts = _mesh->getVertexList();
+  std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
+
+  _mesh->calcDimensions();
+
+  ngl::BBox boundingBox = _mesh->getBBox();
+  float meshheight = boundingBox.height();
+  float scale = _size/meshheight;
+  ngl::Vec3 centre = boundingBox.center();
+
+
+  std::vector<ngl::Vec3> vertNormals = std::vector<ngl::Vec3>(verts.size());
+  std::fill(vertNormals.begin(), vertNormals.end(), ngl::Vec3(0.0f,0.0f,0.0f));
+  std::vector<int> numberOfFacesPerVert = std::vector<int>(verts.size());
+  std::fill(numberOfFacesPerVert.begin(), numberOfFacesPerVert.end(), 0);
+
+  std::vector<ngl::Vec3> vertTex = _mesh->getTextureCordList();
+
+  if(_interpnormals && _normals)
+  {
+    for(int i = 0; i<objFaceList.size(); ++i)
+    {
+      ngl::Vec3 tmpNormal;
+
+      tmpNormal = (verts[objFaceList[i].m_vert[1]]-verts[objFaceList[i].m_vert[0]]).cross(verts[objFaceList[i].m_vert[2]]-verts[objFaceList[i].m_vert[0]]);
+      tmpNormal.normalize();
+      for(int j =0; j<objFaceList[i].m_vert.size(); ++j)
+      {
+        vertNormals[objFaceList[i].m_vert[j]] += tmpNormal;
+        numberOfFacesPerVert[objFaceList[i].m_vert[j]]++;
+      }
+    }
+
+    for(int i =0; i<(int)vertNormals.size(); ++i)
+    {
+      vertNormals[i]= vertNormals[i]/numberOfFacesPerVert[i] ;
+      vertNormals[i].normalize();
+    }
+  }
+
+  for(std::vector<ngl::Face>::iterator itr=objFaceList.begin(); itr!=objFaceList.end(); ++itr)
+  {
+    if(itr->m_vert.size()==3)
+    {
+
+      //-------------------------VERTEXES----------------------------
+      ngl::Vec3 a, b, c, e1;
+      a = verts[itr->m_vert[0]]*scale - centre;
+      b = verts[itr->m_vert[1]]*scale - centre;
+      c = verts[itr->m_vert[2]]*scale - centre;
+      e1 = b - a;
+
+      //--------------------------NORMALS-----------------------------
+      ngl::Vec3 na, nb, nc;
+      ngl::Vec3 tmpNormal;
+      if(_interpnormals && _normals)
+      {
+        na = vertNormals[itr->m_vert[0]];
+        nb = vertNormals[itr->m_vert[1]];
+        nc = vertNormals[itr->m_vert[2]];
+      }
+      else if(_normals)
+      {
+        tmpNormal = (verts[itr->m_vert[1]]-verts[itr->m_vert[0]]).cross(verts[itr->m_vert[2]]-verts[itr->m_vert[0]]);
+        tmpNormal.normalize();
+      }
+
+      int steps = std::ceil(e1.length()/m_voxUnit);
+      ngl::Vec3 vecStep = e1/(2*steps); // scaled
+
+      for(int i =0; i<(steps+1)*2; ++i) //scaled
+      {
+        ngl::Vec3 pos = a+(vecStep*i);
+        ngl::Vec3 posnormal = ngl::lerp(na,nb,((float)i)/((float)(((steps+1)*2)-1)));
+        //ngl::Vec2 posUV = ;
+        ngl::Vec3 line = c-pos;
+        int jsteps = std::ceil(line.length()/m_voxUnit);
+
+        if(i!=steps)
+        {
+          if(i%2==1) jsteps/=2;
+          else if(i%4==2) jsteps*=0.75;
+          else if(i%8==4) jsteps*=0.875;
+        }
+
+        ngl::Vec3 mystep = line*(m_voxUnit / (3*line.length())); //scaled
+
+        for(int j = 0; j<jsteps*3; ++j) //scaled
+        {
+          float inNX, inNY, inNZ;
+          float inU, inV;
+          if(_interpnormals && _normals)
+          {
+            ngl::Vec3 posnormal2 = lerp(posnormal,nc,((float)j)/((float)((jsteps*3) - 1)));
+            inNX = posnormal2.m_x;
+            inNY = posnormal2.m_y;
+            inNZ = posnormal2.m_z;
+          }
+          else if(_normals)
+          {
+            inNX = tmpNormal.m_x;
+            inNY = tmpNormal.m_y;
+            inNZ = tmpNormal.m_z;
+          }
+          else
+          {
+            inNX = 2.0f;
+            inNY = 2.0f;
+            inNZ = 2.0f;
+          }
+          Voxel toinsert = Voxel(inNX,inNY,inNZ,inU,inV);
+
+          toinsert.r = _color[0];
+          toinsert.g = _color[1];
+          toinsert.b = _color[2];
+
+          toinsert.u=inU;
+          toinsert.v=inV;
+
+          addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),toinsert);
+          pos = pos + mystep;
+        }
+      }
+    }
+ }
+}
+
+
+
+void VoxFoxTree::importTexturedObj(ngl::Obj * _mesh, ngl::Image * _texture,float _size, bool _normals, bool _interpnormals)
+{
+  numberOfObjects++;
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
   //std::vector<ngl::Vec3> normalList = _mesh->getNormalList();
@@ -832,9 +998,14 @@ void VoxFoxTree::importObj(ngl::Obj * _mesh, ngl::Image * _texture,float const &
             inNY = tmpNormal.m_y;
             inNZ = tmpNormal.m_z;
           }
-          Voxel toinsert = Voxel(inNX,inNY,inNZ,inU,inV);
-          if(!_noCol && _shader)
+          else
           {
+            inNX = 2.0f;
+            inNY = 2.0f;
+            inNZ = 2.0f;
+          }
+          Voxel toinsert = Voxel(inNX,inNY,inNZ,inU,inV);
+
             // Get RGB value from texture
             // Put in shader as FragmentColor
             ngl::Vec3 postexture2 = lerp(postexture,tc,((float)j)/((float)((jsteps*3) - 1)));
@@ -843,24 +1014,12 @@ void VoxFoxTree::importObj(ngl::Obj * _mesh, ngl::Image * _texture,float const &
             toinsert.r = (float)_texture->getColour(inU,inV).m_r/255.0f;
             toinsert.g = (float)_texture->getColour(inU,inV).m_g/255.0f;
             toinsert.b = (float)_texture->getColour(inU,inV).m_b/255.0f;
-          }
-          else if(_shader)
-          {
-            // Tells shader not to use FragmentColor
-            toinsert.r=2.0f;
-          }
+
 
           // We retain UVs if not using my specific shader
-          if(_shader)
-          {
-            toinsert.u=2.0f;
-            if(_normals) toinsert.v=2.0f;
-          }
-          else
-          {
-            toinsert.u=inU;
-            toinsert.v=inV;
-          }
+
+          toinsert.u=inU;
+          toinsert.v=inV;
           addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),toinsert);
           pos = pos + mystep;
         }
@@ -868,5 +1027,32 @@ void VoxFoxTree::importObj(ngl::Obj * _mesh, ngl::Image * _texture,float const &
     }
  }
 }
+
+int VoxFoxTree::updateVoxCount()
+{
+  const unsigned char oneBits[] = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
+  numberOfVoxels=0;
+  for (auto &prim : m_primChildren) // access by reference to avoid copying
+  {
+    for(auto &sec : prim->m_secChildren)
+    {
+      for(auto &leaf : sec->m_leafChildren)
+      {
+        for(int i =0 ; i<64; ++i)
+        {
+          numberOfVoxels += oneBits[leaf->m_VoxelMap[i]&0x0f];
+          numberOfVoxels += oneBits[leaf->m_VoxelMap[i]>>4];
+        }
+      }
+    }
+  }
+  return numberOfVoxels;
+}
+
+
+
+
+
+
 
 

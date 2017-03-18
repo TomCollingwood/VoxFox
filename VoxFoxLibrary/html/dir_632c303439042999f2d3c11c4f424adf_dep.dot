@@ -1,0 +1,15 @@
+digraph "VoxFoxLibrary" {
+  compound=true
+  node [ fontsize="10", fontname="FreeSans"];
+  edge [ labelfontsize="10", labelfontname="FreeSans"];
+  subgraph clusterdir_be267db39cb192c953339ed7ef22eca2 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="VoxFox" fontname="FreeSans", fontsize="10", URL="dir_be267db39cb192c953339ed7ef22eca2.html"]
+  subgraph clusterdir_632c303439042999f2d3c11c4f424adf {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_632c303439042999f2d3c11c4f424adf.html"];
+    dir_632c303439042999f2d3c11c4f424adf [shape=plaintext label="VoxFoxLibrary"];
+    dir_95477adba7986e5bb194774853efdafb [shape=box label="include" color="black" fillcolor="white" style="filled" URL="dir_95477adba7986e5bb194774853efdafb.html"];
+    dir_431c248b72d7de364566ae009608159f [shape=box label="src" color="black" fillcolor="white" style="filled" URL="dir_431c248b72d7de364566ae009608159f.html"];
+  }
+  }
+  dir_431c248b72d7de364566ae009608159f->dir_95477adba7986e5bb194774853efdafb [headlabel="5", labeldistance=1.5 headhref="dir_000006_000007.html"];
+}

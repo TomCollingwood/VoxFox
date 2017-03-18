@@ -69,27 +69,16 @@ void main() {
     // Reflect the light about the surface normal
     vec3 r = reflect( -s, n );
 
-
-    // Compute the light from the ambient, diffuse and specular components
     LightIntensity = (
-            Light.La * Material.Ka +
-            Light.Ld * Material.Kd * max( dot(s, FragmentNormal), 0.0 ) +
-            Light.Ls * Material.Ks * pow( max( dot(r,v), 0.0 ), Material.Shininess ));
+            Light.La * FragmentColor +
+            Light.Ld * FragmentColor * max( dot(s, FragmentNormal), 0.0 ) +
+            Light.Ls * FragmentColor * pow( max( dot(r,v), 0.0 ), Material.Shininess ));
 
+    FragColor = vec4(LightIntensity,1.0);
 
-    FragColor = vec4(FragmentColor,1.0);
-    if(FragmentColor[0] > 1.0f)
+    if(FragmentNormal[0] > 1.0f)
     {
-      FragColor = vec4(LightIntensity,1.0);
-    }
-    else if(FragmentShading[1] > 1.0f)
-    {
-      LightIntensity = (
-              Light.La * FragmentColor +
-              Light.Ld * FragmentColor * max( dot(s, FragmentNormal), 0.0 ) +
-              Light.Ls * FragmentColor * pow( max( dot(r,v), 0.0 ), Material.Shininess ));
-
-      FragColor = vec4(LightIntensity,1.0);
+      FragColor = vec4(FragmentColor,1.0);
     }
 
 

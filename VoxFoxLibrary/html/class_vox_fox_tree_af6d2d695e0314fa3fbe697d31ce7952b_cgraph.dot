@@ -1,0 +1,13 @@
+digraph "VoxFoxTree::isVoxel"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="VoxFoxTree::isVoxel",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="SecondaryNode::isVoxel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_secondary_node.html#a630c26622725c27fb45e57767b066c59",tooltip="isVoxel checks if a Voxel is present within the SecondaryNode at _position "];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="PrimaryNode::isVoxel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_primary_node.html#a187a4290e705d5af6d6ea67233da56f7",tooltip="isVoxel checks if a Voxel is present within PrimaryNode at _position "];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="LeafNode::isVoxel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_leaf_node.html#a85a8a792b27425d32d8b2f71132ccd1c",tooltip="isVoxel checks if a Voxel is present within LeafNode at _position "];
+}

@@ -49,3 +49,4 @@ else{ # note brace must be here
 	include($(NGLDIR)/UseNGL.pri)
 }
 
+message("Compiled VoxFox")

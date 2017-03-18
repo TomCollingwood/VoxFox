@@ -1,0 +1,11 @@
+digraph "SecondaryNode::getOrigin"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="SecondaryNode::getOrigin",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="SecondaryNode::operator=",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_secondary_node.html#a37ab0aeb0d407911a2839ba1dfc52fd0"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="SecondaryNode::isLeaf",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_secondary_node.html#a14a1ea2f5d88d51db76f53f9f2c58831",tooltip="isLeaf Checks to see if the leaf at the _position is within m_leafChildren of the SecondaryNode ..."];
+}

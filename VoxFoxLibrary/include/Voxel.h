@@ -9,6 +9,11 @@
 #ifndef VOXEL_H
 #define VOXEL_H
 
+#define PRIM_UNIT 10.0
+#define SEC_UNIT = 1.25
+#define LEAF_UNIT = 0.15625
+#define VOXEL_UNIT = 0.01953125
+
 typedef struct Voxel{
   float nx;
   float ny;

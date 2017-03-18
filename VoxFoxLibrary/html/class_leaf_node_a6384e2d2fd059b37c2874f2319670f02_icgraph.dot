@@ -1,0 +1,11 @@
+digraph "LeafNode::getOrigin"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="LeafNode::getOrigin",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="LeafNode::LeafNode",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_leaf_node.html#a41c1c5bf9863ee85116a515bc3a43d80"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="LeafNode::operator=",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_leaf_node.html#af1f9eb3c0a7ce1404e425cf479b9191c"];
+}

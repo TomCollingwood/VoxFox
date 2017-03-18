@@ -57,7 +57,7 @@ SecondaryNode & SecondaryNode::operator=(SecondaryNode const &s)
   return *this;
 }
 
-bool SecondaryNode::isVoxel(glm::vec3 const &_position, LeafNode ** _leafAccessor)
+bool SecondaryNode::isVoxel(glm::vec3 _position, LeafNode ** _leafAccessor) const
 {
   for (auto &leaf : m_leafChildren) // access by reference to avoid copying
       {
@@ -102,7 +102,7 @@ bool SecondaryNode::addVoxel(glm::vec3 _position, Voxel _voxel, LeafNode ** o_le
   }
 }
 
-bool SecondaryNode::isLeaf(glm::vec3 _position, LeafNode ** o_leaf)
+bool SecondaryNode::isLeaf(glm::vec3 _position, LeafNode ** o_leaf) const
 {
 
   for (int i =0; i<m_leafChildren.size(); ++i) // access by reference to avoid copying
@@ -116,7 +116,7 @@ bool SecondaryNode::isLeaf(glm::vec3 _position, LeafNode ** o_leaf)
   return false;
 }
 
-SecondaryNode SecondaryNode::operator +(SecondaryNode const &_s)
+SecondaryNode SecondaryNode::operator +(SecondaryNode const &_s) const
 {
   SecondaryNode retSec = SecondaryNode(m_origin);
   // Leafs are not in order so cannot use jindex trick in + in LeafNode
@@ -133,7 +133,7 @@ SecondaryNode SecondaryNode::operator +(SecondaryNode const &_s)
   return retSec;
 }
 
-SecondaryNode SecondaryNode::operator -(SecondaryNode const &_s)
+SecondaryNode SecondaryNode::operator -(SecondaryNode const &_s) const
 {
   SecondaryNode retSec = SecondaryNode(m_origin);
 
@@ -147,7 +147,10 @@ SecondaryNode SecondaryNode::operator -(SecondaryNode const &_s)
         LeafNode testLeaf = LeafNode(*i-*j);
         // testLeaf could be empty. We test for that.
         // if empty crashes other functions. We always assume that nodes are not empty (flaw?)
-        if(testLeaf.m_VoxelData.size()!=0) retSec.m_leafChildren.push_back(new LeafNode(testLeaf));
+        if(testLeaf.m_VoxelData.size()!=0)
+        {
+          retSec.m_leafChildren.push_back(new LeafNode(testLeaf));
+        }
         found = true;
         break;
       }
@@ -160,7 +163,7 @@ SecondaryNode SecondaryNode::operator -(SecondaryNode const &_s)
   return retSec;
 }
 
-SecondaryNode SecondaryNode::operator |(SecondaryNode const &_s)
+SecondaryNode SecondaryNode::operator |(SecondaryNode const &_s) const
 {
   SecondaryNode retSec = SecondaryNode(m_origin);
   std::vector<bool> jfound;

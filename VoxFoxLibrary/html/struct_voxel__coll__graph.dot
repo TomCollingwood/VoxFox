@@ -1,0 +1,6 @@
+digraph "Voxel"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  Node1 [label="{Voxel\n|+ nx\l+ ny\l+ nz\l+ u\l+ v\l+ r\l+ g\l+ b\l+ index\l|+ Voxel()\l+ Voxel()\l+ Voxel()\l+ Voxel()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

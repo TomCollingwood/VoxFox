@@ -37,10 +37,10 @@ LeafNode & LeafNode::operator=(LeafNode const &_l)
 }
 
 
-bool LeafNode::isVoxel(glm::vec3 _position)
+bool LeafNode::isVoxel(glm::vec3 _position) const
 {
   glm::vec3 xyz = _position-m_origin;
-  xyz = floor(xyz/unitVoxelLength);
+  xyz = floor(xyz/m_voxUnit);
   if(xyz.x<0 || xyz.x>7 || xyz.y<0|| xyz.y>7 || xyz.z<0|| xyz.z>7) return false;
   return m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] & (unsigned int) 1<<(int)xyz.z;
 }
@@ -51,7 +51,7 @@ bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
   if(xyz.x>=0 && xyz.x<unitLeafLength && xyz.y>=0 && xyz.y<unitLeafLength && xyz.z>=0 && xyz.z<unitLeafLength )
   {
     Voxel insertVoxel = _voxel;
-    xyz = floor(xyz/unitVoxelLength);
+    xyz = floor(xyz/m_voxUnit);
     insertVoxel.index = (int) (xyz.x*8*8 + xyz.y*8 + xyz.z);
     if(!(m_VoxelMap[((int)xyz.x)*8 + (int)xyz.y] & (unsigned int) 1<<(int)xyz.z))
     {
@@ -76,63 +76,8 @@ bool LeafNode::addVoxel(glm::vec3 _position, Voxel _voxel)
   }
 }
 
-void LeafNode::shiftOrigin(int _x, int _y, int _z)
-{
-  idx+=_x;
-  idy+=_y;
-  idz+=_z;
-  m_origin+=glm::vec3(_x,_y,_z)*m_leafUnit;
-}
-
-void LeafNode::moveX(const int &_shift)
-{
-  std::array<char,64> oldMap = m_VoxelMap;
-  for(int i = 0; i<8; ++i)
-  {
-    for(int j = 0; j<8; ++j)
-    {
-      if((i-_shift) >= 0 && (i-_shift) < 8)
-      {
-        m_VoxelMap[i*8 + j] = oldMap[(i-_shift)*8 + j];
-      }
-      else
-      {
-        m_VoxelMap[i*8 + j] = 0x00;
-      }
-    }
-  }
-}
-
-void LeafNode::moveY(const int &_shift)
-{
-  std::array<char,64> oldMap = m_VoxelMap;
-  for(int i = 0; i<8; ++i)
-  {
-    for(int j = 0; j<8; ++j)
-    {
-      if((j-_shift) >= 0 && (j-_shift) < 8)
-      {
-        m_VoxelMap[i*8 + j] = oldMap[i*8 + (j-_shift)];
-      }
-      else
-      {
-        m_VoxelMap[i*8 + j] = 0x00;
-      }
-    }
-  }
-}
-
-void LeafNode::moveZ(const int &_shift)
-{
-  for(int i = 0; i<64; ++i)
-  {
-    if(_shift>0) m_VoxelMap[i] = m_VoxelMap[i]>>_shift;
-    else m_VoxelMap[i] = m_VoxelMap[i]<<_shift;
-  }
-}
-
 // Is not associative, voxels take the first nodes colour
-LeafNode LeafNode::operator+(LeafNode const & _l)
+LeafNode LeafNode::operator+(LeafNode const & _l) const
 {
   LeafNode retLeaf = LeafNode(m_origin);
   int count = 0;
@@ -144,7 +89,6 @@ LeafNode LeafNode::operator+(LeafNode const & _l)
       if((m_VoxelMap[i] & (1<<j)) && (retLeaf.m_VoxelMap[i] & (1<<j)))
       {
         retLeaf.m_VoxelData.push_back(m_VoxelData[count]);
-        count++;
       }
       if(m_VoxelMap[i] & (1<<j)) count++;
     }
@@ -152,7 +96,7 @@ LeafNode LeafNode::operator+(LeafNode const & _l)
   return retLeaf;
 }
 
-LeafNode LeafNode::operator-(LeafNode const &_l)
+LeafNode LeafNode::operator-(LeafNode const &_l) const
 {
   LeafNode retLeaf = LeafNode(m_origin);
   int count =0;
@@ -164,15 +108,15 @@ LeafNode LeafNode::operator-(LeafNode const &_l)
       if((retLeaf.m_VoxelMap[i] & (1<<j))&&(m_VoxelMap[i] & (1<<j)))
       {
         retLeaf.m_VoxelData.push_back(m_VoxelData[count]);
-        count++;
       }
+      if(m_VoxelMap[i] & (1<<j)) count++;
     }
   }
   return retLeaf;
 }
 
 
-LeafNode LeafNode::operator|(LeafNode const &_l)
+LeafNode LeafNode::operator|(LeafNode const &_l) const
 {
   LeafNode retLeaf = LeafNode(m_origin);
   for(int i = 0; i<64; ++i)

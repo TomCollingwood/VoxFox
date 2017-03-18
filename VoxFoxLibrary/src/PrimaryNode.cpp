@@ -59,7 +59,7 @@ PrimaryNode & PrimaryNode::operator=(PrimaryNode const &p)
 
 
 
-bool PrimaryNode::isVoxel(glm::vec3 _position, SecondaryNode ** _secAccessor, LeafNode ** _leafAccessor)
+bool PrimaryNode::isVoxel(glm::vec3 _position, SecondaryNode ** _secAccessor, LeafNode ** _leafAccessor) const
 {
   for (auto &sec : m_secChildren) // access by reference to avoid copying
       {
@@ -94,7 +94,7 @@ void PrimaryNode::addVoxel(glm::vec3 _position, Voxel _voxel, SecondaryNode ** o
   }
 }
 
-bool PrimaryNode::isLeaf(glm::vec3 _position, SecondaryNode ** _sec, LeafNode ** _leaf)
+bool PrimaryNode::isLeaf(glm::vec3 _position, SecondaryNode ** _sec, LeafNode ** _leaf) const
 {
   for (int i =0 ; i< m_secChildren.size(); ++i) // access by reference to avoid copying
   {
@@ -107,7 +107,7 @@ bool PrimaryNode::isLeaf(glm::vec3 _position, SecondaryNode ** _sec, LeafNode **
   return false;
 }
 
-bool PrimaryNode::isSecondary(glm::vec3 _position, SecondaryNode ** _secondary)
+bool PrimaryNode::isSecondary(glm::vec3 _position, SecondaryNode ** _secondary) const
 {
   for (int i =0 ; i< m_secChildren.size(); ++i) // access by reference to avoid copying
   {
@@ -120,7 +120,7 @@ bool PrimaryNode::isSecondary(glm::vec3 _position, SecondaryNode ** _secondary)
   return false;
 }
 
-PrimaryNode PrimaryNode::operator |(PrimaryNode const &_p)
+PrimaryNode PrimaryNode::operator |(PrimaryNode const &_p) const
 {
   PrimaryNode retPrim = PrimaryNode(m_origin);
   std::vector<bool> jfound;
@@ -156,7 +156,7 @@ PrimaryNode PrimaryNode::operator |(PrimaryNode const &_p)
   return retPrim;
 }
 
-PrimaryNode PrimaryNode::operator -(PrimaryNode const &_p)
+PrimaryNode PrimaryNode::operator -(PrimaryNode const &_p) const
 {
   PrimaryNode retPrim = PrimaryNode(m_origin);
   for(const auto & i : m_secChildren)
@@ -179,7 +179,7 @@ PrimaryNode PrimaryNode::operator -(PrimaryNode const &_p)
   return retPrim;
 }
 
-PrimaryNode PrimaryNode::operator +(PrimaryNode const &_p)
+PrimaryNode PrimaryNode::operator +(PrimaryNode const &_p) const
 {
   PrimaryNode retPrim = PrimaryNode(m_origin);
   for(const auto &i : m_secChildren)

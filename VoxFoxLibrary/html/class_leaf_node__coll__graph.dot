@@ -1,0 +1,6 @@
+digraph "LeafNode"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  Node1 [label="{LeafNode\n|+ m_VoxelMap\l+ m_VoxelData\l+ idx\l+ idy\l+ idz\l- m_origin\l- unitVoxelLength\l- unitLeafLength\l- m_primUnit\l- m_secUnit\l- m_leafUnit\l- m_voxUnit\l|+ LeafNode()\l+ LeafNode()\l+ LeafNode()\l+ operator=()\l+ operator+()\l+ operator\|()\l+ operator-()\l+ addVoxel()\l+ isVoxel()\l+ getOrigin()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

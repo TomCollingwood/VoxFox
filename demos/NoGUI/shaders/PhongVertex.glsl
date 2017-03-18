@@ -37,7 +37,8 @@ void main() {
     gl_Position = MVP * vec4(VertexPosition, 1.0);
 
     FragmentPosition = vec3(MV * vec4(VertexPosition,1.0));
-    FragmentNormal = N * VertexNormal;
+    if(VertexNormal[0]<1.0f) FragmentNormal = N * VertexNormal;
+    else FragmentNormal=VertexNormal;
     FragmentShading = TexCoord;
     FragmentColor = VertexColor;
     _MV = MV;

@@ -1,0 +1,9 @@
+digraph "include" {
+  compound=true
+  node [ fontsize="10", fontname="FreeSans"];
+  edge [ labelfontsize="10", labelfontname="FreeSans"];
+  subgraph clusterdir_632c303439042999f2d3c11c4f424adf {
+    graph [ bgcolor="#ddddee", pencolor="black", label="VoxFoxLibrary" fontname="FreeSans", fontsize="10", URL="dir_632c303439042999f2d3c11c4f424adf.html"]
+  dir_95477adba7986e5bb194774853efdafb [shape=box, label="include", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_95477adba7986e5bb194774853efdafb.html"];
+  }
+}
