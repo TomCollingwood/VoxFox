@@ -118,22 +118,19 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   void importQuickObj(ngl::Obj * _mesh, float const &_size);
 
-  //----------------------------------------------------------------------------------------------------------------------
-  /// \brief importObjRGB   Sluggishly imports a polygonal .obj file to the VoxFoxTree as voxel data
-  ///                       See readme for how it is done. It uses texture and UVs to fetch rgb from texture.
-  /// \param[in] _mesh      The ngl::Obj object of the mesh
-  /// \param[in] _texture   The ngl::Texture for the mesh and to grab rgb values
-  /// \param[in] _size      The height of the imported voxels in worldspace
-  //----------------------------------------------------------------------------------------------------------------------
-  void importObjRGB(ngl::Obj * _mesh, ngl::Image * _texture,float const &_size);
+
 
   //----------------------------------------------------------------------------------------------------------------------
-  /// \brief importAccurateObj  Slowly imports a polygonal .obj file to the VoxFoxTree as voxel data
-  ///                           See readme for how it is done. It imports UVs and does not fetch rgb from texture.
+  /// \brief importObj          Imports a polygonal .obj file to the VoxFoxTree as voxel data.
   /// \param[in] _mesh          The ngl::Obj object of the mesh
-  /// \param[in] _size          The height of the imported voxels in worldspace
+  /// \param[in] _texture       The ngl::Texture for the mesh and to grab rgb values
+  /// \param[in] _normals       This tells us we want normals used in shader and calculated
+  /// \param[in] _interpnormals This tells us to interpolate the normals in fragments between vertexes
+  /// \param[in] _noCol         This tells the shader to not use texture
+  /// \param[in] _shader        This tells us to use the UV coordinates to tell the shader how to shade
+  ///                           and not as actual UV texture coordinates.
   //----------------------------------------------------------------------------------------------------------------------
-  void importObjUV(ngl::Obj * _mesh, float const &size);
+  void importObj(ngl::Obj * _mesh, ngl::Image * _texture,float const &_size, bool const &_normals=false, bool const &_interpnormals=false, bool const &_noCol=false,bool const &_shader=true);
 
   // As the functions below also set the accessors we can use these as getters also by using accessors after calling them.
   bool isLeaf(glm::vec3 _position);

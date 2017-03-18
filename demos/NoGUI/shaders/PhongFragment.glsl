@@ -9,7 +9,7 @@ uniform sampler2D ColourTexture;
 //in vec3 LightIntensity;
 in vec3 FragmentPosition;
 in vec3 FragmentNormal;
-in vec2 FragmentTexCoord;
+in vec2 FragmentShading;
 in vec3 FragmentColor;
 in mat4 _MV;
 
@@ -44,9 +44,9 @@ struct MaterialInfo {
 
 // The object has a material
 uniform MaterialInfo Material = MaterialInfo(
-            vec3(1, 0, 0),    // Ka
-            vec3(1.0, 0.0, 0.0),    // Kd
-            vec3(1.0, 0.0, 0.0),    // Ks
+            vec3(1, 1, 1),    // Ka
+            vec3(1.0, 1.0, 1.0),    // Kd
+            vec3(1.0, 1.0, 1.0),    // Ks
             3.0                    // Shininess
             );
 
@@ -69,6 +69,7 @@ void main() {
     // Reflect the light about the surface normal
     vec3 r = reflect( -s, n );
 
+
     // Compute the light from the ambient, diffuse and specular components
     LightIntensity = (
             Light.La * Material.Ka +
@@ -76,8 +77,22 @@ void main() {
             Light.Ls * Material.Ks * pow( max( dot(r,v), 0.0 ), Material.Shininess ));
 
 
-    vec3 texColor = texture(ColourTexture,FragmentTexCoord).rgb;
-
-    // Set the output color of our current pixel
     FragColor = vec4(FragmentColor,1.0);
+    if(FragmentColor[0] > 1.0f)
+    {
+      FragColor = vec4(LightIntensity,1.0);
+    }
+    else if(FragmentShading[1] > 1.0f)
+    {
+      LightIntensity = (
+              Light.La * FragmentColor +
+              Light.Ld * FragmentColor * max( dot(s, FragmentNormal), 0.0 ) +
+              Light.Ls * FragmentColor * pow( max( dot(r,v), 0.0 ), Material.Shininess ));
+
+      FragColor = vec4(LightIntensity,1.0);
+    }
+
+
+
+    //FragColor = vec4(FragmentColor,1.0);
 }

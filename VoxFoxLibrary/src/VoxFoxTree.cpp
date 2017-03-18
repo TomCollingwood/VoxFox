@@ -610,11 +610,9 @@ void VoxFoxTree::calculatePolys()
                     m_textureCoords.push_back(leaf->m_VoxelData[voxelindex].v);
                     if(!blockCol)
                     {
-
                       m_colors.push_back(leaf->m_VoxelData[voxelindex].r);
                       m_colors.push_back(leaf->m_VoxelData[voxelindex].g);
                       m_colors.push_back(leaf->m_VoxelData[voxelindex].b);
-
                     }
                   }
                 }
@@ -720,10 +718,8 @@ void VoxFoxTree::importQuickObj(ngl::Obj * _mesh, float const &_size)
     }
 }
 
-void VoxFoxTree::importObjUV(ngl::Obj * _mesh,float const &_size)
+void VoxFoxTree::importObj(ngl::Obj * _mesh, ngl::Image * _texture,float const &_size, bool const &_normals, bool const &_interpnormals, bool const &_noCol,bool const &_shader)
 {
-
-  bool interpnormals = true;
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
   //std::vector<ngl::Vec3> normalList = _mesh->getNormalList();
@@ -735,6 +731,7 @@ void VoxFoxTree::importObjUV(ngl::Obj * _mesh,float const &_size)
   float scale = _size/meshheight;
   ngl::Vec3 centre = boundingBox.center();
 
+
   std::vector<ngl::Vec3> vertNormals = std::vector<ngl::Vec3>(verts.size());
   std::fill(vertNormals.begin(), vertNormals.end(), ngl::Vec3(0.0f,0.0f,0.0f));
   std::vector<int> numberOfFacesPerVert = std::vector<int>(verts.size());
@@ -742,187 +739,60 @@ void VoxFoxTree::importObjUV(ngl::Obj * _mesh,float const &_size)
 
   std::vector<ngl::Vec3> vertTex = _mesh->getTextureCordList();
 
-  if(interpnormals)
+  if(_interpnormals && _normals)
   {
-  for(int i = 0; i<objFaceList.size(); ++i)
-  {
-
-    ngl::Vec3 tmpNormal;
-
-    tmpNormal = (verts[objFaceList[i].m_vert[1]]-verts[objFaceList[i].m_vert[0]]).cross(verts[objFaceList[i].m_vert[2]]-verts[objFaceList[i].m_vert[0]]);
-    tmpNormal.normalize();
-    for(int j =0; j<objFaceList[i].m_vert.size(); ++j)
+    for(int i = 0; i<objFaceList.size(); ++i)
     {
-      vertNormals[objFaceList[i].m_vert[j]] += tmpNormal;
-      numberOfFacesPerVert[objFaceList[i].m_vert[j]]++;
-    }
-  }
+      ngl::Vec3 tmpNormal;
 
-  for(int i =0; i<(int)vertNormals.size(); ++i)
-  {
-    vertNormals[i]= vertNormals[i]/numberOfFacesPerVert[i] ;
-    vertNormals[i].normalize();
-  }
-  }
-
-    for(std::vector<ngl::Face>::iterator itr=objFaceList.begin(); itr!=objFaceList.end(); ++itr)
-    {
-      if(itr->m_vert.size()==3)
+      tmpNormal = (verts[objFaceList[i].m_vert[1]]-verts[objFaceList[i].m_vert[0]]).cross(verts[objFaceList[i].m_vert[2]]-verts[objFaceList[i].m_vert[0]]);
+      tmpNormal.normalize();
+      for(int j =0; j<objFaceList[i].m_vert.size(); ++j)
       {
-        ngl::Vec3 tmpNormal = (verts[itr->m_vert[1]]-verts[itr->m_vert[0]]).cross(verts[itr->m_vert[2]]-verts[itr->m_vert[0]]);
-
-        //-------------------------VERTEXES----------------------------
-        ngl::Vec3 a, b, c, e1;
-        a = verts[itr->m_vert[0]]*scale - centre;
-        b = verts[itr->m_vert[1]]*scale - centre;
-        c = verts[itr->m_vert[2]]*scale - centre;
-        e1 = b - a;
-
-        ngl::Vec3 ta, tb, tc;
-        ta = vertTex[itr->m_tex[0]];
-        tb = vertTex[itr->m_tex[1]];
-        tc = vertTex[itr->m_tex[2]];
-
-
-        //--------------------------NORMALS-----------------------------
-        ngl::Vec3 na, nb, nc;
-
-        if(interpnormals)
-        {
-          na = vertNormals[itr->m_vert[0]];
-          nb = vertNormals[itr->m_vert[1]];
-          nc = vertNormals[itr->m_vert[2]];
-        }
-
-      int steps = std::ceil(e1.length()/m_voxUnit);
-      ngl::Vec3 vecStep = e1/(2*steps); // scaled
-
-      for(int i =0; i<(steps+1)*2; ++i) //scaled
-      {
-        ngl::Vec3 pos = a+(vecStep*i);
-        ngl::Vec3 posnormal = ngl::lerp(na,nb,((float)i)/((float)(((steps+1)*2)-1)));
-        ngl::Vec3 postexture = ngl::lerp(ta,tb,((float)i)/((float)(((steps+1)*2)-1)));
-        //ngl::Vec2 posUV = ;
-        ngl::Vec3 line = c-pos;
-        int jsteps = std::ceil(line.length()/m_voxUnit);
-
-        if(i!=steps)
-        {
-          if(i%2==1) jsteps/=2;
-          else if(i%4==2) jsteps*=0.75;
-          else if(i%8==4) jsteps*=0.875;
-        }
-
-        ngl::Vec3 mystep = line*(m_voxUnit / (3*line.length())); //scaled
-
-        for(int j = 0; j<jsteps*3; ++j) //scaled
-        {
-          float inNX, inNY, inNZ;
-          float inU, inV;
-          if(interpnormals)
-          {
-            ngl::Vec3 posnormal2 = lerp(posnormal,nc,((float)j)/((float)((jsteps*3) - 1)));
-            ngl::Vec3 postexture2 = lerp(postexture,tc,((float)j)/((float)((jsteps*3) - 1)));
-            inNX = posnormal2.m_x;
-            inNY = posnormal2.m_y;
-            inNZ = posnormal2.m_z;
-            inU = postexture2.m_x;
-            inV = postexture2.m_y;
-          }
-          else
-          {
-            inNX = tmpNormal.m_x;
-            inNY = tmpNormal.m_y;
-            inNZ = tmpNormal.m_z;
-            inU = ta.m_x;
-            inV = tb.m_y;
-          }
-
-          Voxel toinsert = Voxel(inNX,inNY,inNZ,inU,inV);
-          addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),toinsert);
-          pos = pos + mystep;
-        }
+        vertNormals[objFaceList[i].m_vert[j]] += tmpNormal;
+        numberOfFacesPerVert[objFaceList[i].m_vert[j]]++;
       }
     }
- }
- printf("Number of voxels: %d",numberOfVoxels);
-}
 
-
-void VoxFoxTree::importObjRGB(ngl::Obj * _mesh, ngl::Image * _texture, float const &_size)
-{
-
-  bool interpnormals = true;
-  std::vector<ngl::Vec3> verts = _mesh->getVertexList();
-  std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
-  //std::vector<ngl::Vec3> normalList = _mesh->getNormalList();
-
-  _mesh->calcDimensions();
-
-  ngl::BBox boundingBox = _mesh->getBBox();
-  float meshheight = boundingBox.height();
-  float scale = _size/meshheight;
-  ngl::Vec3 centre = boundingBox.center();
-
-
-  std::vector<ngl::Vec3> vertNormals = std::vector<ngl::Vec3>(verts.size());
-  std::fill(vertNormals.begin(), vertNormals.end(), ngl::Vec3(0.0f,0.0f,0.0f));
-  std::vector<int> numberOfFacesPerVert = std::vector<int>(verts.size());
-  std::fill(numberOfFacesPerVert.begin(), numberOfFacesPerVert.end(), 0);
-
-  std::vector<ngl::Vec3> vertTex = _mesh->getTextureCordList();
-
-  if(interpnormals)
-  {
-  for(int i = 0; i<objFaceList.size(); ++i)
-  {
-
-    ngl::Vec3 tmpNormal;
-
-    tmpNormal = (verts[objFaceList[i].m_vert[1]]-verts[objFaceList[i].m_vert[0]]).cross(verts[objFaceList[i].m_vert[2]]-verts[objFaceList[i].m_vert[0]]);
-    tmpNormal.normalize();
-    for(int j =0; j<objFaceList[i].m_vert.size(); ++j)
+    for(int i =0; i<(int)vertNormals.size(); ++i)
     {
-      vertNormals[objFaceList[i].m_vert[j]] += tmpNormal;
-      numberOfFacesPerVert[objFaceList[i].m_vert[j]]++;
+      vertNormals[i]= vertNormals[i]/numberOfFacesPerVert[i] ;
+      vertNormals[i].normalize();
     }
   }
 
-  for(int i =0; i<(int)vertNormals.size(); ++i)
+  for(std::vector<ngl::Face>::iterator itr=objFaceList.begin(); itr!=objFaceList.end(); ++itr)
   {
-    vertNormals[i]= vertNormals[i]/numberOfFacesPerVert[i] ;
-    vertNormals[i].normalize();
-  }
-  }
-
-    for(std::vector<ngl::Face>::iterator itr=objFaceList.begin(); itr!=objFaceList.end(); ++itr)
+    if(itr->m_vert.size()==3)
     {
-      if(itr->m_vert.size()==3)
+
+      //-------------------------VERTEXES----------------------------
+      ngl::Vec3 a, b, c, e1;
+      a = verts[itr->m_vert[0]]*scale - centre;
+      b = verts[itr->m_vert[1]]*scale - centre;
+      c = verts[itr->m_vert[2]]*scale - centre;
+      e1 = b - a;
+
+      ngl::Vec3 ta, tb, tc;
+      ta = vertTex[itr->m_tex[0]];
+      tb = vertTex[itr->m_tex[1]];
+      tc = vertTex[itr->m_tex[2]];
+
+
+      //--------------------------NORMALS-----------------------------
+      ngl::Vec3 na, nb, nc;
+      ngl::Vec3 tmpNormal;
+      if(_interpnormals && _normals)
       {
-        ngl::Vec3 tmpNormal = (verts[itr->m_vert[1]]-verts[itr->m_vert[0]]).cross(verts[itr->m_vert[2]]-verts[itr->m_vert[0]]);
-
-        //-------------------------VERTEXES----------------------------
-        ngl::Vec3 a, b, c, e1;
-        a = verts[itr->m_vert[0]]*scale - centre;
-        b = verts[itr->m_vert[1]]*scale - centre;
-        c = verts[itr->m_vert[2]]*scale - centre;
-        e1 = b - a;
-
-        ngl::Vec3 ta, tb, tc;
-        ta = vertTex[itr->m_tex[0]];
-        tb = vertTex[itr->m_tex[1]];
-        tc = vertTex[itr->m_tex[2]];
-
-
-        //--------------------------NORMALS-----------------------------
-        ngl::Vec3 na, nb, nc;
-
-        if(interpnormals)
-        {
-          na = vertNormals[itr->m_vert[0]];
-          nb = vertNormals[itr->m_vert[1]];
-          nc = vertNormals[itr->m_vert[2]];
-        }
+        na = vertNormals[itr->m_vert[0]];
+        nb = vertNormals[itr->m_vert[1]];
+        nc = vertNormals[itr->m_vert[2]];
+      }
+      else if(_normals)
+      {
+        tmpNormal = (verts[itr->m_vert[1]]-verts[itr->m_vert[0]]).cross(verts[itr->m_vert[2]]-verts[itr->m_vert[0]]);
+        tmpNormal.normalize();
+      }
 
       int steps = std::ceil(e1.length()/m_voxUnit);
       ngl::Vec3 vecStep = e1/(2*steps); // scaled
@@ -949,46 +819,54 @@ void VoxFoxTree::importObjRGB(ngl::Obj * _mesh, ngl::Image * _texture, float con
         {
           float inNX, inNY, inNZ;
           float inU, inV;
-          if(interpnormals)
+          if(_interpnormals && _normals)
           {
             ngl::Vec3 posnormal2 = lerp(posnormal,nc,((float)j)/((float)((jsteps*3) - 1)));
-            ngl::Vec3 postexture2 = lerp(postexture,tc,((float)j)/((float)((jsteps*3) - 1)));
             inNX = posnormal2.m_x;
             inNY = posnormal2.m_y;
             inNZ = posnormal2.m_z;
-            inU = postexture2.m_x;
-            inV = postexture2.m_y;
           }
-          else
+          else if(_normals)
           {
             inNX = tmpNormal.m_x;
             inNY = tmpNormal.m_y;
             inNZ = tmpNormal.m_z;
-            inU = ta.m_x;
-            inV = tb.m_y;
           }
-          if(inU<-1.0f) inU=-1.0f;
           Voxel toinsert = Voxel(inNX,inNY,inNZ,inU,inV);
-          if(inU>1.0f || inU<0.0f || inV>1.0f || inV<0.0f)
+          if(!_noCol && _shader)
           {
-            toinsert.r = 1.0f;
-            toinsert.g = 0.0f;
-            toinsert.b = 0.0f;
-          }
-          else
-          {
+            // Get RGB value from texture
+            // Put in shader as FragmentColor
+            ngl::Vec3 postexture2 = lerp(postexture,tc,((float)j)/((float)((jsteps*3) - 1)));
+            inU = postexture2.m_x;
+            inV = postexture2.m_y;
             toinsert.r = (float)_texture->getColour(inU,inV).m_r/255.0f;
             toinsert.g = (float)_texture->getColour(inU,inV).m_g/255.0f;
             toinsert.b = (float)_texture->getColour(inU,inV).m_b/255.0f;
           }
+          else if(_shader)
+          {
+            // Tells shader not to use FragmentColor
+            toinsert.r=2.0f;
+          }
 
+          // We retain UVs if not using my specific shader
+          if(_shader)
+          {
+            toinsert.u=2.0f;
+            if(_normals) toinsert.v=2.0f;
+          }
+          else
+          {
+            toinsert.u=inU;
+            toinsert.v=inV;
+          }
           addVoxel(glm::vec3(pos.m_x,pos.m_y,pos.m_z),toinsert);
           pos = pos + mystep;
         }
       }
     }
  }
- printf("Number of voxels: %d",numberOfVoxels);
 }
 
 

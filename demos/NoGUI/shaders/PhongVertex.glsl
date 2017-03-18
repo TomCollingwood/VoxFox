@@ -26,7 +26,7 @@ layout (location=3) in vec3 VertexColor;
 
 out vec3 FragmentPosition;
 out vec3 FragmentNormal;
-out vec2 FragmentTexCoord;
+out vec2 FragmentShading;
 out vec3 FragmentColor;
 
 out mat4 _MV;
@@ -38,7 +38,7 @@ void main() {
 
     FragmentPosition = vec3(MV * vec4(VertexPosition,1.0));
     FragmentNormal = N * VertexNormal;
-    FragmentTexCoord = TexCoord;
+    FragmentShading = TexCoord;
     FragmentColor = VertexColor;
     _MV = MV;
 }

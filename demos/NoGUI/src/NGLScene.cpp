@@ -113,7 +113,7 @@ void NGLScene::initializeGL()
   // TEXTURE
 
   GLuint m_colourTex;
-  initTexture(0, m_colourTex, "images/texture.jpg");
+  initTexture(0, m_colourTex, "images/deer.jpg");
   GLuint pid = shader->getProgramID("Phong");
   glUniform1i(glGetUniformLocation(pid,"ColourTexture"),0);
 
@@ -180,7 +180,7 @@ void NGLScene::initializeGL()
 
 
   myRoot=new VoxFoxTree();
-  VoxFoxTree sphere, cube, cylinder1, cylinder2, cylinder3, deer;
+  VoxFoxTree sphere, cube, cylinder1, cylinder2, cylinder3, deer, dwarf;
   //myDeer.createSphere(glm::vec3(0.0f,1.0f,0.0f),40.0f);
   //myDeer.createBox(glm::vec3(-0.2f,-0.2f,-0.2f),glm::vec3(0.2f,0.2f,0.2f),glm::vec3(0.0f,0.2f,0.8f));
   float scale = 1.0f;
@@ -188,13 +188,14 @@ void NGLScene::initializeGL()
   cylinder1.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,0.0f,1.0f),0.2f*scale,1.1f*scale,ourcol);
   cylinder2.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,1.0f,0.0f),0.2f*scale,1.1f*scale,ourcol);
   cylinder3.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(1.0f,0.0f,0.0f),0.2f*scale,1.1f*scale,ourcol);
-  deer.importObjRGB(dwarfmesh,dwarftex,0.25f);
+  deer.importObj(deermesh,deertex,1.0f,true,true);
+  dwarf.importObj(dwarfmesh,dwarftex,1.0f,true,true);
+
 
   sphere.createSphere(glm::vec3(0.0f,0.0f,0.0f),0.6f,ourcol);
   cube.createBox(glm::vec3(-0.5f,-0.5f,-0.5f),glm::vec3(0.5f,0.5,0.5f),ourcol);
-
-  //myDwarf.importObjRGB(dwarfmesh,dwarftex,2.0f);
-  deer = deer | ((cube + sphere) - (cylinder1 | cylinder2 | cylinder3)) ;//| deer;
+  dwarf.translate(glm::vec3(0.5f,0.0f,0.0f));
+  deer = deer | dwarf;//((cube + sphere) - (cylinder1 | cylinder2 | cylinder3)) ;//| deer;
   //glitches cos the check>?
   (*myRoot) = deer;
 

@@ -144,6 +144,7 @@ LeafNode LeafNode::operator+(LeafNode const & _l)
       if((m_VoxelMap[i] & (1<<j)) && (retLeaf.m_VoxelMap[i] & (1<<j)))
       {
         retLeaf.m_VoxelData.push_back(m_VoxelData[count]);
+        count++;
       }
       if(m_VoxelMap[i] & (1<<j)) count++;
     }
@@ -163,8 +164,8 @@ LeafNode LeafNode::operator-(LeafNode const &_l)
       if((retLeaf.m_VoxelMap[i] & (1<<j))&&(m_VoxelMap[i] & (1<<j)))
       {
         retLeaf.m_VoxelData.push_back(m_VoxelData[count]);
+        count++;
       }
-      count++;
     }
   }
   return retLeaf;
