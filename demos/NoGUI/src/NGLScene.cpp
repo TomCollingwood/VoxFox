@@ -147,11 +147,11 @@ void NGLScene::initializeGL()
 
   //------------------------LIBRARY DEMO BEGIN----------------------------
 
-  ngl::Obj * m_meshdwarf = new ngl::Obj("../../models/dwarf.obj");
-  ngl::Obj * m_meshdeer = new ngl::Obj("../../models/deer.obj");
+  ngl::Obj * dwarfmesh = new ngl::Obj("../../models/dwarf.obj");
+  ngl::Obj * deermesh = new ngl::Obj("../../models/deer.obj");
 
-  ngl::Image * mytexturedwarf = new ngl::Image("../../images/dwarf.jpg");
-  ngl::Image * mytexturedeer = new ngl::Image("../../images/deer.jpg");
+  ngl::Image * dwarftex = new ngl::Image("../../images/dwarf.jpg");
+  ngl::Image * deertex = new ngl::Image("../../images/deer.jpg");
   ngl::Image * foxtex= new ngl::Image("../../images/foxemoji.png");
   ngl::Image * titletex= new ngl::Image("../../images/title.png");
   //ngl::Image * tex = new ngl::Image("../../images/.png");
@@ -161,49 +161,9 @@ void NGLScene::initializeGL()
   ngl::Image * intersectTex = new ngl::Image("../../images/intersection.png");
   ngl::Image * minusTex = new ngl::Image("../../images/minus.png");
 
-
-  VoxFoxTree myDeer, myDwarf, mySphere, myTorus;
-  myRoot = new VoxFoxTree();
-
-  //-----------------------DRAWING SHAPES----------------------------
-
-  myTorus.createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
-  mySphere.createSphere(glm::vec3(0,0,0),10);
-
-  //-----------------------IMPORTING OBJ------------------------------
-
-  std::cout<<"Importing..\n"<<std::endl;
-  clock_t begin = clock();
-  myDeer.importObjRGB(m_meshdeer,mytexturedeer,0.5f);
-  myDwarf.importObjRGB(m_meshdwarf,mytexturedwarf,0.5f);
-  clock_t end = clock();
-  double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout<<"Import took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
-
-  //--------------------------TRANSLATION------------------------------
-
-  std::cout<<"Translating..\n"<<std::endl;
-  begin = clock();
-  myDeer.translate(glm::vec3(0.5f,0.0f,0.0f));
-  mySphere.translate(glm::vec3(-0.07f,-0.75f,0.0f));
-  myTorus.translate(glm::vec3(0.0f,-1.0f,0.0f));
-  end = clock();
-  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout<<"Translating took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
-
-  //-----------------------------UNION---------------------------------
-
-  std::cout<<"Unioning..\n"<<std::endl;
-  begin = clock();
-  myDeer= myDeer | myDwarf;
-  myDeer.translate(glm::vec3(0.0f,-1.0f,0.1f));
-  VoxFoxTree titles;
-  //ngl::Image * mytextureface = new ngl::Image("../../images/dra");
-  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout<<"Unioning took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
-
   //-----------------------------PLACEMENT-----------------------------
   glm::vec3 currentPos = glm::vec3(0.0f,0.0f,0.0f);
+  VoxFoxTree titles;
   titles.drawFlatImage(currentPos,titletex,3.5f);
   titles.drawFlatImage(currentPos+glm::vec3(0.0f,-1.0f,0.8f),foxtex,1.0f);
   float step = 3.5f;
@@ -216,18 +176,29 @@ void NGLScene::initializeGL()
   currentPos+=glm::vec3(step,0.0f,0.0f);
   titles.drawFlatImage(currentPos,intersectTex,3.5f);
   currentPos+=glm::vec3(step,0.0f,0.0f);
-  myRoot=new VoxFoxTree(titles);
 
 
+
+  myRoot=new VoxFoxTree();
+  VoxFoxTree sphere, cube, cylinder1, cylinder2, cylinder3;
+  //myDeer.createSphere(glm::vec3(0.0f,1.0f,0.0f),40.0f);
+  //myDeer.createBox(glm::vec3(-0.2f,-0.2f,-0.2f),glm::vec3(0.2f,0.2f,0.2f),glm::vec3(0.0f,0.2f,0.8f));
+  float scale = 1.0f;
+  glm::vec3 ourcol = glm::vec3(0.0f,0.3,1.0f);
+  cylinder1.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,0.0f,1.0f),0.1f*scale,1.0f*scale,ourcol);
+  cylinder2.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,1.0f,0.0f),0.1f*scale,1.0f*scale,ourcol);
+  cylinder3.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(1.0f,0.0f,0.0f),0.1f*scale,1.0f*scale,ourcol);
+
+  sphere.createSphere(glm::vec3(0.0f,0.0f,0.0f),0.6f,ourcol);
+  cube.createBox(glm::vec3(-0.5f,-0.5f,-0.5f),glm::vec3(0.5f,0.5,0.5f),ourcol);
+
+  //myDwarf.importObjRGB(dwarfmesh,dwarftex,2.0f);
+  (*myRoot) = cube + sphere;
 
   //-----------------------POLYGON GENERATION--------------------------
 
-  std::cout<<"Poly Calculating..\n"<<std::endl;
-  begin = clock();
   myRoot->calculatePolys();
-  end = clock();
-  elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout<<"Polycalc took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+
 
 
    // GENERATION

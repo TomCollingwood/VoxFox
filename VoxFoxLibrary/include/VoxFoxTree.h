@@ -81,13 +81,16 @@ public:
   std::vector<float> getColors();
   std::vector<PrimaryNode *> * getChildren() {return &m_primChildren;}
 
-  // SHAPES
-  //----------------------------------------------------------------------------------------------------------------------
-  /// \brief createSphere   Creates a sphere of variable radius at a location.
-  /// \param[in] _position  Centre point of the sphere to create
-  /// \param[in] _radius    The radius of the sphere to create
-  //----------------------------------------------------------------------------------------------------------------------
-  void createSphere(glm::vec3 const &_position, int const &_radius);
+  // SIGNED DISTANCE SHAPESSS
+  ///
+
+  ///
+  /// \brief createSphere
+  /// \param _position
+  /// \param _radius
+  /// \param color
+  ///
+  void createSphere(glm::vec3 const &_position, float const &_radius, glm::vec3 color);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief createTorus    Creates a torus / ring of variable radii
@@ -96,12 +99,16 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   void createTorus(glm::vec3 const &_position, glm::vec2 const &_t);
 
-  //----------------------------------------------------------------------------------------------------------------------
-  /// \brief createBox  Creates a box
-  /// \param[in] _min   minimum point of box
-  /// \param[in] _max   minimum point of box
-  //----------------------------------------------------------------------------------------------------------------------
-  void createBox(ngl::Vec3 const &_min, ngl::Vec3 const &_max);
+  void createCylinder(glm::vec3 position, glm::vec3 axis, float radius, float height, glm::vec3 color);
+
+
+  ///
+  ///  /// \brief createBox
+  ///  /// \param _min
+  ///  /// \param _max
+  ///  /// \param _color
+  ///
+  void createBox(glm::vec3 const &_min, glm::vec3 const &_max, glm::vec3 const &_color);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief importQuickObj Quickly imports an polygonal .obj file to the VoxFoxTree as voxel data

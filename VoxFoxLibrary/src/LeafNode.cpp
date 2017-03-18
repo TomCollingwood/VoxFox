@@ -135,23 +135,18 @@ void LeafNode::moveZ(const int &_shift)
 LeafNode LeafNode::operator+(LeafNode const & _l)
 {
   LeafNode retLeaf = LeafNode(m_origin);
+  int count = 0;
   for(int i = 0; i<64; ++i)
   {
     retLeaf.m_VoxelMap[i] = m_VoxelMap[i] & _l.m_VoxelMap[i];
-  }
-
-  // Using jindex makes it somewhat more efficient
-  int jindex = 0;
-  for(auto & i : m_VoxelData)
-  {
-    for(int j =jindex; j<_l.m_VoxelData.size(); ++j)
+    for(int j =0 ; j<8; ++j)
     {
-      if(i.index==m_VoxelData[j].index)
+
+      if((m_VoxelMap[i] & (1<<j)) && (retLeaf.m_VoxelMap[i] & (1<<j)))
       {
-        retLeaf.m_VoxelData.push_back(i);
-        jindex=j+1;
-        break;
+        retLeaf.m_VoxelData.push_back(m_VoxelData[count]);
       }
+      if(m_VoxelMap[i] & (1<<j)) count++;
     }
   }
   return retLeaf;

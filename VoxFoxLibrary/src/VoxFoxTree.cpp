@@ -279,7 +279,32 @@ void VoxFoxTree::translate(const glm::vec3 &_translation)
     addVoxel(ourTranslatedPositions[i],ourTranslatedVoxels[i]);
   }
 }
+// loosely based on http://iquilezles.org/www/articles/distfunctions/distfunctions.htm
+void VoxFoxTree::createCylinder(glm::vec3 position, glm::vec3 axis, float radius, float height, glm::vec3 color)
+{
+  int heightvox = (int)(height/m_voxUnit);
+  int diameter = (int)((radius*2.0f)/m_voxUnit);
+  glm::vec2 h = glm::vec2(radius,height);
 
+    for(int x=-diameter/2; x<diameter/2; ++x)
+    {
+      for(int y=-heightvox/2; y<heightvox/2; ++y)
+      {
+        for(int z=-diameter/2; z<diameter/2; ++z)
+        {
+          glm::vec3 p = glm::vec3(x,y,z)*m_voxUnit;
+          glm::vec2 d = glm::abs(glm::vec2(glm::length(glm::vec2(p.x,p.z)),p.y)) - h;
+          if(glm::min(glm::max(d.x,d.y),0.0f) + glm::length(glm::max(d,0.0f))<0.0f)
+          {
+            Voxel toBeInserted = Voxel(color[0],color[1],color[2]);
+            if(axis[1]>0.0f) addVoxel(p+position,toBeInserted);
+            else if(axis[0]>0.0f) addVoxel(glm::vec3(p.y,p.z,p.x)+position,toBeInserted);
+            else if(axis[2]>0.0f) addVoxel(glm::vec3(p.z,p.x,p.y)+position,toBeInserted);
+          }
+        }
+      }
+    }
+}
 
 
 void VoxFoxTree::calculatePolys()
@@ -303,6 +328,11 @@ void VoxFoxTree::calculatePolys()
                 float _u =  m_voxUnit;//*10;
 
                 int numberOfFaces =0;
+
+                bool blockCol = false;
+                if(leaf->m_VoxelData[voxelindex].u<-1.0f) blockCol = true;
+                float step = 0.2f;
+
 
                 // This checks whether needed to draw each face of voxel
                 // If there is voxel next to voxel then will not add the quad
@@ -338,6 +368,16 @@ void VoxFoxTree::calculatePolys()
                   m_vertexes.push_back(_y);
                   m_vertexes.push_back(_z);
 
+                  if(blockCol && (int)leaf->m_VoxelData.size()>=voxelindex+1)
+                  {
+                    for(int c =0; c<6; ++c)
+                    {
+                       m_colors.push_back(leaf->m_VoxelData[voxelindex].r-(step));
+                       m_colors.push_back(leaf->m_VoxelData[voxelindex].g-(step));
+                       m_colors.push_back(leaf->m_VoxelData[voxelindex].b-(step));
+                    }
+                  }
+
                   ++numberOfFaces;
 
                 }
@@ -369,6 +409,15 @@ void VoxFoxTree::calculatePolys()
                   m_vertexes.push_back(_y+_u);
                   m_vertexes.push_back(_z+_u);
                   ++numberOfFaces;
+                  if(blockCol && (int)leaf->m_VoxelData.size()>=voxelindex+1)
+                  {
+                    for(int c =0; c<6; ++c)
+                    {
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].r-(step));
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].g-(step));
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].b-(step));
+                    }
+                  }
                 }
                 // LEFT FACE
                 if((i>7 && !(leaf->m_VoxelMap[i-8] & (1<<j)))    ||  (i<=7 && !isVoxel(glm::vec3(_x-m_voxUnit,_y,_z))))
@@ -397,7 +446,15 @@ void VoxFoxTree::calculatePolys()
                   m_vertexes.push_back(_x);
                   m_vertexes.push_back(_y+_u);
                   m_vertexes.push_back(_z+_u);
-
+                  if(blockCol && (int)leaf->m_VoxelData.size()>=voxelindex+1)
+                  {
+                    for(int c =0; c<6; ++c)
+                    {
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].r-(step*0.5f));
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].g-(step*0.5f));
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].b-(step*0.5f));
+                    }
+                  }
                   ++numberOfFaces;
                 }
                 // RIGHT FACE
@@ -428,9 +485,18 @@ void VoxFoxTree::calculatePolys()
                   m_vertexes.push_back(_y+_u);
                   m_vertexes.push_back(_z+_u);
 
+                  if(blockCol && (int)leaf->m_VoxelData.size()>=voxelindex+1)
+                  {
+                    for(int c =0; c<6; ++c)
+                    {
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].r-(step*3.0f));
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].g-(step*3.0f));
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].b-(step*3.0f));
+                    }
+                  }
                   ++numberOfFaces;
                 }
-
+                // TOP
                 if((i%8<7 && !(leaf->m_VoxelMap[i+1] & (1<<j)))  ||   (i%8==7 && !isVoxel(glm::vec3(_x,_y+m_voxUnit,_z))))
                 {
                   // 9
@@ -458,8 +524,19 @@ void VoxFoxTree::calculatePolys()
                   m_vertexes.push_back(_y+_u);
                   m_vertexes.push_back(_z);
 
+                  if(blockCol && (int)leaf->m_VoxelData.size()>=voxelindex+1)
+                  {
+                    for(int c =0; c<6; ++c)
+                    {
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].r);
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].g);
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].b);
+                    }
+                  }
+
                   ++numberOfFaces;
                 }
+                // BOTTOM
                 if((i%8>0 && !(leaf->m_VoxelMap[i-1] & (1<<j)))  ||  (i%8==0 && !isVoxel(glm::vec3(_x,_y-m_voxUnit,_z))))
                 {
                   // 11
@@ -486,6 +563,15 @@ void VoxFoxTree::calculatePolys()
                   m_vertexes.push_back(_x);
                   m_vertexes.push_back(_y);
                   m_vertexes.push_back(_z+_u);
+                  if(blockCol && (int)leaf->m_VoxelData.size()>=voxelindex+1)
+                  {
+                    for(int c =0; c<6; ++c)
+                    {
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].r-(step*2.5f));
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].g-(step*2.5f));
+                     m_colors.push_back(leaf->m_VoxelData[voxelindex].b-(step*2.5f));
+                    }
+                  }
 
                   ++numberOfFaces;
                 }
@@ -499,10 +585,15 @@ void VoxFoxTree::calculatePolys()
 
                     m_textureCoords.push_back(leaf->m_VoxelData[voxelindex].u);
                     m_textureCoords.push_back(leaf->m_VoxelData[voxelindex].v);
-
-                    m_colors.push_back(leaf->m_VoxelData[voxelindex].r);
-                    m_colors.push_back(leaf->m_VoxelData[voxelindex].g);
-                    m_colors.push_back(leaf->m_VoxelData[voxelindex].b);
+                    if(!blockCol)
+                    {
+                      for(int c =0; c<6; ++c)
+                      {
+                      m_colors.push_back(leaf->m_VoxelData[voxelindex].r);
+                      m_colors.push_back(leaf->m_VoxelData[voxelindex].g);
+                      m_colors.push_back(leaf->m_VoxelData[voxelindex].b);
+                      }
+                    }
                   }
                 }
                 ++voxelindex;
@@ -514,21 +605,19 @@ void VoxFoxTree::calculatePolys()
       }
 }
 }
-void VoxFoxTree::createSphere(glm::vec3 const &_position, int const &_radius)
+void VoxFoxTree::createSphere(glm::vec3 const &_position, float const &_radius, glm::vec3 color)
 {
-  for(int x = -_radius; x<_radius; ++x)
+  int voxRadius = (int)(_radius/m_voxUnit);
+  for(int x = -voxRadius; x<voxRadius; ++x)
   {
-    for(int y = -_radius; y<_radius; ++y)
+    for(int y = -voxRadius; y<voxRadius; ++y)
       {
-      for(int z = -_radius; z<_radius; ++z)
+      for(int z = -voxRadius; z<voxRadius; ++z)
         {
-          glm::vec3 pos = glm::vec3(x,y,z);
-          pos*=m_voxUnit;
-          pos+=_position;
-          glm::vec3 vect = pos-_position;
-          if(glm::length(vect) < _radius*m_voxUnit)
+          glm::vec3 pos = glm::vec3(x,y,z)*m_voxUnit;
+          if(glm::length(pos) < _radius)
           {
-            addVoxel(pos,Voxel());
+            addVoxel(pos+_position,Voxel(color[0],color[1],color[2]));
           }
         }
       }
@@ -557,18 +646,21 @@ void VoxFoxTree::createTorus(glm::vec3 const &_position, glm::vec2 const &_t)
   }
 }
 
-void VoxFoxTree::createBox(ngl::Vec3 const &_min, ngl::Vec3 const &_max)
+void VoxFoxTree::createBox(glm::vec3 const &_min, glm::vec3 const &_max, glm::vec3 const &_color)
 {
-  ngl::Vec3 diff = _max-_min;
-  diff=diff/m_voxUnit;
-
-  for(int i = 0; i<(int)std::ceil(diff.m_x); ++i)
+  glm::vec3 diff = _max-_min;
+  diff/=m_voxUnit;
+  glm::abs(diff);
+  glm::floor(diff);
+  for(int x =0; x<(int)diff[0]; ++x)
   {
-    for(int j = 0; j<(int)std::ceil(diff.m_y); ++j)
+    for(int y =0; y<(int)diff[1]; ++y)
     {
-      for(int k = 0; k<(int)std::ceil(diff.m_z); ++k)
+      for(int z =0; z<(int)diff[2]; ++z)
       {
-        addVoxel(glm::vec3(_min.m_x+i*m_voxUnit,_min.m_y+j*m_voxUnit,_min.m_z+k*m_voxUnit),Voxel());
+        glm::vec3 pos = _min + (glm::vec3(x,y,z)*m_voxUnit);
+        Voxel toBeInserted = Voxel(_color[0],_color[1],_color[2]);
+        addVoxel(pos,toBeInserted);
       }
     }
   }
@@ -602,7 +694,7 @@ void VoxFoxTree::importQuickObj(ngl::Obj * _mesh, float const &_size)
       if(verts[itr->m_vert[i]].m_y>max.m_y) {max.m_y=verts[itr->m_vert[i]].m_y*scale - centre.m_y;}
       if(verts[itr->m_vert[i]].m_z>max.m_z) {max.m_z=verts[itr->m_vert[i]].m_z*scale - centre.m_z;}
     }
-    if(numVertexInFace==3) createBox(min,max);
+    if(numVertexInFace==3) createBox(glm::vec3(min.m_x,min.m_y,min.m_z),glm::vec3(max.m_x,max.m_y,max.m_z),glm::vec3(1.0f,0.0f,0.0f));
     }
 }
 
