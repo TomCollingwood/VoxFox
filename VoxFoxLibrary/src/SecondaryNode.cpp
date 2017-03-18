@@ -144,7 +144,10 @@ SecondaryNode SecondaryNode::operator -(SecondaryNode const &_s)
     {
       if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
-        retSec.m_leafChildren.push_back(new LeafNode(*i-*j));
+        LeafNode testLeaf = LeafNode(*i-*j);
+        // testLeaf could be empty. We test for that.
+        // if empty crashes other functions. We always assume that nodes are not empty (flaw?)
+        if(testLeaf.m_VoxelData.size()!=0) retSec.m_leafChildren.push_back(new LeafNode(testLeaf));
         found = true;
         break;
       }

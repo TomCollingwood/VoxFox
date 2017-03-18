@@ -610,12 +610,11 @@ void VoxFoxTree::calculatePolys()
                     m_textureCoords.push_back(leaf->m_VoxelData[voxelindex].v);
                     if(!blockCol)
                     {
-                      for(int c =0; c<6; ++c)
-                      {
+
                       m_colors.push_back(leaf->m_VoxelData[voxelindex].r);
                       m_colors.push_back(leaf->m_VoxelData[voxelindex].g);
                       m_colors.push_back(leaf->m_VoxelData[voxelindex].b);
-                      }
+
                     }
                   }
                 }
@@ -968,6 +967,7 @@ void VoxFoxTree::importObjRGB(ngl::Obj * _mesh, ngl::Image * _texture, float con
             inU = ta.m_x;
             inV = tb.m_y;
           }
+          if(inU<-1.0f) inU=-1.0f;
           Voxel toinsert = Voxel(inNX,inNY,inNZ,inU,inV);
           if(inU>1.0f || inU<0.0f || inV>1.0f || inV<0.0f)
           {

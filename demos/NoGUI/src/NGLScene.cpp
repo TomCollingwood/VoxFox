@@ -188,14 +188,15 @@ void NGLScene::initializeGL()
   cylinder1.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,0.0f,1.0f),0.2f*scale,1.1f*scale,ourcol);
   cylinder2.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,1.0f,0.0f),0.2f*scale,1.1f*scale,ourcol);
   cylinder3.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(1.0f,0.0f,0.0f),0.2f*scale,1.1f*scale,ourcol);
-  deer.importObjRGB(dwarfmesh,dwarftex,1.0f);
+  deer.importObjRGB(dwarfmesh,dwarftex,0.25f);
 
   sphere.createSphere(glm::vec3(0.0f,0.0f,0.0f),0.6f,ourcol);
   cube.createBox(glm::vec3(-0.5f,-0.5f,-0.5f),glm::vec3(0.5f,0.5,0.5f),ourcol);
 
   //myDwarf.importObjRGB(dwarfmesh,dwarftex,2.0f);
-  (*myRoot) = deer;// | ((cube + sphere) - (cylinder1 | cylinder2 | cylinder3)) ;//| deer;
-  //(*myRoot) = (*myRoot) | deer;
+  deer = deer | ((cube + sphere) - (cylinder1 | cylinder2 | cylinder3)) ;//| deer;
+  //glitches cos the check>?
+  (*myRoot) = deer;
 
   //-----------------------POLYGON GENERATION--------------------------
 
