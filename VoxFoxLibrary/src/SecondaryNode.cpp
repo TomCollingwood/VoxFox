@@ -116,7 +116,24 @@ bool SecondaryNode::isLeaf(glm::vec3 _position, LeafNode ** o_leaf)
   return false;
 }
 
-SecondaryNode SecondaryNode::operator +(SecondaryNode _s)
+SecondaryNode SecondaryNode::operator +(SecondaryNode const &_s)
+{
+  SecondaryNode retSec = SecondaryNode(m_origin);
+  // Leafs are not in order so cannot use jindex trick in + in LeafNode
+  for(const auto &i : m_leafChildren)
+  {
+    for(const auto &j : _s.m_leafChildren)
+    {
+      if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
+      {
+        retSec.m_leafChildren.push_back(new LeafNode(*i+*j));
+      }
+    }
+  }
+  return retSec;
+}
+
+SecondaryNode SecondaryNode::operator |(SecondaryNode const &_s)
 {
   SecondaryNode retSec = SecondaryNode(m_origin);
   std::vector<bool> jfound;
@@ -131,7 +148,7 @@ SecondaryNode SecondaryNode::operator +(SecondaryNode _s)
     {
       if(i->idx==m_leafChildren[j]->idx && i->idy==m_leafChildren[j]->idy && i->idz==m_leafChildren[j]->idz)
       {
-        retSec.m_leafChildren.push_back(new LeafNode(*m_leafChildren[j]+*i));
+        retSec.m_leafChildren.push_back(new LeafNode(*m_leafChildren[j]|*i));
         jfound[j]=true;
         found = true;
         break;

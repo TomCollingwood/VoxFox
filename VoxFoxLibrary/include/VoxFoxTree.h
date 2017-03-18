@@ -41,8 +41,7 @@ public:
   VoxFoxTree operator|(VoxFoxTree _r) ;
   VoxFoxTree operator-(VoxFoxTree _r) ;
 
-  // Same as &
-  VoxFoxTree operator+(VoxFoxTree _r);
+  VoxFoxTree operator+(VoxFoxTree const &_r);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief translate          Translates all voxels in the VoxFoxTree by the worldspace input
@@ -133,6 +132,9 @@ public:
   bool isLeaf(glm::vec3 _position);
   bool isSecondary(glm::vec3 _position);
   bool isPrimary(glm::vec3 _position);
+
+  void drawFlatImage(glm::vec3 _position, ngl::Image *_texture, float height);
+
 
   // only adds if not present
   void addLeaf(LeafNode newLeaf);

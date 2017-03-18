@@ -58,7 +58,7 @@ VoxFoxTree & VoxFoxTree::operator =(const VoxFoxTree & _r)
   return *this;
 }
 
-VoxFoxTree VoxFoxTree::operator+(VoxFoxTree r)
+VoxFoxTree VoxFoxTree::operator|(VoxFoxTree r)
 {
   VoxFoxTree retRoot;
   std::vector<bool> jfound;
@@ -73,7 +73,7 @@ VoxFoxTree VoxFoxTree::operator+(VoxFoxTree r)
     {
       if(i->idx==m_primChildren[j]->idx && i->idy==m_primChildren[j]->idy && i->idz==m_primChildren[j]->idz)
       {
-        retRoot.m_primChildren.push_back(new PrimaryNode(*m_primChildren[j]+*i));
+        retRoot.m_primChildren.push_back(new PrimaryNode(*m_primChildren[j]|*i));
         jfound[j]=true;
         found = true;
         break;
@@ -87,6 +87,22 @@ VoxFoxTree VoxFoxTree::operator+(VoxFoxTree r)
   for(int i =0 ; i<jfound.size(); ++i)
   {
     if(!jfound[i]) retRoot.m_primChildren.push_back(new PrimaryNode(*m_primChildren[i]));
+  }
+  return retRoot;
+}
+
+VoxFoxTree VoxFoxTree::operator +(VoxFoxTree const & _v)
+{
+  VoxFoxTree retRoot;
+  for(auto & i : m_primChildren)
+  {
+    for(auto & j : _v.m_primChildren)
+    {
+      if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
+      {
+        retRoot.m_primChildren.push_back(new PrimaryNode(*i + *j));
+      }
+    }
   }
   return retRoot;
 }
@@ -115,6 +131,30 @@ std::vector<float> VoxFoxTree::getColors()
 int VoxFoxTree::getVertexSize()
 {
   return m_vertexes.size();
+}
+
+void VoxFoxTree::drawFlatImage(glm::vec3 _position, ngl::Image* _texture, float height)
+{
+  int steps = glm::floor(height/m_voxUnit);
+  glm::vec3 currentPos = _position + glm::vec3(-height/2.0f,-height/2.0f,0.0f);
+  for(int i =0; i<steps; ++i)
+  {
+    currentPos+=glm::vec3(m_voxUnit,0.0f,0.0f);
+    currentPos[1]=-height/2.0f + _position[1];
+    for(int j=0; j<steps; ++j)
+    {
+      currentPos+=glm::vec3(0.0f,m_voxUnit,0.0f);
+      Voxel toBeInserted = Voxel();
+      ngl::Colour voxCol= _texture->getColour(((float)i)/((float)steps),((float)j)/((float)steps));
+      toBeInserted.r = voxCol.m_r/255.0f;
+      toBeInserted.g = voxCol.m_g/255.0f;
+      toBeInserted.b = voxCol.m_b/255.0f;
+      if((int)voxCol.m_a>254)
+      {
+        addVoxel(currentPos,toBeInserted);
+      }
+    }
+  }
 }
 
 bool VoxFoxTree::isVoxel(glm::vec3 const &_position)

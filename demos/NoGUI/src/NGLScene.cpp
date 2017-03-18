@@ -152,14 +152,23 @@ void NGLScene::initializeGL()
 
   ngl::Image * mytexturedwarf = new ngl::Image("../../images/dwarf.jpg");
   ngl::Image * mytexturedeer = new ngl::Image("../../images/deer.jpg");
+  ngl::Image * foxtex= new ngl::Image("../../images/foxemoji.png");
+  ngl::Image * titletex= new ngl::Image("../../images/title.png");
+  //ngl::Image * tex = new ngl::Image("../../images/.png");
+  ngl::Image * Atex = new ngl::Image("../../images/A.png");
+  ngl::Image * Btex = new ngl::Image("../../images/B.png");
+  ngl::Image * unionTex = new ngl::Image("../../images/union.png");
+  ngl::Image * intersectTex = new ngl::Image("../../images/intersection.png");
+  ngl::Image * minusTex = new ngl::Image("../../images/minus.png");
+
 
   VoxFoxTree myDeer, myDwarf, mySphere, myTorus;
   myRoot = new VoxFoxTree();
 
   //-----------------------DRAWING SHAPES----------------------------
 
-  mySphere.createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
-  myTorus.createSphere(glm::vec3(0,0,0),10);
+  myTorus.createTorus(glm::vec3(0,0,0),glm::vec2(1,0.06));
+  mySphere.createSphere(glm::vec3(0,0,0),10);
 
   //-----------------------IMPORTING OBJ------------------------------
 
@@ -176,7 +185,7 @@ void NGLScene::initializeGL()
   std::cout<<"Translating..\n"<<std::endl;
   begin = clock();
   myDeer.translate(glm::vec3(0.5f,0.0f,0.0f));
-  mySphere.translate(glm::vec3(1.0f,0.0f,0.0f));
+  mySphere.translate(glm::vec3(-0.07f,-0.75f,0.0f));
   myTorus.translate(glm::vec3(0.0f,-1.0f,0.0f));
   end = clock();
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
@@ -186,11 +195,30 @@ void NGLScene::initializeGL()
 
   std::cout<<"Unioning..\n"<<std::endl;
   begin = clock();
-  myDeer= myDeer + myDwarf;
-  myRoot=new VoxFoxTree(myDeer+mySphere+myTorus);
-  end = clock();
+  myDeer= myDeer | myDwarf;
+  myDeer.translate(glm::vec3(0.0f,-1.0f,0.1f));
+  VoxFoxTree titles;
+  //ngl::Image * mytextureface = new ngl::Image("../../images/dra");
   elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout<<"Unioning took "<<elapsed_secs<<" seconds \n\n"<<std::endl;
+
+  //-----------------------------PLACEMENT-----------------------------
+  glm::vec3 currentPos = glm::vec3(0.0f,0.0f,0.0f);
+  titles.drawFlatImage(currentPos,titletex,3.5f);
+  titles.drawFlatImage(currentPos+glm::vec3(0.0f,-1.0f,0.8f),foxtex,1.0f);
+  float step = 3.5f;
+  currentPos+=glm::vec3(step,0.0f,0.0f);
+  titles.drawFlatImage(currentPos,Atex,3.5f);
+  currentPos+=glm::vec3(step,0.0f,0.0f);
+  titles.drawFlatImage(currentPos,Btex,3.5f);
+  currentPos+=glm::vec3(step,0.0f,0.0f);
+  titles.drawFlatImage(currentPos,unionTex,3.5f);
+  currentPos+=glm::vec3(step,0.0f,0.0f);
+  titles.drawFlatImage(currentPos,intersectTex,3.5f);
+  currentPos+=glm::vec3(step,0.0f,0.0f);
+  myRoot=new VoxFoxTree(titles);
+
+
 
   //-----------------------POLYGON GENERATION--------------------------
 
@@ -290,25 +318,36 @@ void NGLScene::paintGL()
   // Rotation based on the mouse position for our global transform
   ngl::Mat4 rotX;
   ngl::Mat4 rotY;
+  ngl::Mat4 rotZ;
+
+  rotX.identity();
+  rotY.identity();
+  rotZ.identity();
   // create the rotation matrices
 
   ngl::Mat4 translate1, translate2;
 
   translate1.translate(-m_modelPos.m_x,-m_modelPos.m_y,-m_modelPos.m_z);
   translate2.translate(m_modelPos.m_x,m_modelPos.m_y,m_modelPos.m_z);
+  static int count =0;
+  count++;
+  rotX.rotateX( -47.0f +  16.0f + m_win.spinXFace );
+  rotY.rotateY( 36.0f + 19.0f + m_win.spinYFace );//+ m_win.spinYFace );
+  rotZ.rotateZ(38.0f);
+  printf("ROTX = %d ROTY = %d", m_win.spinXFace,m_win.spinYFace);
 
-  rotX.rotateX( m_win.spinXFace);
-  rotY.rotateY( m_win.spinYFace );
 
+  // We need to transform the m_modelPos according to the rotation
+  // Edited by Tom Collingwood
+  ngl::Vec4 mycoord = ngl::Vec4(m_modelPos.m_x,m_modelPos.m_y,m_modelPos.m_z,1.0f);
+  mycoord = mycoord * rotY * rotX * rotZ;
 
-  // multiply the rotations
-  m_mouseGlobalTX = translate1 * rotY * rotX  * translate2;
+  m_mouseGlobalTX = rotY * rotX * rotZ;
 
-  // add the translations
-//  m_mouseGlobalTX.m_m[ 3 ][ 0 ] = m_modelPos.m_x;
-//  m_mouseGlobalTX.m_m[ 3 ][ 1 ] = m_modelPos.m_y;
-//  m_mouseGlobalTX.m_m[ 3 ][ 2 ] = m_modelPos.m_z;
-
+  m_mouseGlobalTX.m_m[ 3 ][ 0 ] = mycoord.m_x;
+  m_mouseGlobalTX.m_m[ 3 ][ 1 ] = mycoord.m_y;
+  m_mouseGlobalTX.m_m[ 3 ][ 2 ] = mycoord.m_z;
+  // end of edit
 
   // get the VBO instance and draw the built in teapot
   //ngl::VAOPrimitives* prim = ngl::VAOPrimitives::instance();

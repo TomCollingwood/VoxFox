@@ -131,7 +131,33 @@ void LeafNode::moveZ(const int &_shift)
   }
 }
 
-LeafNode LeafNode::operator+(LeafNode _l)
+// Is not associative, voxels take the first nodes colour
+LeafNode LeafNode::operator+(LeafNode const & _l)
+{
+  LeafNode retLeaf = LeafNode(m_origin);
+  for(int i = 0; i<64; ++i)
+  {
+    retLeaf.m_VoxelMap[i] = m_VoxelMap[i] & _l.m_VoxelMap[i];
+  }
+
+  // Using jindex makes it somewhat more efficient
+  int jindex = 0;
+  for(auto & i : m_VoxelData)
+  {
+    for(int j =jindex; j<_l.m_VoxelData.size(); ++j)
+    {
+      if(i.index==m_VoxelData[j].index)
+      {
+        retLeaf.m_VoxelData.push_back(i);
+        jindex=j+1;
+        break;
+      }
+    }
+  }
+  return retLeaf;
+}
+
+LeafNode LeafNode::operator|(LeafNode _l)
 {
   LeafNode retLeaf = LeafNode(m_origin);
   for(int i = 0; i<64; ++i)

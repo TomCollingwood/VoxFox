@@ -32,7 +32,7 @@ public:
 
   LeafNode & operator=(LeafNode const &_l) ;
 
-  LeafNode operator+(LeafNode _l) ;
+  LeafNode operator+(LeafNode const & _l);
   LeafNode operator|(LeafNode _l) ;
   LeafNode operator-(LeafNode _l) ;
 

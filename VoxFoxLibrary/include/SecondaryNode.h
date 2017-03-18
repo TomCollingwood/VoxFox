@@ -31,9 +31,9 @@ public:
   /// \param[in] _s       RHS of operator
   /// \return             Union of RHS and LHS SecondaryNode
   //----------------------------------------------------------------------------------------------------------------------
-  SecondaryNode operator +(SecondaryNode _s) ;
-  SecondaryNode operator |(SecondaryNode _s) ;
-  SecondaryNode operator -(SecondaryNode _s) ;
+  SecondaryNode operator +(SecondaryNode const &_s) ;
+  SecondaryNode operator |(SecondaryNode const &_s) ;
+  SecondaryNode operator -(SecondaryNode const &_s) ;
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief addVoxel               tries to add voxel to the SecondaryNode
