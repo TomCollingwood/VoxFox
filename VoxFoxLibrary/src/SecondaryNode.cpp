@@ -133,6 +133,30 @@ SecondaryNode SecondaryNode::operator +(SecondaryNode const &_s)
   return retSec;
 }
 
+SecondaryNode SecondaryNode::operator -(SecondaryNode const &_s)
+{
+  SecondaryNode retSec = SecondaryNode(m_origin);
+
+  for(const auto &i : m_leafChildren)
+  {
+    bool found = false;
+    for(const auto &j : _s.m_leafChildren)
+    {
+      if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
+      {
+        retSec.m_leafChildren.push_back(new LeafNode(*i-*j));
+        found = true;
+        break;
+      }
+    }
+    if(!found)
+    {
+      retSec.m_leafChildren.push_back(new LeafNode(*i));
+    }
+  }
+  return retSec;
+}
+
 SecondaryNode SecondaryNode::operator |(SecondaryNode const &_s)
 {
   SecondaryNode retSec = SecondaryNode(m_origin);

@@ -120,7 +120,7 @@ bool PrimaryNode::isSecondary(glm::vec3 _position, SecondaryNode ** _secondary)
   return false;
 }
 
-PrimaryNode PrimaryNode::operator |(PrimaryNode _p)
+PrimaryNode PrimaryNode::operator |(PrimaryNode const &_p)
 {
   PrimaryNode retPrim = PrimaryNode(m_origin);
   std::vector<bool> jfound;
@@ -156,7 +156,30 @@ PrimaryNode PrimaryNode::operator |(PrimaryNode _p)
   return retPrim;
 }
 
-PrimaryNode PrimaryNode::operator +(PrimaryNode _p)
+PrimaryNode PrimaryNode::operator -(PrimaryNode const &_p)
+{
+  PrimaryNode retPrim = PrimaryNode(m_origin);
+  for(const auto & i : m_secChildren)
+  {
+    bool found = false;
+    for(const auto & j : _p.m_secChildren)
+    {
+      if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
+      {
+        retPrim.m_secChildren.push_back(new SecondaryNode(*i-*j));
+        found = true;
+        break;
+      }
+    }
+    if(!found)
+    {
+      retPrim.m_secChildren.push_back(new SecondaryNode(*i));
+    }
+  }
+  return retPrim;
+}
+
+PrimaryNode PrimaryNode::operator +(PrimaryNode const &_p)
 {
   PrimaryNode retPrim = PrimaryNode(m_origin);
   for(const auto &i : m_secChildren)
@@ -170,6 +193,5 @@ PrimaryNode PrimaryNode::operator +(PrimaryNode _p)
     }
   }
   return retPrim;
-
 }
 

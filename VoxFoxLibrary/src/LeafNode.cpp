@@ -141,7 +141,6 @@ LeafNode LeafNode::operator+(LeafNode const & _l)
     retLeaf.m_VoxelMap[i] = m_VoxelMap[i] & _l.m_VoxelMap[i];
     for(int j =0 ; j<8; ++j)
     {
-
       if((m_VoxelMap[i] & (1<<j)) && (retLeaf.m_VoxelMap[i] & (1<<j)))
       {
         retLeaf.m_VoxelData.push_back(m_VoxelData[count]);
@@ -152,7 +151,27 @@ LeafNode LeafNode::operator+(LeafNode const & _l)
   return retLeaf;
 }
 
-LeafNode LeafNode::operator|(LeafNode _l)
+LeafNode LeafNode::operator-(LeafNode const &_l)
+{
+  LeafNode retLeaf = LeafNode(m_origin);
+  int count =0;
+  for(int i = 0; i<64; ++i)
+  {
+    retLeaf.m_VoxelMap[i] = m_VoxelMap[i] & ~(m_VoxelMap[i] & _l.m_VoxelMap[i]);
+    for(int j =0 ; j<8; ++j)
+    {
+      if((m_VoxelMap[i] & (1<<j)) && (retLeaf.m_VoxelMap[i] & (1<<j)))
+      {
+        retLeaf.m_VoxelData.push_back(m_VoxelData[count]);
+      }
+      if(m_VoxelMap[i] & (1<<j)) count++;
+    }
+  }
+  return retLeaf;
+}
+
+
+LeafNode LeafNode::operator|(LeafNode const &_l)
 {
   LeafNode retLeaf = LeafNode(m_origin);
   for(int i = 0; i<64; ++i)

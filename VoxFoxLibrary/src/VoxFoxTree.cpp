@@ -58,7 +58,7 @@ VoxFoxTree & VoxFoxTree::operator =(const VoxFoxTree & _r)
   return *this;
 }
 
-VoxFoxTree VoxFoxTree::operator|(VoxFoxTree r)
+VoxFoxTree VoxFoxTree::operator|(VoxFoxTree const &r)
 {
   VoxFoxTree retRoot;
   std::vector<bool> jfound;
@@ -87,6 +87,29 @@ VoxFoxTree VoxFoxTree::operator|(VoxFoxTree r)
   for(int i =0 ; i<jfound.size(); ++i)
   {
     if(!jfound[i]) retRoot.m_primChildren.push_back(new PrimaryNode(*m_primChildren[i]));
+  }
+  return retRoot;
+}
+
+VoxFoxTree VoxFoxTree::operator-(VoxFoxTree const &_r)
+{
+  VoxFoxTree retRoot;
+  for(auto & i : m_primChildren)
+  {
+    bool found = false;
+    for(auto & j : _r.m_primChildren)
+    {
+      if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
+      {
+        retRoot.m_primChildren.push_back(new PrimaryNode(*i-*j));
+        found = true;
+        break;
+      }
+    }
+    if(!found)
+    {
+      retRoot.m_primChildren.push_back(new PrimaryNode(*i));
+    }
   }
   return retRoot;
 }

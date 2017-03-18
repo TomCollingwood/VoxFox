@@ -30,9 +30,9 @@ public:
   /// \param[in] _p       RHS of operator
   /// \return             Union of RHS and LHS PrimaryNode
   //----------------------------------------------------------------------------------------------------------------------
-  PrimaryNode operator +(PrimaryNode _p) ;
-  PrimaryNode operator |(PrimaryNode _p) ;
-  PrimaryNode operator -(PrimaryNode _p) ;
+  PrimaryNode operator +(PrimaryNode const &_p);
+  PrimaryNode operator |(PrimaryNode const &_p);
+  PrimaryNode operator -(PrimaryNode const &_p);
 
   //----------------------------------------------------------------------------------------------------------------------
   /// \brief addVoxel             tries to add voxel to the PrimaryNode

@@ -38,8 +38,8 @@ public:
   /// \param[in] _r       RHS of operator
   /// \return             Union of RHS and LHS VoxFoxTree
   //----------------------------------------------------------------------------------------------------------------------
-  VoxFoxTree operator|(VoxFoxTree _r) ;
-  VoxFoxTree operator-(VoxFoxTree _r) ;
+  VoxFoxTree operator|(VoxFoxTree const &_r) ;
+  VoxFoxTree operator-(VoxFoxTree const &_r) ;
 
   VoxFoxTree operator+(VoxFoxTree const &_r);
 
