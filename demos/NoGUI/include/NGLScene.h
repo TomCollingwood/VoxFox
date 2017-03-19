@@ -8,6 +8,7 @@
 #include <ngl/Obj.h>
 #include <QOpenGLWindow>
 #include "VoxFoxTree.h"
+#include "Examples.h"
 //----------------------------------------------------------------------------------------------------------------------
 /// @file NGLScene.h
 /// @brief this class inherits from the Qt OpenGLWindow and allows us to use NGL to draw OpenGL
@@ -20,6 +21,7 @@
 /// @brief our main glwindow widget for NGL applications all drawing elements are
 /// put in this file
 //----------------------------------------------------------------------------------------------------------------------
+// https://github.com/NCCA/SimpleNGL
 
 class NGLScene : public QOpenGLWindow
 {

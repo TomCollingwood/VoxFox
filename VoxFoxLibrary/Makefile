@@ -51,20 +51,24 @@ OBJECTS_DIR   = obj/
 SOURCES       = src/LeafNode.cpp \
 		src/VoxFoxTree.cpp \
 		src/SecondaryNode.cpp \
-		src/PrimaryNode.cpp 
+		src/PrimaryNode.cpp \
+		src/Examples.cpp 
 OBJECTS       = obj/LeafNode.o \
 		obj/VoxFoxTree.o \
 		obj/SecondaryNode.o \
-		obj/PrimaryNode.o
+		obj/PrimaryNode.o \
+		obj/Examples.o
 DIST          = ../.qmake.stash \
 		VoxFox.pro include/VoxFoxTree.h \
 		include/LeafNode.h \
 		include/SecondaryNode.h \
 		include/PrimaryNode.h \
-		include/Voxel.h src/LeafNode.cpp \
+		include/Voxel.h \
+		include/Examples.h src/LeafNode.cpp \
 		src/VoxFoxTree.cpp \
 		src/SecondaryNode.cpp \
-		src/PrimaryNode.cpp
+		src/PrimaryNode.cpp \
+		src/Examples.cpp
 QMAKE_TARGET  = VoxFox
 DESTDIR       = lib/
 TARGET        = libVoxFox.1.0.0.dylib
@@ -485,8 +489,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /Users/Tom/Qt2/5.8/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents include/VoxFoxTree.h include/LeafNode.h include/SecondaryNode.h include/PrimaryNode.h include/Voxel.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/LeafNode.cpp src/VoxFoxTree.cpp src/SecondaryNode.cpp src/PrimaryNode.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents include/VoxFoxTree.h include/LeafNode.h include/SecondaryNode.h include/PrimaryNode.h include/Voxel.h include/Examples.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/LeafNode.cpp src/VoxFoxTree.cpp src/SecondaryNode.cpp src/PrimaryNode.cpp src/Examples.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -652,6 +656,46 @@ obj/PrimaryNode.o: src/PrimaryNode.cpp include/PrimaryNode.h \
 		include/Voxel.h \
 		include/SecondaryNode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/PrimaryNode.o src/PrimaryNode.cpp
+
+obj/Examples.o: src/Examples.cpp include/Examples.h \
+		include/VoxFoxTree.h \
+		/Users/Tom/NGL/include/ngl/Vec3.h \
+		/Users/Tom/NGL/include/ngl/Types.h \
+		/Users/Tom/NGL/include/ngl/glew.h \
+		/Users/Tom/Qt2/5.8/clang_64/lib/QtOpenGL.framework/Headers/QGLContext \
+		/Users/Tom/Qt2/5.8/clang_64/lib/QtOpenGL.framework/Headers/qgl.h \
+		/Users/Tom/NGL/include/ngl/Vec4.h \
+		/Users/Tom/NGL/include/ngl/Vec2.h \
+		/Users/Tom/NGL/include/ngl/BBox.h \
+		/Users/Tom/NGL/include/ngl/AbstractVAO.h \
+		/Users/Tom/NGL/include/ngl/Obj.h \
+		/Users/Tom/NGL/include/ngl/Texture.h \
+		/Users/Tom/NGL/include/ngl/Image.h \
+		/Users/Tom/NGL/include/ngl/Colour.h \
+		/Users/Tom/NGL/include/ngl/AbstractMesh.h \
+		/Users/Tom/NGL/include/ngl/RibExport.h \
+		/Users/Tom/NGL/include/ngl/NGLassert.h \
+		/Users/Tom/NGL/include/ngl/ShaderLib.h \
+		/Users/Tom/NGL/include/ngl/Shader.h \
+		/Users/Tom/NGL/include/ngl/ShaderProgram.h \
+		/Users/Tom/NGL/include/ngl/Util.h \
+		/Users/Tom/NGL/include/ngl/Singleton.h \
+		/Users/Tom/NGL/include/ngl/Mat3.h \
+		/Users/Tom/NGL/include/ngl/Mat4.h \
+		include/LeafNode.h \
+		/Users/Tom/NGL/include/ngl/Camera.h \
+		/Users/Tom/NGL/include/ngl/Plane.h \
+		/Users/Tom/NGL/include/ngl/AABB.h \
+		/Users/Tom/NGL/include/ngl/Light.h \
+		/Users/Tom/NGL/include/ngl/Text.h \
+		/Users/Tom/NGL/include/ngl/VAOFactory.h \
+		/Users/Tom/NGL/include/ngl/SimpleVAO.h \
+		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QFont \
+		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qfont.h \
+		include/Voxel.h \
+		include/PrimaryNode.h \
+		include/SecondaryNode.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Examples.o src/Examples.cpp
 
 ####### Install
 

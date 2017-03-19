@@ -530,6 +530,7 @@ moc/moc_NGLScene.cpp: include/WindowParams.h \
 		../../VoxFoxLibrary/include/Voxel.h \
 		../../VoxFoxLibrary/include/PrimaryNode.h \
 		../../VoxFoxLibrary/include/SecondaryNode.h \
+		../../VoxFoxLibrary/include/Examples.h \
 		include/NGLScene.h \
 		moc/moc_predefs.h \
 		/Users/Tom/Qt2/5.8/clang_64/bin/moc
@@ -592,6 +593,7 @@ obj/NGLScene.o: src/NGLScene.cpp include/NGLScene.h \
 		../../VoxFoxLibrary/include/Voxel.h \
 		../../VoxFoxLibrary/include/PrimaryNode.h \
 		../../VoxFoxLibrary/include/SecondaryNode.h \
+		../../VoxFoxLibrary/include/Examples.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QGuiApplication \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qguiapplication.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
@@ -643,6 +645,7 @@ obj/NGLSceneMouseControls.o: src/NGLSceneMouseControls.cpp include/NGLScene.h \
 		../../VoxFoxLibrary/include/Voxel.h \
 		../../VoxFoxLibrary/include/PrimaryNode.h \
 		../../VoxFoxLibrary/include/SecondaryNode.h \
+		../../VoxFoxLibrary/include/Examples.h \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
 		/Users/Tom/Qt2/5.8/clang_64/lib/QtGui.framework/Headers/qevent.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/NGLSceneMouseControls.o src/NGLSceneMouseControls.cpp
@@ -687,7 +690,8 @@ obj/main.o: src/main.cpp include/NGLScene.h \
 		../../VoxFoxLibrary/include/LeafNode.h \
 		../../VoxFoxLibrary/include/Voxel.h \
 		../../VoxFoxLibrary/include/PrimaryNode.h \
-		../../VoxFoxLibrary/include/SecondaryNode.h
+		../../VoxFoxLibrary/include/SecondaryNode.h \
+		../../VoxFoxLibrary/include/Examples.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/main.o src/main.cpp
 
 obj/moc_NGLScene.o: moc/moc_NGLScene.cpp 

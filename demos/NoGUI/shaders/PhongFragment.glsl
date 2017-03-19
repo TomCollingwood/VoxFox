@@ -3,13 +3,10 @@
 #version 410 core
 
 
-uniform sampler2D ColourTexture;
-
 // This is passed on from the vertex shader
 //in vec3 LightIntensity;
 in vec3 FragmentPosition;
 in vec3 FragmentNormal;
-in vec2 FragmentShading;
 in vec3 FragmentColor;
 in mat4 _MV;
 
@@ -81,7 +78,4 @@ void main() {
       FragColor = vec4(FragmentColor,1.0);
     }
 
-
-
-    //FragColor = vec4(FragmentColor,1.0);
 }

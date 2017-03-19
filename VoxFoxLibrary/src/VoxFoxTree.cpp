@@ -111,7 +111,8 @@ VoxFoxTree VoxFoxTree::operator-(VoxFoxTree const &_r) const
     {
       if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
-        retRoot.m_primChildren.push_back(new PrimaryNode(*i-*j));
+        PrimaryNode testNode = PrimaryNode(*i-*j);
+        if(testNode.m_secChildren.size()!=0) retRoot.m_primChildren.push_back(new PrimaryNode(testNode));
         found = true;
         break;
       }
@@ -138,7 +139,8 @@ VoxFoxTree VoxFoxTree::operator +(VoxFoxTree const & _v) const
     {
       if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
-        retRoot.m_primChildren.push_back(new PrimaryNode(*i + *j));
+        PrimaryNode testNode = PrimaryNode(*i+*j);
+        if(testNode.m_secChildren.size()!=0) retRoot.m_primChildren.push_back(new PrimaryNode(testNode));
       }
     }
   }
@@ -753,6 +755,7 @@ void VoxFoxTree::importQuickObj(ngl::Obj * _mesh, float _size)
 
 void VoxFoxTree::importObj(ngl::Obj * _mesh, glm::vec3 _color,float _size, bool _normals, bool _interpnormals)
 {
+  if(_size < m_voxUnit) return;
   numberOfObjects++;
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
@@ -885,6 +888,7 @@ void VoxFoxTree::importObj(ngl::Obj * _mesh, glm::vec3 _color,float _size, bool 
 
 void VoxFoxTree::importTexturedObj(ngl::Obj * _mesh, ngl::Image * _texture,float _size, bool _normals, bool _interpnormals)
 {
+  if(_size < m_voxUnit) return;
   numberOfObjects++;
   std::vector<ngl::Vec3> verts = _mesh->getVertexList();
   std::vector<ngl::Face> objFaceList = _mesh->getFaceList();
@@ -1009,8 +1013,8 @@ void VoxFoxTree::importTexturedObj(ngl::Obj * _mesh, ngl::Image * _texture,float
             // Get RGB value from texture
             // Put in shader as FragmentColor
             ngl::Vec3 postexture2 = lerp(postexture,tc,((float)j)/((float)((jsteps*3) - 1)));
-            inU = postexture2.m_x;
-            inV = postexture2.m_y;
+            inU = postexture2.m_x - (int)postexture2.m_x;
+            inV = postexture2.m_y - (int)postexture2.m_y;
             toinsert.r = (float)_texture->getColour(inU,inV).m_r/255.0f;
             toinsert.g = (float)_texture->getColour(inU,inV).m_g/255.0f;
             toinsert.b = (float)_texture->getColour(inU,inV).m_b/255.0f;

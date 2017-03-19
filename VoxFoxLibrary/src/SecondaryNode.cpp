@@ -126,7 +126,8 @@ SecondaryNode SecondaryNode::operator +(SecondaryNode const &_s) const
     {
       if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
-        retSec.m_leafChildren.push_back(new LeafNode(*i+*j));
+        LeafNode testNode = LeafNode(*i+*j);
+        if(testNode.m_VoxelData.size()!=0) retSec.m_leafChildren.push_back(new LeafNode(testNode));
       }
     }
   }
@@ -178,7 +179,9 @@ SecondaryNode SecondaryNode::operator |(SecondaryNode const &_s) const
     {
       if(i->idx==m_leafChildren[j]->idx && i->idy==m_leafChildren[j]->idy && i->idz==m_leafChildren[j]->idz)
       {
-        retSec.m_leafChildren.push_back(new LeafNode(*m_leafChildren[j]|*i));
+        // if empty nono
+        LeafNode testNode = LeafNode(*m_leafChildren[j]|*i);
+        retSec.m_leafChildren.push_back(new LeafNode(testNode));
         jfound[j]=true;
         found = true;
         break;

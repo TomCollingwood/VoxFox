@@ -18,13 +18,15 @@ MOC_DIR=moc
 SOURCES+=   $$PWD/src/LeafNode.cpp \
             $$PWD/src/VoxFoxTree.cpp \
             $$PWD/src/SecondaryNode.cpp \
-            $$PWD/src/PrimaryNode.cpp
+            $$PWD/src/PrimaryNode.cpp \
+    src/Examples.cpp
 # same for the .h files
 HEADERS+=   $$PWD/include/VoxFoxTree.h \
             $$PWD/include/LeafNode.h \
             $$PWD/include/SecondaryNode.h \
             $$PWD/include/PrimaryNode.h \
-            $$PWD/include/Voxel.h
+            $$PWD/include/Voxel.h \
+    include/Examples.h
 # and add the include dir into the search path for Qt and make
 INCLUDEPATH +=./include \
               $$PWD/lib

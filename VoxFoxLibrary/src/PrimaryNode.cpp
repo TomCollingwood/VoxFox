@@ -166,6 +166,8 @@ PrimaryNode PrimaryNode::operator -(PrimaryNode const &_p) const
     {
       if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
+        SecondaryNode testNode = SecondaryNode(*i-*j);
+        if(testNode.m_leafChildren.size()!=0) retPrim.m_secChildren.push_back(new SecondaryNode(testNode));
         retPrim.m_secChildren.push_back(new SecondaryNode(*i-*j));
         found = true;
         break;
@@ -188,7 +190,8 @@ PrimaryNode PrimaryNode::operator +(PrimaryNode const &_p) const
     {
       if(i->idx==j->idx && i->idy==j->idy && i->idz==j->idz)
       {
-        retPrim.m_secChildren.push_back(new SecondaryNode(*i+*j));
+        SecondaryNode testNode = SecondaryNode(*i+*j);
+        if(testNode.m_leafChildren.size()!=0) retPrim.m_secChildren.push_back(new SecondaryNode(testNode));
       }
     }
   }

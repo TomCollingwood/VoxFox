@@ -15,18 +15,14 @@ uniform mat3 N; // This is the inverse transpose of the MV matrix
 // The vertex position attribute
 layout (location=0) in vec3 VertexPosition;
 
-// The texture coordinate attribute
-layout (location=1) in vec2 TexCoord;
-
 // The vertex normal attribute
-layout (location=2) in vec3 VertexNormal;
+layout (location=1) in vec3 VertexNormal;
 
 // The vertex color attribute
-layout (location=3) in vec3 VertexColor;
+layout (location=2) in vec3 VertexColor;
 
 out vec3 FragmentPosition;
 out vec3 FragmentNormal;
-out vec2 FragmentShading;
 out vec3 FragmentColor;
 
 out mat4 _MV;
@@ -39,7 +35,6 @@ void main() {
     FragmentPosition = vec3(MV * vec4(VertexPosition,1.0));
     if(VertexNormal[0]<1.0f) FragmentNormal = N * VertexNormal;
     else FragmentNormal=VertexNormal;
-    FragmentShading = TexCoord;
     FragmentColor = VertexColor;
     _MV = MV;
 }

@@ -12,22 +12,18 @@
 #include <cstring>
 #include <ctime>
 
-//#define TESTINGFILL
-
-
+// https://github.com/NCCA/SimpleNGL
+// GO TO line 150 to change examples
 
 NGLScene::NGLScene()
 {
   setTitle( "Qt5 Simple NGL Demo" );
 }
 
-
 NGLScene::~NGLScene()
 {
   std::cout << "Shutting down NGL, removing VAO's and Shaders\n";
 }
-
-
 
 void NGLScene::resizeGL( int _w, int _h )
 {
@@ -111,13 +107,6 @@ void NGLScene::initializeGL()
   // and make it active ready to load values
   ( *shader )[ shaderProgram ]->use();
 
-  // TEXTURE
-
-  GLuint m_colourTex;
-  initTexture(0, m_colourTex, "images/deer.jpg");
-  GLuint pid = shader->getProgramID("Phong");
-  glUniform1i(glGetUniformLocation(pid,"ColourTexture"),0);
-
   // the shader will use the currently active material and light0 so set them
   ngl::Material m( ngl::STDMAT::GOLD );
   // load our material values to the shader into the structure material (see Vertex shader)
@@ -146,103 +135,27 @@ void NGLScene::initializeGL()
 
   glEnable(GL_CULL_FACE);
 
+  // Beginning my editing of Jon Macey's NGLScene
+
   myRoot=new VoxFoxTree();
 
-  // Be warned macbook users. Frame rate is not too good.
-  // Last I checked there are over 5 million voxels ...
-  // ... and 1.5 million polygons.
-  //------------------------LIBRARY DEMO BEGIN----------------------------
+  //------------------------LIBRARY DEMO BEGIN-------------------------
+  // EXAMPLE 0: The Title ---------------------------------------------
+  // EXAMPLE 1: Gnome Sphere Binary Operations ------------------------
+  // EXAMPLE 2: The CSG TREE ------------------------------------------
+  // EXAMPLE 3: The Cascade -------------------------------------------
+  // EXAMPLE 4: The Gnome ---------------------------------------------
+  // EXAMPLE 6: The RGB Gnomes ----------------------------------------
+  // EXAMPLE 7: Idiotically Massive Gnome  ----------------------------
+  // EXAMPLE 8: Idiotically Massive Deer  -----------------------------
+  //-------------------------------------------------------------------
+  Examples::runExample(7,myRoot,"../../VoxFoxLibrary");
 
-  ngl::Obj * dwarfmesh = new ngl::Obj("../../models/dwarf.obj");
-  ngl::Obj * deermesh = new ngl::Obj("../../models/deer.obj");
-
-  ngl::Image * dwarftex = new ngl::Image("../../images/dwarf.jpg");
-  ngl::Image * deertex = new ngl::Image("../../images/blue.png");
-
-  ngl::Image * foxtex= new ngl::Image("../../images/foxemoji.png");
-  ngl::Image * titletex= new ngl::Image("../../images/title.png");
-  ngl::Image * labelstex = new ngl::Image("../../images/labels.png");
-
-  //ngl::Image * tex = new ngl::Image("../../images/.png");
-
-  //,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸TITLE,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø,¸
-  glm::vec3 currentPos = glm::vec3(0.0f,0.0f,0.0f);
-  VoxFoxTree title, labels;
-  title.drawFlatImage(currentPos,titletex,3.5f);
-  title.drawFlatImage(currentPos+glm::vec3(0.0f,-1.0f,0.8f),foxtex,1.0f);
-
-  glm::vec3 labelscentre = glm::vec3(8.0f,-4.0f,0.0f);
-  float labelsize = 10.0f;
-  labels.drawFlatImage(labelscentre,labelstex,labelsize);
-  (*myRoot) = title | labels;
-
-
-  // ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸DWARF,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø,¸
-
-  float depthh = 1.0f;
-  VoxFoxTree dwarf, sphered, dwarfunion, dwarfminus, dwarfintersect;
-  dwarf.importTexturedObj(dwarfmesh,dwarftex,2.0f);
-  sphered.createSphere(glm::vec3(0.0f,1.5f,0.0f),0.7f,glm::vec3(1.0f,0.0f,0.0f));
-  //dwarf |= sphered;
-
-  glm::vec3 dwarfstart = labelscentre+glm::vec3(-0.85f*labelsize/2.0f,0.3f*labelsize/2.0f,depthh);
-
-  dwarfunion = sphered | dwarf;
-  dwarfunion.translate(dwarfstart+glm::vec3(4.0f,0.0f,0.0f));
-  dwarfminus = dwarf - sphered;
-  dwarfminus.translate(dwarfstart+glm::vec3(6.0f,0.0f,0.0f));
-  dwarfintersect = dwarf + sphered;
-  dwarfintersect.translate(dwarfstart+glm::vec3(8.0f,0.0f,0.0f));
-
-  dwarf.translate(dwarfstart);
-  sphered.translate(dwarfstart+glm::vec3(2.0f,0.0f,0.0f));
-
-
-  (*myRoot) |= dwarf | sphered | dwarfunion | dwarfminus | dwarfintersect ;
-
-  // ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸DEER,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø,¸
-
-
-  // ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸CSG TREE,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸¸,ø¤º°`°º¤ø,¸
-  float scale = 0.7f;
-  glm::vec3 ourcol = glm::vec3(0.0f,0.7,1.0f);
-  VoxFoxTree sphere, cube, cylinder1, cylinder2, cylinder3, CSGfinal, CSG2cylinder, CSG3cylinder, CSGcubesphere;
-
-  cylinder1.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,0.0f,1.0f),0.2f*scale,1.1f*scale,ourcol);
-  cylinder2.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,1.0f,0.0f),0.2f*scale,1.1f*scale,ourcol);
-  cylinder3.createCylinder(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(1.0f,0.0f,0.0f),0.2f*scale,1.1f*scale,ourcol);
-
-  sphere.createSphere(glm::vec3(0.0f,0.0f,0.0f),0.6f*scale,ourcol);
-  cube.createBox(glm::vec3(-0.5f,-0.5f,-0.5f)*scale,glm::vec3(0.5f,0.5,0.5f)*scale,ourcol);
-
-  CSG2cylinder = cylinder3 | cylinder2;
-  CSG3cylinder = cylinder1 | cylinder2 | cylinder3;
-  CSGcubesphere = cube + sphere;
-
-  CSGfinal = ((cube + sphere) - (cylinder1 | cylinder2 | cylinder3)) ;
-
-  // if centre is centre,
-
-  cube.translate(labelscentre + glm::vec3(((21.0f-256.0f)/512.0f)*labelsize,((256.0f-411.0f)/512.0f)*labelsize,depthh));
-  sphere.translate(labelscentre + glm::vec3(((112.0f-256.0f)/512.0f)*labelsize,((256.0f-411.0f)/512.0f)*labelsize,depthh));
-  cylinder1.translate(labelscentre + glm::vec3(((153.0f-256.0f)/512.0f)*labelsize,((256.0f-411.0f)/512.0f)*labelsize,depthh));
-  cylinder2.translate(labelscentre + glm::vec3(((292.0f-256.0f)/512.0f)*labelsize,((256.0f-507.0f)/512.0f)*labelsize,depthh));
-  cylinder3.translate(labelscentre + glm::vec3(((196.0f-256.0f)/512.0f)*labelsize,((256.0f-507.0f)/512.0f)*labelsize,depthh));
-  CSG2cylinder.translate(labelscentre + glm::vec3(((230.0f-256.0f)/512.0f)*labelsize,((256.0f-411.0f)/512.0f)*labelsize,depthh));
-  CSG3cylinder.translate(labelscentre + glm::vec3(((181.0f-256.0f)/512.0f)*labelsize,((256.0f-317.0f)/512.0f)*labelsize,depthh));
-  CSGcubesphere.translate(labelscentre + glm::vec3(((66.0f-256.0f)/512.0f)*labelsize,((256.0f-317.0f)/512.0f)*labelsize,depthh));
-  CSGfinal.translate(labelscentre + glm::vec3(((123.0f-256.0f)/512.0f)*labelsize,((256.0f-234.0f)/512.0f)*labelsize,depthh));
-
-  (*myRoot) |= cube | sphere | cylinder1 | cylinder2 | cylinder3 | CSG2cylinder | CSG3cylinder | CSGcubesphere | CSGfinal;
-
-
-  //-----------------------POLYGON GENERATION--------------------------
-
-
+  //------------------------CALCULATE POLYGONS-------------------------
   myRoot->calculatePolys();
 
-  //http://stackoverflow.com/a/24192835
-  // begin citation
+  // Code below grabbed from: http://stackoverflow.com/a/24192835
+  // beginning of citation
   std::string numWithCommas = std::to_string(myRoot->updateVoxCount());
   int insertPosition = numWithCommas.length() - 3;
   while (insertPosition > 0) {
@@ -255,16 +168,15 @@ void NGLScene::initializeGL()
   while (insertPosition > 0) {
       numWithCommas2.insert(insertPosition, ",");
       insertPosition-=3;
-
   }
+  // end of citation
+
   std::cout<<"-------------------------------------------------"<<std::endl;
   std::cout<<"Number of Voxels:               "<<numWithCommas<<std::endl;
   std::cout<<"Number of Polygons              "<<numWithCommas2<<std::endl;
-//  std::cout<<"Number of objects created:      "<<myRoot->numberOfObjects<<std::endl;
-  // By object I mean objs, shapes and flatimages
   std::cout<<"-------------------------------------------------"<<std::endl;
 
-   // GENERATION
+  //------------------LOAD IN VOXEL TREE DATA TO SHADER------------------
    GLuint vao;
    glGenVertexArrays(1, &vao);
 
@@ -280,7 +192,6 @@ void NGLScene::initializeGL()
    GLuint cbo;
    glGenBuffers(1, &cbo);
 
-   // BINDING AND CALCULATE
    glBindVertexArray(vao);
 
    int amountVertexData = myRoot->getVertexSize();
@@ -291,9 +202,6 @@ void NGLScene::initializeGL()
 
    glBindBuffer(GL_ARRAY_BUFFER, nbo);
    glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getNormals().data(), GL_STATIC_DRAW);
-
-   glBindBuffer(GL_ARRAY_BUFFER, tbo);
-   glBufferData(GL_ARRAY_BUFFER, amountTexData * sizeof(float), myRoot->getTextureCoords().data(), GL_STATIC_DRAW);
 
    glBindBuffer(GL_ARRAY_BUFFER, cbo);
    glBufferData(GL_ARRAY_BUFFER, amountVertexData * sizeof(float), myRoot->getColors().data(), GL_STATIC_DRAW);
@@ -307,11 +215,6 @@ void NGLScene::initializeGL()
    GLint n = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexNormal");
    glEnableVertexAttribArray(n);
    glVertexAttribPointer(n,3,GL_FLOAT,GL_FALSE,3*sizeof(float), 0);
-
-   glBindBuffer(GL_ARRAY_BUFFER, tbo);
-   GLint t = glGetAttribLocation(shader->getProgramID(shaderProgram), "TexCoord");
-   glEnableVertexAttribArray(t);
-   glVertexAttribPointer(t,2,GL_FLOAT,GL_FALSE,0, 0);
 
    glBindBuffer(GL_ARRAY_BUFFER, cbo);
    GLint c = glGetAttribLocation(shader->getProgramID(shaderProgram), "VertexColor");
@@ -329,7 +232,7 @@ void NGLScene::loadMatricesToShader()
   ngl::Mat3 normalMatrix;
   ngl::Mat4 M;
   M            = m_mouseGlobalTX;
-  MV           = M * m_cam.getViewMatrix(); // CAMERA MATRIX multiply world coordinates to this to get camera coordinates
+  MV           = M * m_cam.getViewMatrix();
   MVP          = M * m_cam.getVPMatrix();
   normalMatrix = MV;
   normalMatrix.inverse();
@@ -356,7 +259,6 @@ void NGLScene::paintGL()
   rotX.identity();
   rotY.identity();
   rotZ.identity();
-  // create the rotation matrices
 
   ngl::Mat4 translate1, translate2;
 
@@ -364,6 +266,8 @@ void NGLScene::paintGL()
   translate2.translate(m_modelPos.m_x,m_modelPos.m_y,m_modelPos.m_z);
   static int count =0;
   count++;
+
+
   rotX.rotateX( -47.0f +  16.0f + m_win.spinXFace );
   rotY.rotateY( 36.0f + 19.0f + m_win.spinYFace );//+ m_win.spinYFace );
   rotZ.rotateZ(38.0f);
@@ -379,16 +283,7 @@ void NGLScene::paintGL()
   m_mouseGlobalTX.m_m[ 3 ][ 0 ] = mycoord.m_x;
   m_mouseGlobalTX.m_m[ 3 ][ 1 ] = mycoord.m_y;
   m_mouseGlobalTX.m_m[ 3 ][ 2 ] = mycoord.m_z;
-  // end of edit
 
-  // get the VBO instance and draw the built in teapot
-  //ngl::VAOPrimitives* prim = ngl::VAOPrimitives::instance();
-  // draw
-
-  //prim->draw( "teapot" );
-  //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-  //myRoot->calculatePolys(m_mouseGlobalTX* m_cam.getViewMatrix());
-  //myRoot->loadVBO(shader->getProgramID("Phong"),vbo,nbo);
   loadMatricesToShader();
   glDrawArrays(GL_TRIANGLES,0,myRoot->getVertexSize()/3);
 }
@@ -421,6 +316,7 @@ void NGLScene::keyPressEvent( QKeyEvent* _event )
       break;
     // show windowed
     case Qt::Key_N:
+
       showNormal();
       break;
     case Qt::Key_Space :
@@ -432,4 +328,5 @@ void NGLScene::keyPressEvent( QKeyEvent* _event )
       break;
   }
   update();
+
 }
