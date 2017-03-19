@@ -243,6 +243,7 @@ void VoxFoxTree::addVoxel(glm::vec3 _position, Voxel _data)
       glm::vec3 newOrigin = floor(_position/m_primUnit)*m_primUnit;
       m_primChildren.push_back(new PrimaryNode(newOrigin));
       m_primChildren.back()->addVoxel(_position,_data,&m_secAccessor,&m_leafAccessor);
+      m_primAccessor=m_primChildren.back();
       min=glm::vec3(glm::min(min.x,newOrigin.x),glm::min(min.y,newOrigin.y),glm::min(min.z,newOrigin.z));
       max=glm::vec3(glm::max(min.x,newOrigin.x+m_primUnit),glm::max(min.y,newOrigin.y+m_primUnit),glm::max(min.z,newOrigin.z+m_primUnit));
     }
@@ -700,7 +701,6 @@ void VoxFoxTree::createTorus(glm::vec3 _position, glm::vec2 _t)
 void VoxFoxTree::createBox(glm::vec3 _min, glm::vec3 _max, glm::vec3 _color)
 {
   numberOfObjects++;
-
   glm::vec3 diff = _max-_min;
   diff/=m_voxUnit;
   glm::abs(diff);
@@ -1034,6 +1034,7 @@ void VoxFoxTree::importTexturedObj(ngl::Obj * _mesh, ngl::Image * _texture,float
 
 int VoxFoxTree::updateVoxCount()
 {
+  // Hopefully this is correct!
   const unsigned char oneBits[] = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
   numberOfVoxels=0;
   for (auto &prim : m_primChildren) // access by reference to avoid copying
@@ -1042,11 +1043,7 @@ int VoxFoxTree::updateVoxCount()
     {
       for(auto &leaf : sec->m_leafChildren)
       {
-        for(int i =0 ; i<64; ++i)
-        {
-          numberOfVoxels += oneBits[leaf->m_VoxelMap[i]&0x0f];
-          numberOfVoxels += oneBits[leaf->m_VoxelMap[i]>>4];
-        }
+        numberOfVoxels+=leaf->m_VoxelData.size();
       }
     }
   }

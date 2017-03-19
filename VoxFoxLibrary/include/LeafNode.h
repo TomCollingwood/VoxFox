@@ -82,14 +82,15 @@ public:
   // Unique ID for the LeafNode within tree. Trees can have LeafNodes with same id.
   // Used for quick compare in set operators
   int idx, idy, idz;
-private:
-  glm::vec3 m_origin;
-  float unitVoxelLength = 0.01953125;
-  float unitLeafLength = 0.15625;
   float m_primUnit = 10.0;
   float m_secUnit = 1.25;
   float m_leafUnit = 0.15625;
   float m_voxUnit = 0.01953125;
+private:
+  glm::vec3 m_origin;
+  float unitVoxelLength = 0.01953125;
+  float unitLeafLength = 0.15625;
+
 };
 
 #endif // LEAFNODE_H

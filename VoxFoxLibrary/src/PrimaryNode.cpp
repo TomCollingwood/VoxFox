@@ -74,6 +74,11 @@ bool PrimaryNode::isVoxel(glm::vec3 _position, SecondaryNode ** _secAccessor, Le
 
 void PrimaryNode::addVoxel(glm::vec3 _position, Voxel _voxel, SecondaryNode ** o_secAccessor, LeafNode ** o_leafAccessor)
 {
+  // IMPORTANT TO NOTE:
+  // We assume the voxel to be added belongs in this primary node.
+  // We know this since the addvoxel at the top in VoxFoxTree is correct in selecting which PrimaryNode.
+  // This correctness of node follows through to the bottom.
+  // Since in VoxFoxTree we do the same checks as below. And so on.
   bool found = false;
   for (auto &sec : m_secChildren) // access by reference to avoid copying
       {

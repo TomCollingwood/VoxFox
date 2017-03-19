@@ -11,6 +11,7 @@
 #include <ngl/VAOPrimitives.h>
 #include <cstring>
 #include <ctime>
+#include <gtest/gtest.h>
 
 // https://github.com/NCCA/SimpleNGL
 // GO TO line 150 to change examples
@@ -144,15 +145,16 @@ void NGLScene::initializeGL()
   // EXAMPLE 1: Gnome Sphere Binary Operations ------------------------
   // EXAMPLE 2: The CSG TREE ------------------------------------------
   // EXAMPLE 3: The Cascade -------------------------------------------
-  // EXAMPLE 4: The Horned Deer Gnome ---------------------------------
-  // EXAMPLE 5: The Gnome ---------------------------------------------
+  // EXAMPLE 4: The Gnome ---------------------------------------------
   // EXAMPLE 6: The RGB Gnomes ----------------------------------------
   // EXAMPLE 7: Idiotically Massive Gnome  ----------------------------
   // EXAMPLE 8: Idiotically Massive Deer  -----------------------------
-  // EXAMPLE 9: Three Teapots -----------------------------------------
   //-------------------------------------------------------------------
-  Examples::runExample(9,myRoot,"../../VoxFoxLibrary");
-
+  Examples::runExample(6,myRoot,"../../VoxFoxLibrary");
+  TEST(VoxFoxTreeTests,Example6)
+  {
+    EXPECT_TRUE(myRoot->getVertexSize()/3=555252);
+  }
 
   //------------------------CALCULATE POLYGONS-------------------------
   myRoot->calculatePolys();
@@ -174,9 +176,10 @@ void NGLScene::initializeGL()
   }
   // end of citation
 
-  std::cout<<"// Number of Voxels:               "<<numWithCommas<<std::endl;
-  std::cout<<"// Number of Polygons              "<<numWithCommas2<<std::endl;
-  std::cout<<"// ---------------------------------------------------------------------------------"<<std::endl;
+  std::cout<<"-------------------------------------------------"<<std::endl;
+  std::cout<<"Number of Voxels:               "<<numWithCommas<<std::endl;
+  std::cout<<"Number of Polygons              "<<numWithCommas2<<std::endl;
+  std::cout<<"-------------------------------------------------"<<std::endl;
 
   //------------------LOAD IN VOXEL TREE DATA TO SHADER------------------
    GLuint vao;

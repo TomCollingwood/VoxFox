@@ -176,6 +176,10 @@ public:
   bool isSecondary(glm::vec3 _position);
   bool isPrimary(glm::vec3 _position);
 
+  PrimaryNode * getPrimAccessor() {return m_primAccessor;}
+  SecondaryNode * getSecAccessor() {return m_secAccessor;}
+  LeafNode * getLeafAccessor() {return m_leafAccessor;}
+
   float m_primUnit = 10.0;
   float m_secUnit = 1.25;
   float m_leafUnit = 0.15625;

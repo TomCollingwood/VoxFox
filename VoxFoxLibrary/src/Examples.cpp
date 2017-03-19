@@ -4,7 +4,6 @@ int Examples::runExample(int _whichExample, VoxFoxTree * _toRunOn, std::string _
 {
   ngl::Obj * dwarfmesh = new ngl::Obj(_RelativePathToLibrary+"/models/dwarf.obj");
   ngl::Obj * deermesh = new ngl::Obj(_RelativePathToLibrary+"/models/deer.obj");
-  ngl::Obj * foxmesh = new ngl::Obj(_RelativePathToLibrary+"/models/foxtoy.obj");
 
   ngl::Image * dwarftex = new ngl::Image(_RelativePathToLibrary+"/images/dwarf.jpg");
   ngl::Image * deertex = new ngl::Image(_RelativePathToLibrary+"/images/deer.jpg");
@@ -15,9 +14,14 @@ int Examples::runExample(int _whichExample, VoxFoxTree * _toRunOn, std::string _
 
   ngl::Image * easteregg = new ngl::Image(_RelativePathToLibrary+"/images/computers.png");
 
+  // EXAMPLE 0: The Title ------------------------------------------------------------
+  //    Number of Voxels:               56,346
+  //    Number of Polygons              691,368
+  // ---------------------------------------------------------------------------------
   if(_whichExample==0)
   {
-    // EXAMPLE 0: The Title -----------------------------------------------------
+    std::cout<<"// EXAMPLE 0: The Title ------------------------------------------------------------"<<std::endl;
+
     VoxFoxTree theTitleExample;
     glm::vec3 currentPos = glm::vec3(0.0f,1.0f,0.0f);
     theTitleExample.drawFlatImage(currentPos,titletex,3.5f);
@@ -26,9 +30,14 @@ int Examples::runExample(int _whichExample, VoxFoxTree * _toRunOn, std::string _
     theTitleExample.drawFlatImage(currentPos+glm::vec3(0.0f,0.0f,5.8f),easteregg,6.0f);
     (*_toRunOn)=theTitleExample;
   }
+  // EXAMPLE 1: Gnome Sphere Binary Operations----------------------------------------
+  // Number of Voxels:               446,487
+  // Number of Polygons              1,095,228
+  // ---------------------------------------------------------------------------------
   else if(_whichExample==1)
   {
-    // EXAMPLE 1: Gnome Sphere Binary Operations----------------------------------
+    std::cout<<"// EXAMPLE 1: Gnome Sphere Binary Operations----------------------------------------"<<std::endl;
+
     VoxFoxTree gnomeSphereExample;
     float labelsize = 10.0f;
     gnomeSphereExample.drawFlatImage(glm::vec3(0.0f,0.0f,0.0f),labelstex,labelsize);
@@ -37,8 +46,6 @@ int Examples::runExample(int _whichExample, VoxFoxTree * _toRunOn, std::string _
     VoxFoxTree dwarf, sphered, dwarfunion, dwarfminus, dwarfintersect;
     dwarf.importTexturedObj(dwarfmesh,dwarftex,2.0f);
     sphered.createSphere(glm::vec3(0.0f,1.5f,0.0f),0.7f,glm::vec3(1.0f,0.0f,0.0f));
-    //dwarf |= sphered;
-
 
     glm::vec3 dwarfstart = glm::vec3(-0.85f*labelsize/2.0f,0.3f*labelsize/2.0f,depthh);
 
@@ -56,9 +63,14 @@ int Examples::runExample(int _whichExample, VoxFoxTree * _toRunOn, std::string _
     gnomeSphereExample.translate(glm::vec3(4.5f,-3.0f,0.0f));
     (*_toRunOn)=gnomeSphereExample;
   }
+  // EXAMPLE 2: The CSG TREE ---------------------------------------------------------
+  // Number of Voxels:               186,601
+  // Number of Polygons              333,384
+  // ---------------------------------------------------------------------------------
   else if(_whichExample==2)
   {
-    // EXAMPLE 2: The CSG TREE ------------------------------------------------
+    std::cout<<"// EXAMPLE 2: The CSG TREE ---------------------------------------------------------"<<std::endl;
+
     VoxFoxTree theCSGTree;// = title;
     float labelsize = 10.0f;
     float depthh = 1.0f;
@@ -96,9 +108,14 @@ int Examples::runExample(int _whichExample, VoxFoxTree * _toRunOn, std::string _
     theCSGTree.translate(glm::vec3(2.5f,2.0f,0.0f));
     (*_toRunOn)=theCSGTree;
   }
+  // EXAMPLE 3: The Cascade ---------------------------------------------------------
+  // Number of Voxels:               236,164
+  // Number of Polygons              2,973,744
+  // ---------------------------------------------------------------------------------
   else if(_whichExample==3)
   {
-    // EXAMPLE 3: The Cascade ------------------------------------------------
+    std::cout<<"// EXAMPLE 3: The Cascade ---------------------------------------------------------"<<std::endl;
+
     VoxFoxTree theCascade;
 
     // These guys change how they're shaded each iteration.
@@ -124,9 +141,15 @@ int Examples::runExample(int _whichExample, VoxFoxTree * _toRunOn, std::string _
     theCascade = gnomecascade | deercascade;
     (*_toRunOn)=theCascade;
   }
+
+  // EXAMPLE 4: The Horned Deer Gnome ------------------------------------------------
+  // Number of Voxels:               110,384
+  // Number of Polygons              1,334,952
+  // ---------------------------------------------------------------------------------
   else if(_whichExample==4)
   {
-    // EXAMPLE 3: The Cascade ------------------------------------------------
+    std::cout<<"// EXAMPLE 4: The Horned Deer Gnome ------------------------------------------------"<<std::endl;
+
     VoxFoxTree theHornedDeerGnome;
 
     float gnomedeerscale =1.0f;
@@ -150,18 +173,28 @@ int Examples::runExample(int _whichExample, VoxFoxTree * _toRunOn, std::string _
     }
     (*_toRunOn)=theHornedDeerGnome;
   }
+
+  // EXAMPLE 5: The Gnome ------------------------------------------------------------
+  // Number of Voxels:               23,143
+  // Number of Polygons              298,152
+  // ---------------------------------------------------------------------------------
   else if(_whichExample==5)
   {
-    // EXAMPLE 5: The Gnome ------------------------------------------------
+    std::cout<<"// EXAMPLE 5: The Gnome ------------------------------------------------------------"<<std::endl;
+
     VoxFoxTree theGnome;
     theGnome.importTexturedObj(dwarfmesh,dwarftex,2.0f);
     (*_toRunOn)=theGnome;
-    //Number of Voxels:               131,103
-    //Number of Polygons              298,152
+
   }
+  // EXAMPLE 6: The RGB Gnomes ------------------------------------------------------
+  // Number of Voxels:               43,502
+  // Number of Polygons              555,252
+  // ---------------------------------------------------------------------------------
   else if(_whichExample==6)
   {
-    // EXAMPLE 6: The RGB Gnomes ------------------------------------------------
+    std::cout<<"// EXAMPLE 6: The RGB Gnomes ------------------------------------------------------"<<std::endl;
+
     VoxFoxTree theRGBGnomes;
     theRGBGnomes.importObj(dwarfmesh,glm::vec3(1.0f,0.3f,0.0f),1.5f);
     theRGBGnomes.translate(glm::vec3(1.0f,0.0f,0.0f));
@@ -170,29 +203,47 @@ int Examples::runExample(int _whichExample, VoxFoxTree * _toRunOn, std::string _
     theRGBGnomes.importObj(dwarfmesh,glm::vec3(0.0f,0.3f,1.0f),1.1f);
     theRGBGnomes.translate(glm::vec3(-0.85f,0.0f,0.0f));
     (*_toRunOn)=theRGBGnomes;
-    //Number of Voxels:               258,706
-    //Number of Polygons              555,252
+
   }
+  // EXAMPLE 7: Idiotically Massive Gnome --------------------------------------------
+  // Number of Voxels:               562,591
+  // Number of Polygons              7,464,780
+  // ---------------------------------------------------------------------------------
+
   else if(_whichExample==7)
   {
-    // EXAMPLE 7: Idiotically Massive Gnome -------------------------------------
+    std::cout<<"// EXAMPLE 7: Idiotically Massive Gnome --------------------------------------------"<<std::endl;
+
     VoxFoxTree theGnome;
     theGnome.importTexturedObj(dwarfmesh,dwarftex,10.0f);
     (*_toRunOn)=theGnome;
-//    -------------------------------------------------
-//    Number of Voxels:               3,200,806
-//    Number of Polygons              7,464,780
-//    -------------------------------------------------
+
   }
+  // EXAMPLE 8: Idiotically Massive Deer --------------------------------------------
+  // Number of Voxels:               305,035
+  // Number of Polygons              4,006,668
+  // ---------------------------------------------------------------------------------
   else if(_whichExample==8)
   {
-    // EXAMPLE 8: Idiotically Massive Deer -------------------------------------
+    std::cout<<"// EXAMPLE 8: Idiotically Massive Deer --------------------------------------------"<<std::endl;
     VoxFoxTree theDeer;
     theDeer.importTexturedObj(deermesh,deertex,10.0f);
     (*_toRunOn)=theDeer;
-//    -------------------------------------------------
-//    Number of Voxels:               1,277,268
-//    Number of Polygons              4,006,668
-//    -------------------------------------------------
+  }
+
+  // EXAMPLE 9: Three Teapots -------------------------------------------------------
+  // Number of Voxels:               120,712
+  // Number of Polygons              1,595,316
+  // ---------------------------------------------------------------------------------
+  else if(_whichExample==9)
+  {
+    std::cout<<"// EXAMPLE 9: Three Teapots -------------------------------------------------------"<<std::endl;
+
+    ngl::Obj * teapot = new ngl::Obj(_RelativePathToLibrary+"/models/teapot.obj");
+    (*_toRunOn).importObj(teapot,glm::vec3(1.0f,0.3f,0.0f),0.3f);
+    (*_toRunOn).translate(glm::vec3(1.0f,0.0f,0.0f));
+    (*_toRunOn).importObj(teapot,glm::vec3(0.3f,1.0f,0.0f),0.6f);
+    (*_toRunOn).translate(glm::vec3(2.2f,0.0f,0.0f));
+    (*_toRunOn).importObj(teapot,glm::vec3(0.0f,0.3f,1.0f),2.5f);
   }
 }
