@@ -6,20 +6,20 @@ Initial design based on SimpleNGL by Jon Macey. The two shader files are written
 See my initial ideas here:
 [https://drive.google.com/file/d/0B3Bu_KdSBGhibENXZksyVjFCeUk/view?usp=sharing](https://drive.google.com/file/d/0B3Bu_KdSBGhibENXZksyVjFCeUk/view?usp=sharing)
 
-** Folders **
+## Folders ##
 VoxFoxLibrary contains the library. The library has a class called Examples.h which the demo uses to render examples.
 
 The demo project is in the demo folder. Change the int at around line 150 to select an example to render.
 
 Tests contains the various tests for each class.
 
-** Requirements **
+## Requirements ##
 QtCreator is required to make the project. Requires NGL (normally placed in Home folder) and GLM. C++11 is also used. Google Test is used for the tests.
 
 
 ## WHAT DOES IT DO ##
 
-** Create a Tree **
+## Create a Tree ##
 
 simply write:
 ```
@@ -32,7 +32,7 @@ VoxFoxTree * myTree = new VoxFoxTree();
 (*myTree) = VoxFoxTree(otherTree);
 ```
 
-** Import Objs **
+## Import Objs ##
 Can import textured objs as well as objs with no texture.
 
 importObj(...) takes an ngl::Obj pointer, ngl::Image pointer and a float to give size.
@@ -47,7 +47,7 @@ myTree.importTexturedObj(myObj,myTex,2.0f);
 There are an optional two flags which specify whether to include normals and/not interpolate normals.
 Default these are set to true. Get that shiny look.
 
-** Set Operators and Translate **
+## Set Operators and Translate ##
 
 You can use set operators on your trees!
 ```
@@ -65,7 +65,7 @@ myTree = otherTree - otherTree2;
 myTree.translate(glm::vec3(1.0,0.4f,0.0f);
 ```
 
-** Shapes **
+## Shapes ##
 At the moment I have three workable shapes.
 ```
 myTree.createCylinder(
@@ -89,7 +89,7 @@ myTree.createBox(
 );
 ```
 
-** Rendering ! **
+## Rendering ! ##
 Call
 ```
 calculatePolys();
@@ -105,7 +105,7 @@ These give you a vector of floats corresponding to each coordinate. So for examp
 
 You pass these into the shader of your choosing yourself. However there is a demo in demos/ that will do this for you.
 
-** Demo **
+## Demo ##
 In demos/NoGUI Simply go to where the Examples::runExample(..) is located in src/NGLScene.cpp and do whatever voxel stuff there and set (*myRoot) to it.
 
 Or better yet simply change the integer on the runExample(..) function to see the examples !
