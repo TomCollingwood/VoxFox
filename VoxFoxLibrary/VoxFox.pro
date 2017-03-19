@@ -27,6 +27,8 @@ HEADERS+=   $$PWD/include/VoxFoxTree.h \
             $$PWD/include/PrimaryNode.h \
             $$PWD/include/Voxel.h \
     include/Examples.h
+
+OTHER_FILES += ../readme.md
 # and add the include dir into the search path for Qt and make
 INCLUDEPATH +=./include \
               $$PWD/lib
