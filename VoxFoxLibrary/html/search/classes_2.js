@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['secondarynode',['SecondaryNode',['../class_secondary_node.html',1,'']]]
+  ['primarynode',['PrimaryNode',['../class_primary_node.html',1,'']]]
 ];

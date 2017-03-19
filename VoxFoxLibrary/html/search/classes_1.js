@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['primarynode',['PrimaryNode',['../class_primary_node.html',1,'']]]
+  ['leafnode',['LeafNode',['../class_leaf_node.html',1,'']]]
 ];

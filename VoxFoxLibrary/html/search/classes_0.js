@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['leafnode',['LeafNode',['../class_leaf_node.html',1,'']]]
+  ['examples',['Examples',['../class_examples.html',1,'']]]
 ];

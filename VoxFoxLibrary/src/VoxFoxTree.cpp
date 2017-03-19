@@ -2,6 +2,11 @@
 
 #define NEWOBIMPORT
 
+/*! \mainpage My Personal Index Page
+ *
+ * See readme.md
+ */
+
 VoxFoxTree::VoxFoxTree()
 {
 }

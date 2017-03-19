@@ -170,11 +170,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a8a62d1a45e8874a34aacf82de8fb5655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae43bb477d35e6d68de31c9630c9ffcd2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_secondary_node.html#ae43bb477d35e6d68de31c9630c9ffcd2">idz</a></td></tr>
 <tr class="separator:ae43bb477d35e6d68de31c9630c9ffcd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a348597e23d262565a7d29a0c3e62f36a"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">m_origin</a></td></tr>
-<tr class="separator:a348597e23d262565a7d29a0c3e62f36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c6c830d38bd85d5de5b2e47d1a8bbaf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_secondary_node.html#a4c6c830d38bd85d5de5b2e47d1a8bbaf">m_primUnit</a> = 10.0</td></tr>
 <tr class="separator:a4c6c830d38bd85d5de5b2e47d1a8bbaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0493d3462f87297384d74d35cd8a607"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_secondary_node.html#af0493d3462f87297384d74d35cd8a607">m_secUnit</a> = 1.25</td></tr>
@@ -183,6 +178,11 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a42ad9db6d3937baa0ae15495d40d431d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a176a4cc1222fac5f6e19939284747e5b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_secondary_node.html#a176a4cc1222fac5f6e19939284747e5b">m_voxUnit</a> = 0.01953125</td></tr>
 <tr class="separator:a176a4cc1222fac5f6e19939284747e5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a348597e23d262565a7d29a0c3e62f36a"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">m_origin</a></td></tr>
+<tr class="separator:a348597e23d262565a7d29a0c3e62f36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -262,7 +262,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00017">17</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
 
-<p>References <a class="el" href="_secondary_node_8h_source.html#l00088">idx</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idy</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idz</a>, and <a class="el" href="_secondary_node_8h_source.html#l00093">m_secUnit</a>.</p>
+<p>References <a class="el" href="_secondary_node_8h_source.html#l00088">idx</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idy</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idz</a>, and <a class="el" href="_secondary_node_8h_source.html#l00091">m_secUnit</a>.</p>
 <div class="fragment"><div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                                            : <a class="code" href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">m_origin</a>(_origin)</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <a class="code" href="class_secondary_node.html#af41b3f54afbdc6789af18d92485e4401">idx</a> = (int)(_origin[0]/<a class="code" href="class_secondary_node.html#af0493d3462f87297384d74d35cd8a607">m_secUnit</a>);</div>
@@ -270,10 +270,10 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <a class="code" href="class_secondary_node.html#ae43bb477d35e6d68de31c9630c9ffcd2">idz</a> = (int)(_origin[2]/<a class="code" href="class_secondary_node.html#af0493d3462f87297384d74d35cd8a607">m_secUnit</a>);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;}</div>
 <div class="ttc" id="class_secondary_node_html_ae43bb477d35e6d68de31c9630c9ffcd2"><div class="ttname"><a href="class_secondary_node.html#ae43bb477d35e6d68de31c9630c9ffcd2">SecondaryNode::idz</a></div><div class="ttdeci">int idz</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00088">SecondaryNode.h:88</a></div></div>
-<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00091">SecondaryNode.h:91</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00096">SecondaryNode.h:96</a></div></div>
 <div class="ttc" id="class_secondary_node_html_af41b3f54afbdc6789af18d92485e4401"><div class="ttname"><a href="class_secondary_node.html#af41b3f54afbdc6789af18d92485e4401">SecondaryNode::idx</a></div><div class="ttdeci">int idx</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00088">SecondaryNode.h:88</a></div></div>
 <div class="ttc" id="class_secondary_node_html_a8a62d1a45e8874a34aacf82de8fb5655"><div class="ttname"><a href="class_secondary_node.html#a8a62d1a45e8874a34aacf82de8fb5655">SecondaryNode::idy</a></div><div class="ttdeci">int idy</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00088">SecondaryNode.h:88</a></div></div>
-<div class="ttc" id="class_secondary_node_html_af0493d3462f87297384d74d35cd8a607"><div class="ttname"><a href="class_secondary_node.html#af0493d3462f87297384d74d35cd8a607">SecondaryNode::m_secUnit</a></div><div class="ttdeci">float m_secUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00093">SecondaryNode.h:93</a></div></div>
+<div class="ttc" id="class_secondary_node_html_af0493d3462f87297384d74d35cd8a607"><div class="ttname"><a href="class_secondary_node.html#af0493d3462f87297384d74d35cd8a607">SecondaryNode::m_secUnit</a></div><div class="ttdeci">float m_secUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00091">SecondaryNode.h:91</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -337,7 +337,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00073">73</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
 
-<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, <a class="el" href="_secondary_node_8h_source.html#l00094">m_leafUnit</a>, <a class="el" href="_secondary_node_8h_source.html#l00091">m_origin</a>, and <a class="el" href="_secondary_node_8h_source.html#l00093">m_secUnit</a>.</p>
+<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, <a class="el" href="_secondary_node_8h_source.html#l00092">m_leafUnit</a>, <a class="el" href="_secondary_node_8h_source.html#l00096">m_origin</a>, and <a class="el" href="_secondary_node_8h_source.html#l00091">m_secUnit</a>.</p>
 <div class="fragment"><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;{</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;leaf : <a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>) <span class="comment">// access by reference to avoid copying</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      {</div>
@@ -368,11 +368,11 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  }</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;}</div>
-<div class="ttc" id="class_secondary_node_html_a42ad9db6d3937baa0ae15495d40d431d"><div class="ttname"><a href="class_secondary_node.html#a42ad9db6d3937baa0ae15495d40d431d">SecondaryNode::m_leafUnit</a></div><div class="ttdeci">float m_leafUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00094">SecondaryNode.h:94</a></div></div>
-<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00091">SecondaryNode.h:91</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a42ad9db6d3937baa0ae15495d40d431d"><div class="ttname"><a href="class_secondary_node.html#a42ad9db6d3937baa0ae15495d40d431d">SecondaryNode::m_leafUnit</a></div><div class="ttdeci">float m_leafUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00092">SecondaryNode.h:92</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00096">SecondaryNode.h:96</a></div></div>
 <div class="ttc" id="class_leaf_node_html"><div class="ttname"><a href="class_leaf_node.html">LeafNode</a></div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00026">LeafNode.h:26</a></div></div>
 <div class="ttc" id="class_secondary_node_html_ae9d09a8f9c1e4b7a82b8050fcccf8ea3"><div class="ttname"><a href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">SecondaryNode::m_leafChildren</a></div><div class="ttdeci">std::vector&lt; LeafNode * &gt; m_leafChildren</div><div class="ttdoc">m_leafChildren vector of pointers to the LeafNode children </div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00084">SecondaryNode.h:84</a></div></div>
-<div class="ttc" id="class_secondary_node_html_af0493d3462f87297384d74d35cd8a607"><div class="ttname"><a href="class_secondary_node.html#af0493d3462f87297384d74d35cd8a607">SecondaryNode::m_secUnit</a></div><div class="ttdeci">float m_secUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00093">SecondaryNode.h:93</a></div></div>
+<div class="ttc" id="class_secondary_node_html_af0493d3462f87297384d74d35cd8a607"><div class="ttname"><a href="class_secondary_node.html#af0493d3462f87297384d74d35cd8a607">SecondaryNode::m_secUnit</a></div><div class="ttdeci">float m_secUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00091">SecondaryNode.h:91</a></div></div>
 </div><!-- fragment -->
 <p><div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
@@ -413,9 +413,9 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00071">71</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
 
-<p>References <a class="el" href="_secondary_node_8h_source.html#l00091">m_origin</a>.</p>
+<p>References <a class="el" href="_secondary_node_8h_source.html#l00096">m_origin</a>.</p>
 <div class="fragment"><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;{<span class="keywordflow">return</span> <a class="code" href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">m_origin</a>; }</div>
-<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00091">SecondaryNode.h:91</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00096">SecondaryNode.h:96</a></div></div>
 </div><!-- fragment -->
 <p><div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
@@ -466,7 +466,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00105">105</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
 
-<p>References <a class="el" href="_secondary_node_8h_source.html#l00071">getOrigin()</a>, <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, and <a class="el" href="_secondary_node_8h_source.html#l00094">m_leafUnit</a>.</p>
+<p>References <a class="el" href="_secondary_node_8h_source.html#l00071">getOrigin()</a>, <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, and <a class="el" href="_secondary_node_8h_source.html#l00092">m_leafUnit</a>.</p>
 <div class="fragment"><div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;{</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i =0; i&lt;<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.size(); ++i) <span class="comment">// access by reference to avoid copying</span></div>
@@ -479,7 +479,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  }</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}</div>
-<div class="ttc" id="class_secondary_node_html_a42ad9db6d3937baa0ae15495d40d431d"><div class="ttname"><a href="class_secondary_node.html#a42ad9db6d3937baa0ae15495d40d431d">SecondaryNode::m_leafUnit</a></div><div class="ttdeci">float m_leafUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00094">SecondaryNode.h:94</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a42ad9db6d3937baa0ae15495d40d431d"><div class="ttname"><a href="class_secondary_node.html#a42ad9db6d3937baa0ae15495d40d431d">SecondaryNode::m_leafUnit</a></div><div class="ttdeci">float m_leafUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00092">SecondaryNode.h:92</a></div></div>
 <div class="ttc" id="class_secondary_node_html_a5b406b91ef82a11b64bf19aeb10d7484"><div class="ttname"><a href="class_secondary_node.html#a5b406b91ef82a11b64bf19aeb10d7484">SecondaryNode::getOrigin</a></div><div class="ttdeci">glm::vec3 getOrigin() const </div><div class="ttdoc">getOrigin returns the origin vector of node (minimum point in Node) </div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00071">SecondaryNode.h:71</a></div></div>
 <div class="ttc" id="class_secondary_node_html_ae9d09a8f9c1e4b7a82b8050fcccf8ea3"><div class="ttname"><a href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">SecondaryNode::m_leafChildren</a></div><div class="ttdeci">std::vector&lt; LeafNode * &gt; m_leafChildren</div><div class="ttdoc">m_leafChildren vector of pointers to the LeafNode children </div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00084">SecondaryNode.h:84</a></div></div>
 </div><!-- fragment -->
@@ -532,7 +532,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00060">60</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
 
-<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, and <a class="el" href="_secondary_node_8h_source.html#l00094">m_leafUnit</a>.</p>
+<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, and <a class="el" href="_secondary_node_8h_source.html#l00092">m_leafUnit</a>.</p>
 <div class="fragment"><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;{</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;leaf : <a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>) <span class="comment">// access by reference to avoid copying</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      {</div>
@@ -544,7 +544,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      }</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
-<div class="ttc" id="class_secondary_node_html_a42ad9db6d3937baa0ae15495d40d431d"><div class="ttname"><a href="class_secondary_node.html#a42ad9db6d3937baa0ae15495d40d431d">SecondaryNode::m_leafUnit</a></div><div class="ttdeci">float m_leafUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00094">SecondaryNode.h:94</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a42ad9db6d3937baa0ae15495d40d431d"><div class="ttname"><a href="class_secondary_node.html#a42ad9db6d3937baa0ae15495d40d431d">SecondaryNode::m_leafUnit</a></div><div class="ttdeci">float m_leafUnit</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00092">SecondaryNode.h:92</a></div></div>
 <div class="ttc" id="class_secondary_node_html_ae9d09a8f9c1e4b7a82b8050fcccf8ea3"><div class="ttname"><a href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">SecondaryNode::m_leafChildren</a></div><div class="ttdeci">std::vector&lt; LeafNode * &gt; m_leafChildren</div><div class="ttdoc">m_leafChildren vector of pointers to the LeafNode children </div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00084">SecondaryNode.h:84</a></div></div>
 </div><!-- fragment -->
 <p><div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -585,7 +585,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00119">119</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
 
-<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, <a class="el" href="_secondary_node_8h_source.html#l00091">m_origin</a>, and <a class="el" href="_secondary_node_8cpp_source.html#l00003">SecondaryNode()</a>.</p>
+<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, <a class="el" href="_secondary_node_8h_source.html#l00096">m_origin</a>, <a class="el" href="_leaf_node_8h_source.html#l00080">LeafNode::m_VoxelData</a>, and <a class="el" href="_secondary_node_8cpp_source.html#l00003">SecondaryNode()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;{</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <a class="code" href="class_secondary_node.html">SecondaryNode</a> retSec = <a class="code" href="class_secondary_node.html#ae70b5a7f1692f36757581bb9f27b4b2b">SecondaryNode</a>(<a class="code" href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">m_origin</a>);</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  <span class="comment">// Leafs are not in order so cannot use jindex trick in + in LeafNode</span></div>
@@ -595,14 +595,16 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    {</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;      <span class="keywordflow">if</span>(i-&gt;idx==j-&gt;idx &amp;&amp; i-&gt;idy==j-&gt;idy &amp;&amp; i-&gt;idz==j-&gt;idz)</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      {</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(*i+*j));</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      }</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    }</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  }</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  <span class="keywordflow">return</span> retSec;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;}</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <a class="code" href="class_leaf_node.html">LeafNode</a> testNode = <a class="code" href="class_leaf_node.html">LeafNode</a>(*i+*j);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordflow">if</span>(testNode.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size()!=0) retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(testNode));</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      }</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    }</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  }</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;  <span class="keywordflow">return</span> retSec;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;}</div>
+<div class="ttc" id="class_leaf_node_html_a902997299007f814e1f18f9b3460f3c4"><div class="ttname"><a href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">LeafNode::m_VoxelData</a></div><div class="ttdeci">std::vector&lt; Voxel &gt; m_VoxelData</div><div class="ttdoc">m_VoxelData Voxel data for only the present voxels. Is variable. </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00080">LeafNode.h:80</a></div></div>
 <div class="ttc" id="class_secondary_node_html_ae70b5a7f1692f36757581bb9f27b4b2b"><div class="ttname"><a href="class_secondary_node.html#ae70b5a7f1692f36757581bb9f27b4b2b">SecondaryNode::SecondaryNode</a></div><div class="ttdeci">SecondaryNode()</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8cpp_source.html#l00003">SecondaryNode.cpp:3</a></div></div>
-<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00091">SecondaryNode.h:91</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00096">SecondaryNode.h:96</a></div></div>
 <div class="ttc" id="class_leaf_node_html"><div class="ttname"><a href="class_leaf_node.html">LeafNode</a></div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00026">LeafNode.h:26</a></div></div>
 <div class="ttc" id="class_secondary_node_html_ae9d09a8f9c1e4b7a82b8050fcccf8ea3"><div class="ttname"><a href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">SecondaryNode::m_leafChildren</a></div><div class="ttdeci">std::vector&lt; LeafNode * &gt; m_leafChildren</div><div class="ttdoc">m_leafChildren vector of pointers to the LeafNode children </div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00084">SecondaryNode.h:84</a></div></div>
 <div class="ttc" id="class_secondary_node_html"><div class="ttname"><a href="class_secondary_node.html">SecondaryNode</a></div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00019">SecondaryNode.h:19</a></div></div>
@@ -643,37 +645,40 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Subtracted <a class="el" href="class_secondary_node.html">SecondaryNode</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00136">136</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00137">137</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
 
-<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, <a class="el" href="_secondary_node_8h_source.html#l00091">m_origin</a>, <a class="el" href="_leaf_node_8h_source.html#l00080">LeafNode::m_VoxelData</a>, and <a class="el" href="_secondary_node_8cpp_source.html#l00003">SecondaryNode()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;{</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;  <a class="code" href="class_secondary_node.html">SecondaryNode</a> retSec = <a class="code" href="class_secondary_node.html#ae70b5a7f1692f36757581bb9f27b4b2b">SecondaryNode</a>(<a class="code" href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">m_origin</a>);</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;  <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;i : <a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>)</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  {</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordtype">bool</span> found = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;j : _s.m_leafChildren)</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    {</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      <span class="keywordflow">if</span>(i-&gt;idx==j-&gt;idx &amp;&amp; i-&gt;idy==j-&gt;idy &amp;&amp; i-&gt;idz==j-&gt;idz)</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      {</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <a class="code" href="class_leaf_node.html">LeafNode</a> testLeaf = <a class="code" href="class_leaf_node.html">LeafNode</a>(*i-*j);</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="comment">// testLeaf could be empty. We test for that.</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="comment">// if empty crashes other functions. We always assume that nodes are not empty (flaw?)</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="keywordflow">if</span>(testLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size()!=0) retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(testLeaf));</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        found = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      }</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    }</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keywordflow">if</span>(!found)</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    {</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(*i));</div>
+<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, <a class="el" href="_secondary_node_8h_source.html#l00096">m_origin</a>, <a class="el" href="_leaf_node_8h_source.html#l00080">LeafNode::m_VoxelData</a>, and <a class="el" href="_secondary_node_8cpp_source.html#l00003">SecondaryNode()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;{</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  <a class="code" href="class_secondary_node.html">SecondaryNode</a> retSec = <a class="code" href="class_secondary_node.html#ae70b5a7f1692f36757581bb9f27b4b2b">SecondaryNode</a>(<a class="code" href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">m_origin</a>);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;i : <a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>)</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;  {</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordtype">bool</span> found = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;j : _s.m_leafChildren)</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    {</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      <span class="keywordflow">if</span>(i-&gt;idx==j-&gt;idx &amp;&amp; i-&gt;idy==j-&gt;idy &amp;&amp; i-&gt;idz==j-&gt;idz)</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;      {</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <a class="code" href="class_leaf_node.html">LeafNode</a> testLeaf = <a class="code" href="class_leaf_node.html">LeafNode</a>(*i-*j);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="comment">// testLeaf could be empty. We test for that.</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="comment">// if empty crashes other functions. We always assume that nodes are not empty (flaw?)</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keywordflow">if</span>(testLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size()!=0)</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        {</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;          retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(testLeaf));</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        }</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        found = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      }</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    }</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  }</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;  <span class="keywordflow">return</span> retSec;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;}</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keywordflow">if</span>(!found)</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    {</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;      retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(*i));</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    }</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  }</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  <span class="keywordflow">return</span> retSec;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;}</div>
 <div class="ttc" id="class_leaf_node_html_a902997299007f814e1f18f9b3460f3c4"><div class="ttname"><a href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">LeafNode::m_VoxelData</a></div><div class="ttdeci">std::vector&lt; Voxel &gt; m_VoxelData</div><div class="ttdoc">m_VoxelData Voxel data for only the present voxels. Is variable. </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00080">LeafNode.h:80</a></div></div>
 <div class="ttc" id="class_secondary_node_html_ae70b5a7f1692f36757581bb9f27b4b2b"><div class="ttname"><a href="class_secondary_node.html#ae70b5a7f1692f36757581bb9f27b4b2b">SecondaryNode::SecondaryNode</a></div><div class="ttdeci">SecondaryNode()</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8cpp_source.html#l00003">SecondaryNode.cpp:3</a></div></div>
-<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00091">SecondaryNode.h:91</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00096">SecondaryNode.h:96</a></div></div>
 <div class="ttc" id="class_leaf_node_html"><div class="ttname"><a href="class_leaf_node.html">LeafNode</a></div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00026">LeafNode.h:26</a></div></div>
 <div class="ttc" id="class_secondary_node_html_ae9d09a8f9c1e4b7a82b8050fcccf8ea3"><div class="ttname"><a href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">SecondaryNode::m_leafChildren</a></div><div class="ttdeci">std::vector&lt; LeafNode * &gt; m_leafChildren</div><div class="ttdoc">m_leafChildren vector of pointers to the LeafNode children </div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00084">SecondaryNode.h:84</a></div></div>
 <div class="ttc" id="class_secondary_node_html"><div class="ttname"><a href="class_secondary_node.html">SecondaryNode</a></div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00019">SecondaryNode.h:19</a></div></div>
@@ -707,7 +712,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00036">36</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
 
-<p>References <a class="el" href="_secondary_node_8h_source.html#l00071">getOrigin()</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idx</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idy</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idz</a>, <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, and <a class="el" href="_secondary_node_8h_source.html#l00091">m_origin</a>.</p>
+<p>References <a class="el" href="_secondary_node_8h_source.html#l00071">getOrigin()</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idx</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idy</a>, <a class="el" href="_secondary_node_8h_source.html#l00088">idz</a>, <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, and <a class="el" href="_secondary_node_8h_source.html#l00096">m_origin</a>.</p>
 <div class="fragment"><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keywordflow">if</span>(<span class="keyword">this</span>!=&amp;s)</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  {</div>
@@ -731,7 +736,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
 <div class="ttc" id="class_secondary_node_html_ae43bb477d35e6d68de31c9630c9ffcd2"><div class="ttname"><a href="class_secondary_node.html#ae43bb477d35e6d68de31c9630c9ffcd2">SecondaryNode::idz</a></div><div class="ttdeci">int idz</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00088">SecondaryNode.h:88</a></div></div>
-<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00091">SecondaryNode.h:91</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00096">SecondaryNode.h:96</a></div></div>
 <div class="ttc" id="class_leaf_node_html"><div class="ttname"><a href="class_leaf_node.html">LeafNode</a></div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00026">LeafNode.h:26</a></div></div>
 <div class="ttc" id="class_secondary_node_html_af41b3f54afbdc6789af18d92485e4401"><div class="ttname"><a href="class_secondary_node.html#af41b3f54afbdc6789af18d92485e4401">SecondaryNode::idx</a></div><div class="ttdeci">int idx</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00088">SecondaryNode.h:88</a></div></div>
 <div class="ttc" id="class_secondary_node_html_ae9d09a8f9c1e4b7a82b8050fcccf8ea3"><div class="ttname"><a href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">SecondaryNode::m_leafChildren</a></div><div class="ttdeci">std::vector&lt; LeafNode * &gt; m_leafChildren</div><div class="ttdoc">m_leafChildren vector of pointers to the LeafNode children </div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00084">SecondaryNode.h:84</a></div></div>
@@ -773,44 +778,46 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Union of RHS and LHS <a class="el" href="class_secondary_node.html">SecondaryNode</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00163">163</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_secondary_node_8cpp_source.html#l00167">167</a> of file <a class="el" href="_secondary_node_8cpp_source.html">SecondaryNode.cpp</a>.</p>
 
-<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, <a class="el" href="_secondary_node_8h_source.html#l00091">m_origin</a>, and <a class="el" href="_secondary_node_8cpp_source.html#l00003">SecondaryNode()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;{</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  <a class="code" href="class_secondary_node.html">SecondaryNode</a> retSec = <a class="code" href="class_secondary_node.html#ae70b5a7f1692f36757581bb9f27b4b2b">SecondaryNode</a>(<a class="code" href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">m_origin</a>);</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  std::vector&lt;bool&gt; jfound;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i =0 ; i&lt;<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.size(); ++i)</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  {</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    jfound.push_back(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  }</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;i : _s.m_leafChildren)</div>
+<p>References <a class="el" href="_secondary_node_8h_source.html#l00084">m_leafChildren</a>, <a class="el" href="_secondary_node_8h_source.html#l00096">m_origin</a>, and <a class="el" href="_secondary_node_8cpp_source.html#l00003">SecondaryNode()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;{</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  <a class="code" href="class_secondary_node.html">SecondaryNode</a> retSec = <a class="code" href="class_secondary_node.html#ae70b5a7f1692f36757581bb9f27b4b2b">SecondaryNode</a>(<a class="code" href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">m_origin</a>);</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  std::vector&lt;bool&gt; jfound;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i =0 ; i&lt;<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.size(); ++i)</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;  {</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordtype">bool</span> found = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j =0; j&lt;<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.size(); ++j)</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    {</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;      <span class="keywordflow">if</span>(i-&gt;idx==<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[j]-&gt;idx &amp;&amp; i-&gt;idy==<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[j]-&gt;idy &amp;&amp; i-&gt;idz==<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[j]-&gt;idz)</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      {</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(*<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[j]|*i));</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        jfound[j]=<span class="keyword">true</span>;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        found = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;      }</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    }</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordflow">if</span>(!found)</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    {</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;      retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(*i));</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    }</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;  }</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;  <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i =0 ; i&lt;jfound.size(); ++i)</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;  {</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keywordflow">if</span>(!jfound[i]) retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(*<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[i]));</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;  }</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;  <span class="keywordflow">return</span> retSec;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;}</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    jfound.push_back(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  }</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;i : _s.m_leafChildren)</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  {</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keywordtype">bool</span> found = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j =0; j&lt;<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.size(); ++j)</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    {</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      <span class="keywordflow">if</span>(i-&gt;idx==<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[j]-&gt;idx &amp;&amp; i-&gt;idy==<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[j]-&gt;idy &amp;&amp; i-&gt;idz==<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[j]-&gt;idz)</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="comment">// if empty nono</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <a class="code" href="class_leaf_node.html">LeafNode</a> testNode = <a class="code" href="class_leaf_node.html">LeafNode</a>(*<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[j]|*i);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(testNode));</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        jfound[j]=<span class="keyword">true</span>;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        found = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;      }</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    }</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keywordflow">if</span>(!found)</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    {</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(*i));</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    }</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;  }</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;  <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i =0 ; i&lt;jfound.size(); ++i)</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;  {</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="keywordflow">if</span>(!jfound[i]) retSec.<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>.push_back(<span class="keyword">new</span> <a class="code" href="class_leaf_node.html">LeafNode</a>(*<a class="code" href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">m_leafChildren</a>[i]));</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  }</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  <span class="keywordflow">return</span> retSec;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;}</div>
 <div class="ttc" id="class_secondary_node_html_ae70b5a7f1692f36757581bb9f27b4b2b"><div class="ttname"><a href="class_secondary_node.html#ae70b5a7f1692f36757581bb9f27b4b2b">SecondaryNode::SecondaryNode</a></div><div class="ttdeci">SecondaryNode()</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8cpp_source.html#l00003">SecondaryNode.cpp:3</a></div></div>
-<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00091">SecondaryNode.h:91</a></div></div>
+<div class="ttc" id="class_secondary_node_html_a348597e23d262565a7d29a0c3e62f36a"><div class="ttname"><a href="class_secondary_node.html#a348597e23d262565a7d29a0c3e62f36a">SecondaryNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00096">SecondaryNode.h:96</a></div></div>
 <div class="ttc" id="class_leaf_node_html"><div class="ttname"><a href="class_leaf_node.html">LeafNode</a></div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00026">LeafNode.h:26</a></div></div>
 <div class="ttc" id="class_secondary_node_html_ae9d09a8f9c1e4b7a82b8050fcccf8ea3"><div class="ttname"><a href="class_secondary_node.html#ae9d09a8f9c1e4b7a82b8050fcccf8ea3">SecondaryNode::m_leafChildren</a></div><div class="ttdeci">std::vector&lt; LeafNode * &gt; m_leafChildren</div><div class="ttdoc">m_leafChildren vector of pointers to the LeafNode children </div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00084">SecondaryNode.h:84</a></div></div>
 <div class="ttc" id="class_secondary_node_html"><div class="ttname"><a href="class_secondary_node.html">SecondaryNode</a></div><div class="ttdef"><b>Definition:</b> <a href="_secondary_node_8h_source.html#l00019">SecondaryNode.h:19</a></div></div>
@@ -890,22 +897,14 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a42ad9db6d3937baa0ae15495d40d431d"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">float SecondaryNode::m_leafUnit = 0.15625</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00094">94</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
+<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00092">92</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
 
 </div>
 </div>
@@ -927,73 +926,49 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00091">91</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
+<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00096">96</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
 
 </div>
 </div>
 <a class="anchor" id="a4c6c830d38bd85d5de5b2e47d1a8bbaf"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">float SecondaryNode::m_primUnit = 10.0</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00092">92</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
+<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00090">90</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
 
 </div>
 </div>
 <a class="anchor" id="af0493d3462f87297384d74d35cd8a607"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">float SecondaryNode::m_secUnit = 1.25</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00093">93</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
+<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00091">91</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
 
 </div>
 </div>
 <a class="anchor" id="a176a4cc1222fac5f6e19939284747e5b"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">float SecondaryNode::m_voxUnit = 0.01953125</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00095">95</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
+<p>Definition at line <a class="el" href="_secondary_node_8h_source.html#l00093">93</a> of file <a class="el" href="_secondary_node_8h_source.html">SecondaryNode.h</a>.</p>
 
 </div>
 </div>

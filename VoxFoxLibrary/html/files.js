@@ -1,5 +1,9 @@
 var files =
 [
+    [ "Examples.cpp", "_examples_8cpp.html", null ],
+    [ "Examples.h", "_examples_8h.html", [
+      [ "Examples", "class_examples.html", "class_examples" ]
+    ] ],
     [ "LeafNode.cpp", "_leaf_node_8cpp.html", null ],
     [ "LeafNode.h", "_leaf_node_8h.html", [
       [ "LeafNode", "class_leaf_node.html", "class_leaf_node" ]

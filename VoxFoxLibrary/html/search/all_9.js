@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['operator_2b',['operator+',['../class_leaf_node.html#a72aec1d491c30fcbb592bc1c592df4f7',1,'LeafNode::operator+()'],['../class_primary_node.html#a513aed78e37ea7c22c02257e65ebcba5',1,'PrimaryNode::operator+()'],['../class_secondary_node.html#adb3408ab60e76361ad927f97d4b2d130',1,'SecondaryNode::operator+()'],['../class_vox_fox_tree.html#ae961fb5bfaf9ee4b9f64de07c7be9950',1,'VoxFoxTree::operator+()']]],
-  ['operator_2d',['operator-',['../class_leaf_node.html#a53817fcf756494acc91ee49756d92a06',1,'LeafNode::operator-()'],['../class_primary_node.html#af7c5118bee9f9c594c5c82b02bea1227',1,'PrimaryNode::operator-()'],['../class_secondary_node.html#a9538b1d31e1fac2d98aad1c3a0a77eac',1,'SecondaryNode::operator-()'],['../class_vox_fox_tree.html#add28cf4c1e5e504d2e0b21a527b360b6',1,'VoxFoxTree::operator-()']]],
-  ['operator_3d',['operator=',['../class_leaf_node.html#af1f9eb3c0a7ce1404e425cf479b9191c',1,'LeafNode::operator=()'],['../class_primary_node.html#a65947e95c15a0fb410405a40cf9f1588',1,'PrimaryNode::operator=()'],['../class_secondary_node.html#a37ab0aeb0d407911a2839ba1dfc52fd0',1,'SecondaryNode::operator=()'],['../class_vox_fox_tree.html#a096e9e3afac0b0a06f303d7495914240',1,'VoxFoxTree::operator=()']]],
-  ['operator_7c',['operator|',['../class_leaf_node.html#aa2f447899b9c444b9d285c1e357db075',1,'LeafNode::operator|()'],['../class_primary_node.html#a93dc401afeba9346d917900f1f8620b2',1,'PrimaryNode::operator|()'],['../class_secondary_node.html#a8b67f308417142a232cc11b5a31a742c',1,'SecondaryNode::operator|()'],['../class_vox_fox_tree.html#a49e2c72c46714678abd72021eb18d1c7',1,'VoxFoxTree::operator|()']]]
+  ['newobimport',['NEWOBIMPORT',['../_vox_fox_tree_8cpp.html#adc9e94f1dcce6a9e1a65835843743afc',1,'VoxFoxTree.cpp']]],
+  ['numberofobjects',['numberOfObjects',['../class_vox_fox_tree.html#a5f95eb7b521e28450ee108220bef1932',1,'VoxFoxTree']]],
+  ['numberofvoxels',['numberOfVoxels',['../class_vox_fox_tree.html#a812468e08a0040fbe2d169a9119c8297',1,'VoxFoxTree']]],
+  ['nx',['nx',['../struct_voxel.html#a27988692adc52a5b3c13dbcc9e9ccf3c',1,'Voxel']]],
+  ['ny',['ny',['../struct_voxel.html#a4bfe81a3e7fea83eb28fb2b5a590fd17',1,'Voxel']]],
+  ['nz',['nz',['../struct_voxel.html#a2f7703a137741c259d8eba00c3e7917c',1,'Voxel']]]
 ];

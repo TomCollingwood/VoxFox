@@ -198,93 +198,92 @@ $(document).ready(function(){initNavTree('_leaf_node_8cpp_source.html','');});
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <span class="keywordflow">if</span>((<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; (1&lt;&lt;j)) &amp;&amp; (retLeaf.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; (1&lt;&lt;j)))</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      {</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[count]);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        count++;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      }</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      <span class="keywordflow">if</span>(<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; (1&lt;&lt;j)) count++;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    }</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  <span class="keywordflow">return</span> retLeaf;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;}</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="class_leaf_node.html#a53817fcf756494acc91ee49756d92a06">  100</a></span>&#160;<a class="code" href="class_leaf_node.html">LeafNode</a> <a class="code" href="class_leaf_node.html#a53817fcf756494acc91ee49756d92a06">LeafNode::operator-</a>(<a class="code" href="class_leaf_node.html">LeafNode</a> <span class="keyword">const</span> &amp;_l)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <a class="code" href="class_leaf_node.html">LeafNode</a> retLeaf = <a class="code" href="class_leaf_node.html#a84a7fd308f9a0aea57220842f741d6d1">LeafNode</a>(<a class="code" href="class_leaf_node.html#a71810f4797ff7b4e8d72df195dd55a1f">m_origin</a>);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="keywordtype">int</span> count =0;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i&lt;64; ++i)</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  {</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    retLeaf.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] = <a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; ~(<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; _l.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i]);</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j =0 ; j&lt;8; ++j)</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <span class="keywordflow">if</span>((retLeaf.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; (1&lt;&lt;j))&amp;&amp;(<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; (1&lt;&lt;j)))</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      {</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[count]);</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        count++;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      }</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    }</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  <span class="keywordflow">return</span> retLeaf;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      <span class="keywordflow">if</span>(<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; (1&lt;&lt;j)) count++;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    }</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  }</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  <span class="keywordflow">return</span> retLeaf;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="class_leaf_node.html#a53817fcf756494acc91ee49756d92a06">   99</a></span>&#160;<a class="code" href="class_leaf_node.html">LeafNode</a> <a class="code" href="class_leaf_node.html#a53817fcf756494acc91ee49756d92a06">LeafNode::operator-</a>(<a class="code" href="class_leaf_node.html">LeafNode</a> <span class="keyword">const</span> &amp;_l)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <a class="code" href="class_leaf_node.html">LeafNode</a> retLeaf = <a class="code" href="class_leaf_node.html#a84a7fd308f9a0aea57220842f741d6d1">LeafNode</a>(<a class="code" href="class_leaf_node.html#a71810f4797ff7b4e8d72df195dd55a1f">m_origin</a>);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <span class="keywordtype">int</span> count =0;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i&lt;64; ++i)</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    retLeaf.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] = <a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; ~(<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; _l.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i]);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j =0 ; j&lt;8; ++j)</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    {</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <span class="keywordflow">if</span>((retLeaf.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; (1&lt;&lt;j))&amp;&amp;(<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; (1&lt;&lt;j)))</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[count]);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      }</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      <span class="keywordflow">if</span>(<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] &amp; (1&lt;&lt;j)) count++;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  <span class="keywordflow">return</span> retLeaf;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;}</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="class_leaf_node.html#aa2f447899b9c444b9d285c1e357db075">  120</a></span>&#160;<a class="code" href="class_leaf_node.html">LeafNode</a> <a class="code" href="class_leaf_node.html#aa2f447899b9c444b9d285c1e357db075">LeafNode::operator|</a>(<a class="code" href="class_leaf_node.html">LeafNode</a> <span class="keyword">const</span> &amp;_l)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  <a class="code" href="class_leaf_node.html">LeafNode</a> retLeaf = <a class="code" href="class_leaf_node.html#a84a7fd308f9a0aea57220842f741d6d1">LeafNode</a>(<a class="code" href="class_leaf_node.html#a71810f4797ff7b4e8d72df195dd55a1f">m_origin</a>);</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i&lt;64; ++i)</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  {</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    retLeaf.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] = <a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] | _l.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i];</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  }</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="keywordtype">int</span> index1 =0;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="keywordtype">int</span> index2 =0;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;  <span class="keywordtype">bool</span> done = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  <span class="keywordflow">while</span>(!done)</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  {</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index1].index&lt;_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index2].index)</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    {</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index1]);</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      index1++;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    }</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index1].index&gt;_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index2].index)</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    {</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;      retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index2]);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      index2++;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    }</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    {</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index1]);</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;      index2++;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      index1++;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    }</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keywordflow">if</span>(index2&gt;=_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size())</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    {</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=index1; i&lt;<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size(); ++i)</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      {</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[i]);</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      }</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;      done=<span class="keyword">true</span>;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    }</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(index1&gt;=<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size())</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    {</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;      <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=index2; i&lt;_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size(); ++i)</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;      {</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[i]);</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      }</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;      done=<span class="keyword">true</span>;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    }</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  }</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  <span class="keywordflow">return</span> retLeaf;</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;}</div>
-<div class="ttc" id="class_leaf_node_html_a00d3a96839c48d12fd8a6bca0dcf950d"><div class="ttname"><a href="class_leaf_node.html#a00d3a96839c48d12fd8a6bca0dcf950d">LeafNode::m_voxUnit</a></div><div class="ttdeci">float m_voxUnit</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00092">LeafNode.h:92</a></div></div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="class_leaf_node.html#aa2f447899b9c444b9d285c1e357db075">  119</a></span>&#160;<a class="code" href="class_leaf_node.html">LeafNode</a> <a class="code" href="class_leaf_node.html#aa2f447899b9c444b9d285c1e357db075">LeafNode::operator|</a>(<a class="code" href="class_leaf_node.html">LeafNode</a> <span class="keyword">const</span> &amp;_l)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <a class="code" href="class_leaf_node.html">LeafNode</a> retLeaf = <a class="code" href="class_leaf_node.html#a84a7fd308f9a0aea57220842f741d6d1">LeafNode</a>(<a class="code" href="class_leaf_node.html#a71810f4797ff7b4e8d72df195dd55a1f">m_origin</a>);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i&lt;64; ++i)</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  {</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    retLeaf.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] = <a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i] | _l.<a class="code" href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">m_VoxelMap</a>[i];</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <span class="keywordtype">int</span> index1 =0;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="keywordtype">int</span> index2 =0;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="keywordtype">bool</span> done = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;  <span class="keywordflow">while</span>(!done)</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  {</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index1].index&lt;_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index2].index)</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    {</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index1]);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      index1++;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    }</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index1].index&gt;_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index2].index)</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    {</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index2]);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;      index2++;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    }</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    {</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[index1]);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      index2++;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;      index1++;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    }</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keywordflow">if</span>(index2&gt;=_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size())</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    {</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=index1; i&lt;<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size(); ++i)</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      {</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[i]);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      }</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      done=<span class="keyword">true</span>;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    }</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(index1&gt;=<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size())</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    {</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;      <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=index2; i&lt;_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.size(); ++i)</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;      {</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        retLeaf.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>.push_back(_l.<a class="code" href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">m_VoxelData</a>[i]);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;      }</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      done=<span class="keyword">true</span>;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    }</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  }</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <span class="keywordflow">return</span> retLeaf;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;}</div>
+<div class="ttc" id="class_leaf_node_html_a00d3a96839c48d12fd8a6bca0dcf950d"><div class="ttname"><a href="class_leaf_node.html#a00d3a96839c48d12fd8a6bca0dcf950d">LeafNode::m_voxUnit</a></div><div class="ttdeci">float m_voxUnit</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00088">LeafNode.h:88</a></div></div>
 <div class="ttc" id="class_leaf_node_html_a902997299007f814e1f18f9b3460f3c4"><div class="ttname"><a href="class_leaf_node.html#a902997299007f814e1f18f9b3460f3c4">LeafNode::m_VoxelData</a></div><div class="ttdeci">std::vector&lt; Voxel &gt; m_VoxelData</div><div class="ttdoc">m_VoxelData Voxel data for only the present voxels. Is variable. </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00080">LeafNode.h:80</a></div></div>
 <div class="ttc" id="_leaf_node_8h_html"><div class="ttname"><a href="_leaf_node_8h.html">LeafNode.h</a></div><div class="ttdoc">LeafNode Class for the lowest level node. Contains the voxel data. </div></div>
 <div class="ttc" id="class_leaf_node_html_a85a8a792b27425d32d8b2f71132ccd1c"><div class="ttname"><a href="class_leaf_node.html#a85a8a792b27425d32d8b2f71132ccd1c">LeafNode::isVoxel</a></div><div class="ttdeci">bool isVoxel(glm::vec3 _position) const </div><div class="ttdoc">isVoxel checks if a Voxel is present within LeafNode at _position </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8cpp_source.html#l00040">LeafNode.cpp:40</a></div></div>
 <div class="ttc" id="class_leaf_node_html_a6384e2d2fd059b37c2874f2319670f02"><div class="ttname"><a href="class_leaf_node.html#a6384e2d2fd059b37c2874f2319670f02">LeafNode::getOrigin</a></div><div class="ttdeci">glm::vec3 getOrigin() const </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00070">LeafNode.h:70</a></div></div>
-<div class="ttc" id="class_leaf_node_html_a881f491493b6e21197281da5f69cb0f1"><div class="ttname"><a href="class_leaf_node.html#a881f491493b6e21197281da5f69cb0f1">LeafNode::unitLeafLength</a></div><div class="ttdeci">float unitLeafLength</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00088">LeafNode.h:88</a></div></div>
+<div class="ttc" id="class_leaf_node_html_a881f491493b6e21197281da5f69cb0f1"><div class="ttname"><a href="class_leaf_node.html#a881f491493b6e21197281da5f69cb0f1">LeafNode::unitLeafLength</a></div><div class="ttdeci">float unitLeafLength</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00092">LeafNode.h:92</a></div></div>
 <div class="ttc" id="class_leaf_node_html"><div class="ttname"><a href="class_leaf_node.html">LeafNode</a></div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00026">LeafNode.h:26</a></div></div>
-<div class="ttc" id="class_leaf_node_html_aa2f447899b9c444b9d285c1e357db075"><div class="ttname"><a href="class_leaf_node.html#aa2f447899b9c444b9d285c1e357db075">LeafNode::operator|</a></div><div class="ttdeci">LeafNode operator|(LeafNode const &amp;_l) const </div><div class="ttdoc">operator | Union operator set operator </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8cpp_source.html#l00120">LeafNode.cpp:120</a></div></div>
+<div class="ttc" id="class_leaf_node_html_aa2f447899b9c444b9d285c1e357db075"><div class="ttname"><a href="class_leaf_node.html#aa2f447899b9c444b9d285c1e357db075">LeafNode::operator|</a></div><div class="ttdeci">LeafNode operator|(LeafNode const &amp;_l) const </div><div class="ttdoc">operator | Union operator set operator </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8cpp_source.html#l00119">LeafNode.cpp:119</a></div></div>
 <div class="ttc" id="struct_voxel_html_ac78408bbe79504b642692ad56434fc74"><div class="ttname"><a href="struct_voxel.html#ac78408bbe79504b642692ad56434fc74">Voxel::index</a></div><div class="ttdeci">int index</div><div class="ttdef"><b>Definition:</b> <a href="_voxel_8h_source.html#l00026">Voxel.h:26</a></div></div>
-<div class="ttc" id="class_leaf_node_html_ad1438f7a5334fa8f34afae186f84881a"><div class="ttname"><a href="class_leaf_node.html#ad1438f7a5334fa8f34afae186f84881a">LeafNode::m_leafUnit</a></div><div class="ttdeci">float m_leafUnit</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00091">LeafNode.h:91</a></div></div>
+<div class="ttc" id="class_leaf_node_html_ad1438f7a5334fa8f34afae186f84881a"><div class="ttname"><a href="class_leaf_node.html#ad1438f7a5334fa8f34afae186f84881a">LeafNode::m_leafUnit</a></div><div class="ttdeci">float m_leafUnit</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00087">LeafNode.h:87</a></div></div>
 <div class="ttc" id="class_leaf_node_html_ac2a79b0ddb7a25c13047de12c4d18bc9"><div class="ttname"><a href="class_leaf_node.html#ac2a79b0ddb7a25c13047de12c4d18bc9">LeafNode::idx</a></div><div class="ttdeci">int idx</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00084">LeafNode.h:84</a></div></div>
 <div class="ttc" id="class_leaf_node_html_a196fe10e1b759cfef3ab30e0391b152c"><div class="ttname"><a href="class_leaf_node.html#a196fe10e1b759cfef3ab30e0391b152c">LeafNode::idy</a></div><div class="ttdeci">int idy</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00084">LeafNode.h:84</a></div></div>
 <div class="ttc" id="class_leaf_node_html_a3dfae8be0c8d0230c422129a6f973cac"><div class="ttname"><a href="class_leaf_node.html#a3dfae8be0c8d0230c422129a6f973cac">LeafNode::idz</a></div><div class="ttdeci">int idz</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00084">LeafNode.h:84</a></div></div>
@@ -292,8 +291,8 @@ $(document).ready(function(){initNavTree('_leaf_node_8cpp_source.html','');});
 <div class="ttc" id="class_leaf_node_html_ab3b591d51f61a90f916df849c3f2d176"><div class="ttname"><a href="class_leaf_node.html#ab3b591d51f61a90f916df849c3f2d176">LeafNode::m_VoxelMap</a></div><div class="ttdeci">std::array&lt; char, 64 &gt; m_VoxelMap</div><div class="ttdoc">m_VoxelMap Each bit represents the presence of a voxel within the leafnode. 8*8*8 bits = 8*8 chars ...</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00075">LeafNode.h:75</a></div></div>
 <div class="ttc" id="class_leaf_node_html_a3feb48636636e59b85652875e1cbcb5d"><div class="ttname"><a href="class_leaf_node.html#a3feb48636636e59b85652875e1cbcb5d">LeafNode::addVoxel</a></div><div class="ttdeci">bool addVoxel(glm::vec3 _position, Voxel _voxel)</div><div class="ttdoc">addVoxel adds Voxel at specified _position to LeafNode </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8cpp_source.html#l00048">LeafNode.cpp:48</a></div></div>
 <div class="ttc" id="class_leaf_node_html_a72aec1d491c30fcbb592bc1c592df4f7"><div class="ttname"><a href="class_leaf_node.html#a72aec1d491c30fcbb592bc1c592df4f7">LeafNode::operator+</a></div><div class="ttdeci">LeafNode operator+(LeafNode const &amp;_l) const </div><div class="ttdoc">operator + Intersection set operator (retains LHS data) </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8cpp_source.html#l00080">LeafNode.cpp:80</a></div></div>
-<div class="ttc" id="class_leaf_node_html_a71810f4797ff7b4e8d72df195dd55a1f"><div class="ttname"><a href="class_leaf_node.html#a71810f4797ff7b4e8d72df195dd55a1f">LeafNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00086">LeafNode.h:86</a></div></div>
-<div class="ttc" id="class_leaf_node_html_a53817fcf756494acc91ee49756d92a06"><div class="ttname"><a href="class_leaf_node.html#a53817fcf756494acc91ee49756d92a06">LeafNode::operator-</a></div><div class="ttdeci">LeafNode operator-(LeafNode const &amp;_l) const </div><div class="ttdoc">operator - Subtract set operator </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8cpp_source.html#l00100">LeafNode.cpp:100</a></div></div>
+<div class="ttc" id="class_leaf_node_html_a71810f4797ff7b4e8d72df195dd55a1f"><div class="ttname"><a href="class_leaf_node.html#a71810f4797ff7b4e8d72df195dd55a1f">LeafNode::m_origin</a></div><div class="ttdeci">glm::vec3 m_origin</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8h_source.html#l00090">LeafNode.h:90</a></div></div>
+<div class="ttc" id="class_leaf_node_html_a53817fcf756494acc91ee49756d92a06"><div class="ttname"><a href="class_leaf_node.html#a53817fcf756494acc91ee49756d92a06">LeafNode::operator-</a></div><div class="ttdeci">LeafNode operator-(LeafNode const &amp;_l) const </div><div class="ttdoc">operator - Subtract set operator </div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8cpp_source.html#l00099">LeafNode.cpp:99</a></div></div>
 <div class="ttc" id="struct_voxel_html"><div class="ttname"><a href="struct_voxel.html">Voxel</a></div><div class="ttdef"><b>Definition:</b> <a href="_voxel_8h_source.html#l00017">Voxel.h:17</a></div></div>
 <div class="ttc" id="class_leaf_node_html_a84a7fd308f9a0aea57220842f741d6d1"><div class="ttname"><a href="class_leaf_node.html#a84a7fd308f9a0aea57220842f741d6d1">LeafNode::LeafNode</a></div><div class="ttdeci">LeafNode()</div><div class="ttdef"><b>Definition:</b> <a href="_leaf_node_8cpp_source.html#l00003">LeafNode.cpp:3</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

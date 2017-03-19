@@ -5,5 +5,7 @@ digraph "VoxFoxTree::createBox"
   rankdir="LR";
   Node1 [label="VoxFoxTree::createBox",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
-  Node2 [label="VoxFoxTree::importQuickObj",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_vox_fox_tree.html#ac84632b685b383fc1008882efc6365de",tooltip="importQuickObj Quickly imports an polygonal .obj file to the VoxFoxTree as voxel data It is done by s..."];
+  Node2 [label="Examples::runExample",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_examples.html#a2bab39dc5de11db09c101d734b230185"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="VoxFoxTree::importQuickObj",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_vox_fox_tree.html#ac84632b685b383fc1008882efc6365de",tooltip="importQuickObj Quickly imports an polygonal .obj file to the VoxFoxTree as voxel data It is done by s..."];
 }

@@ -13,10 +13,14 @@ digraph "LeafNode.h"
   Node5 [label="VoxFoxTree.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_vox_fox_tree_8h.html",tooltip="VoxFoxTree.h Essentially the rootnode of the tree with all tree functions. "];
   Node5 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
   Node6 [label="VoxFoxTree.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_vox_fox_tree_8cpp.html"];
-  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
-  Node7 [label="SecondaryNode.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_secondary_node_8h.html",tooltip="SecondaryNode.h Second level node that contains and is reponsible for the LeafNodes. "];
-  Node7 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Examples.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_examples_8h.html"];
   Node7 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
-  Node8 [label="SecondaryNode.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_secondary_node_8cpp.html"];
+  Node8 [label="Examples.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_examples_8cpp.html"];
+  Node1 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node9 [label="SecondaryNode.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_secondary_node_8h.html",tooltip="SecondaryNode.h Second level node that contains and is reponsible for the LeafNodes. "];
+  Node9 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node9 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node10 [label="SecondaryNode.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_secondary_node_8cpp.html"];
   Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
 }

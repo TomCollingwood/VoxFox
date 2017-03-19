@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "Vox Fox", "index.html", [
+    [ "My Personal Index Page", "index.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -23,7 +24,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_leaf_node_8cpp.html"
+"_examples_8cpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
