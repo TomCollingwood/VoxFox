@@ -16,7 +16,7 @@ The demo project is in the demo folder. Change the int at around line 150 to sel
 Tests contains the various tests for each class.
 
 ## Requirements ##
-QtCreator is required to make the project. Requires NGL (normally placed in Home folder) and GLM. C++11 is also used. Google Test is used for the tests.
+QtCreator is required to make the project. [Requires NGL (normally placed in Home folder)](https://github.com/NCCA/NGL) and GLM. C++11 is also used. Google Test is used for the tests.
 
 
 ## WHAT DOES IT DO ##
