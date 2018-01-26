@@ -3,6 +3,8 @@ A Voxel Data Structure for C++ using NGL and GLM. It is compatible with OpenGL.
 
 Initial design based on SimpleNGL by Jon Macey. The two shader files are written by Richard Southern. Model objs are not my own.
 
+[Click here for the Youtube video showing the demo](https://www.youtube.com/watch?v=HZUeZx_pb_I)
+
 See my initial ideas here:
 [https://drive.google.com/file/d/0B3Bu_KdSBGhibENXZksyVjFCeUk/view?usp=sharing](https://drive.google.com/file/d/0B3Bu_KdSBGhibENXZksyVjFCeUk/view?usp=sharing)
 
