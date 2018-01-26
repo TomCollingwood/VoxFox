@@ -71,7 +71,7 @@ void NGLScene::initializeGL()
   // gl commands from the lib, if that is not done program will crash
   ngl::NGLInit::instance();
 
-  glClearColor( 0.0f, 0.0f, 0.0f, 1.0f ); // Grey Background
+  glClearColor( 0.0f, 0.0f, 0.0f, 1.0f ); // Black Background
   // enable depth testing for drawing
   glEnable( GL_DEPTH_TEST );
 // enable multisampling for smoother drawing
@@ -234,10 +234,10 @@ void NGLScene::loadMatricesToShader()
   ngl::Mat3 normalMatrix;
   ngl::Mat4 M;
   M            = m_mouseGlobalTX;
-  MV           = M * m_cam.getViewMatrix();
-  MVP          = M * m_cam.getVPMatrix();
+  MV           = m_cam.getViewMatrix() * M;
+  MVP          = m_cam.getVPMatrix() * M;
   normalMatrix = MV;
-  normalMatrix.inverse();
+  normalMatrix.inverse().transpose();
   shader->setUniform( "MV", MV );
   shader->setUniform( "MVP", MVP );
   shader->setUniform( "N", normalMatrix );
